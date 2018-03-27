@@ -9,7 +9,7 @@
       $rowP = mysqli_fetch_object($resultP);
       header("content-type: text/x-json");
       echo json_encode($rowP);
-      exit();
+      exit(); 
   }
   include 'resources.php'; 
   ?>
@@ -102,6 +102,8 @@
       </div><!-- headerbar -->
       <div class="pageheader">
         <h2><i class="fa fa-truck"></i> Data Supplier </h2>
+                <input name="test" type="text" class="form-control" id="test">
+                <a class="btn btn-primary announce" >Announce</a>
       </div>
       <div class="contentpanel">
         <div class="row">
@@ -197,24 +199,32 @@
   <!-- /.modal -->
 
   <script type="text/javascript">
-    $(function() {
-        $("body").delegate('.edit', 'click', function(){
-            var idEdit = $(this).attr('ide');
-            $.ajax({
-              url     : "data_supplier.php",
-              type    : "POST",
-              data    : {
-                "kode": idEdit
-              },
-              success:function(show)
-              {
-                $("#namaSupplier").val(show.nama);
-                $("#noTelepon").val(show.noTelepon);
-                $("#alamatSupplier").val(show.alamat);
-              }
-            });
+    /*$(function() {
+      $("body").delegate('.edit', 'click', function(){
+          var idEdit = $(this).attr('ide');
+          $.ajax({
+            url     : "data_supplier.php",
+            type    : "POST",
+            data    : {
+              "kode": idEdit
+            },
+            success:function(show)
+            {
+              $("#namaSupplier").val(show.nama);
+              $("#noTelepon").val(show.noTelepon);
+              $("#alamatSupplier").val(show.alamat);
+            },
+            error: function(result) {
+              alert("Error Ajax");
+            }
+          });
         });
-    });
+      });*/
+      $(document).ready(function(){
+         $(".announce").click(function(){
+           $("#test").val('asd');
+         });
+      });
     </script>
 </body>
 </html>
