@@ -41,15 +41,15 @@
               <li><a href="data_supplier.php"><i class="fa fa-caret-right"></i> <span>Data Supplier</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
-            <ul class="children" style="display: block";>
-              <li class="active"><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
+          <li class="nav-parent"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
+            <ul class="children">
+              <li ><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
-            <ul class="children">
-              <li><a href="tambah_hadiah.php"><i class="fa fa-caret-right"></i> <span>Tambah Hadiah</span></a></li>
+          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
+            <ul class="children" style="display: block";>
+              <li class="active"><a href="tambah_hadiah.php"><i class="fa fa-caret-right"></i> <span>Tambah Hadiah</span></a></li>
               <li><a href="data_hadiah.php"><i class="fa fa-caret-right"></i> <span>Data Hadiah</span></a></li>
               <li><a href="data_poin.php"><i class="fa fa-caret-right"></i> <span>Data Poin Pelanggan</span></a></li>
               <li><a href="data_reservasi.php"><i class="fa fa-caret-right"></i> <span>Data Reservasi</span></a></li>
@@ -101,7 +101,7 @@
         </div><!-- header-right -->
       </div><!-- headerbar -->
       <div class="pageheader">
-        <h2><i class="fa fa-users"></i> Daftar Karyawan Baru </h2>
+        <h2><i class="fa fa-users"></i> Poin dan Reservasi </h2>
       </div>
       <div class="contentpanel">
         <div class="row">
@@ -109,13 +109,13 @@
             <form action="proses.php?cmd=insertKaryawan" method="POST" id="karyawanBaru" class="form-horizontal">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <h4 class="panel-title">Daftar Karyawan Baru</h4>
+                  <h4 class="panel-title">Daftar Hadiah Baru</h4>
                 </div>
                 <div class="panel-body">
                   <div class="form-group">
-                    <label class="col-sm-4 control-label">Nama Karyawan<span class="asterisk">*</span></label>
+                    <label class="col-sm-4 control-label">Nama Hadiah<span class="asterisk">*</span></label>
                     <div class="col-sm-4">
-                      <input type="text" placeholder="Nama Karyawan" required="true" name="namaKaryawan" class="form-control"/>
+                      <input type="text" placeholder="Nama Hadiah" required="true" name="namaHadiah" class="form-control"/>
                     </div>
                   </div> 
                   <div class="form-group">
@@ -143,17 +143,14 @@
                     <div class="col-sm-4">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-calendar tx-16 lh-0 op-6"></i></span>
-                        <input type="date" name="tanggalMasuk" class="form-control" required="true" placeholder="MM/DD/YYYY" value="<?php echo(date('Y-m-d'));?>">
+                        <input type="date" name="tanggalMasuk" class="form-control" required="true" placeholder="MM/DD/YYYY">
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-sm-4 control-label">Gaji Pokok <span class="asterisk">*</span></label>
                     <div class="col-sm-4">
-                      <div class="input-group">
-                        <span class="input-group-addon">Rp</span>
-                        <input type="number" id="gajiPokok" name="gajiPokok" class="form-control" placeholder="Gaji Pokok" required />
-                      </div>
+                      <input type="number" id="gajiPokok" name="gajiPokok" class="form-control" placeholder="Gaji Pokok" required />
                     </div>
                   </div>
                   <div class="panel-footer">

@@ -4,6 +4,24 @@ require './db.php';
 $cmd = $_GET['cmd'];
 
 switch ($cmd) {
+    case "insertAset": //tambah_aset.php
+        $namaAset = $_POST['namaAset'];
+        $hargaBeli = $_POST['hargaBeli'];
+        $tanggalBeli = $_POST['tanggalBeli'];
+        $perkiraanUmur = $_POST['perkiraanUmur'];
+        $sql = "INSERT INTO `aset`(`nama`, `tglBeli`, `perkiraanUmur`, `hargaBeli`, `aktif`) VALUES ('".$namaAset."', '".$tanggalBeli."', ".$perkiraanUmur.", ".$hargaBeli." , 1)";
+        $result = mysqli_query($link,$sql);
+        if (!$result) {
+            $_SESSION['notif'] = "error";
+            die("SQL ERROR.".$sql);
+            header("Location: /gentlemen/tambah_aset.php");
+        }
+        else {
+            $_SESSION['notif'] = "sukses";
+            header("Location: tambah_aset.php");
+        }
+        break;
+
     case "insertKaryawan": //tambah_supplier.php
         $namaKaryawan = $_POST['namaKaryawan'];
         $jabatanKaryawan = $_POST['jabatanKaryawan'];
@@ -14,10 +32,11 @@ switch ($cmd) {
         //$sql = "INSERT INTO `supplier`(`nama`, `noTelp`, `alamat`) VALUES ('test', 'testt', 'test' )";
         $result = mysqli_query($link,$sql);
         if (!$result) {
-            die("SQL ERROR.".$sql);
+            $_SESSION['notif'] = "error";
+            header("Location: /gentlemen/tambah_karyawan.php");
         }
         else {
-            $_SESSION['notif'] = "<strong>SELAMAT</strong> DATA BERHASIL DI HAPUS.";
+            $_SESSION['notif'] = "sukses";
             header("Location: tambah_karyawan.php");
         }
         break;
@@ -27,11 +46,11 @@ switch ($cmd) {
         $sql = "DELETE FROM supplier WHERE idSupplier=" . $idSupplier;
         $result = mysqli_query($link, $sql);
         if (!$result) {
-            $_SESSION['notifSQL'] = "SQL ERROR.";
+            $_SESSION['notif'] = "error";
             die(header('location: data_supplier.php'));
         }
         else {
-            $_SESSION['notif'] = "<strong>SELAMAT</strong> DATA BERHASIL DI HAPUS.";
+            $_SESSION['notif'] = "sukses";
             header("Location: data_supplier.php");
         }
         break;

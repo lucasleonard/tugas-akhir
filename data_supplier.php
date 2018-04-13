@@ -27,7 +27,7 @@
   <section>
     <div class="leftpanel">
       <div class="logopanel">
-        <h1><span>[</span>GENTLEMEN<span>]</span></h1>
+        <h1><span>[</span>GENTLEMEN <span>]</span></h1>
       </div><!-- logopanel -->
       <div class="leftpanelinner">
         <h5 class="sidebartitle">Navigation</h5>
@@ -199,7 +199,7 @@
   <!-- /.modal -->
 
   <script type="text/javascript">
-    $(function() {
+    //$(function() {
       $("body").delegate('.edit', 'click', function(){
           var idEdit = $(this).attr('ide');
           $.ajax({
@@ -220,7 +220,7 @@
             }
           });
         });
-      }); 
+      //}); 
     </script>
 </body>
 </html>

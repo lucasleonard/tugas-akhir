@@ -17,6 +17,8 @@
 <script src="js/select2.min.js"></script>
 <script src="js/dropzone.min.js"></script>
 <script src="js/colorpicker.js"></script>
+<script src="js/jquery.flot.min.js"></script>
+
 
 <script src="js/custom.js"></script>
 <script src="js/dashboard.js"></script>

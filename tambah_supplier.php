@@ -131,8 +131,9 @@
         
         <div class="row">
           <div class="panel-body panel-body-nopadding">
-            <div class="panel panel-default">
-              <div class="panel-heading">
+            <form action="" method="POST" id="supplierBaru" class="form-horizontal">
+              <div class="panel panel-default">
+                <div class="panel-heading">
                 <h4 class="panel-title">Daftar Supplier Baru</h4>
               </div>
               <div class="panel-body">
@@ -154,7 +155,7 @@
                     <input name="nomorTelepon" class="form-control"/>
                   </div>
                 </div>
-                <div id="formBarang">
+                <div class="form-group" id="formBarang">
                   <div class="form-group" id="divBarang">
                     <label class="col-sm-3 control-label">Barang Supplier</label>
                     <div class="col-sm-6" id="namaBarang">
@@ -169,6 +170,7 @@
                     </div>
                   </div>  
                 </div>
+              </form>
                 <div class="form-group">
                   <div id="divButton">
                     <div class="col-sm-9">
