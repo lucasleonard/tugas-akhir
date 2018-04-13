@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <?php
+  session_start();
   include 'resources.php'; 
   ?>
 </head>
@@ -19,7 +20,7 @@
       <div class="leftpanelinner">
         <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
-          <li><a href="index.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
+          <li><a href="daftar_akun.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
           <li class="nav-parent"><a href=""><i class="fa fa-cube"></i> <span>Produk</span></a>
             <ul class="children">
               <li><a href="tambah_Produk.php"><i class="fa fa-caret-right"></i> <span>Tambah Produk Baru</span></a></li>
@@ -38,11 +39,12 @@
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Hadiah dan Poin</span></a>
+          <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
             <ul class="children">
               <li><a href="tambah_hadiah.php"><i class="fa fa-caret-right"></i> <span>Tambah Hadiah</span></a></li>
               <li><a href="data_hadiah.php"><i class="fa fa-caret-right"></i> <span>Data Hadiah</span></a></li>
               <li><a href="data_poin.php"><i class="fa fa-caret-right"></i> <span>Data Poin Pelanggan</span></a></li>
+              <li><a href="data_reservasi.php"><i class="fa fa-caret-right"></i> <span>Data Reservasi</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-edit"></i> <span>Nota</span></a>
@@ -94,6 +96,39 @@
         <h2><i class="fa fa-truck"></i> Daftar Supplier Baru </h2>
       </div>
       <div class="contentpanel">
+        <?php
+          if(!isset($_SESSION['notif'])) {
+              echo "";
+          }
+          else { 
+            if($_SESSION['notif'] == "error") { ?>
+              <div id="error-alert" class="alert alert-danger alert-solid" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="d-flex align-items-center justify-content-start">
+                  <i class="fa fa-times"></i>
+                  <span><strong>Gagal!</strong> Data supplier gagal dimasukkan.</span>
+                </div><!-- d-flex -->
+              </div><!-- alert -->
+              <?php
+              unset($_SESSION['notif']);
+            }
+            else if ($_SESSION['notif'] == "sukses") { ?>
+              <div id="success-alert" class="alert alert-success alert-solid" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="d-flex align-items-center justify-content-start">
+                  <i class="fa fa-check-circle"></i>
+                  <span><strong>Sukses!</strong> Data supplier berhasil dimasukkan.</span>
+                </div><!-- d-flex -->
+              </div><!-- alert -->
+            <?php 
+            unset($_SESSION['notif']);
+            }
+          } ?>
+        
         <div class="row">
           <div class="panel-body panel-body-nopadding">
             <div class="panel panel-default">
@@ -207,6 +242,9 @@
       }
     });
   });
+
+  $("#success-alert").fadeTo(3000, 500).slideUp(500);
+  $("#error-alert").fadeTo(3000, 500).slideUp(500);
   </script>
 </body>
 </html>

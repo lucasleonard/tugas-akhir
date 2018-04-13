@@ -19,7 +19,7 @@
       <div class="leftpanelinner">
         <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
-          <li><a href="index.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
+          <li><a href="daftar_akun.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
           <li class="nav-parent nav-active active"><a href=""><i class="fa fa-cube"></i> <span>Produk</span></a>
             <ul class="children" style="display: block";>
               <li><a href="tambah_produk.php"><i class="fa fa-caret-right"></i> <span>Tambah Produk Baru</span></a></li>
@@ -38,11 +38,12 @@
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Hadiah dan Poin</span></a>
+          <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
             <ul class="children">
               <li><a href="tambah_hadiah.php"><i class="fa fa-caret-right"></i> <span>Tambah Hadiah</span></a></li>
               <li><a href="data_hadiah.php"><i class="fa fa-caret-right"></i> <span>Data Hadiah</span></a></li>
               <li><a href="data_poin.php"><i class="fa fa-caret-right"></i> <span>Data Poin Pelanggan</span></a></li>
+              <li><a href="data_reservasi.php"><i class="fa fa-caret-right"></i> <span>Data Reservasi</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-edit"></i> <span>Nota</span></a>

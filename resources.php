@@ -12,6 +12,12 @@
 <link rel="stylesheet" href="css/jquery.tagsinput.css" />
 <link rel="stylesheet" href="css/colorpicker.css" />
 <link rel="stylesheet" href="css/dropzone.css" />
+<link rel="stylesheet" href="css/select2.css" />
+<link rel="stylesheet" href="css/fullcalendar.css" />
+<link rel="stylesheet" href="css/ionicons.css" />
+<link rel="stylesheet" href="css/perfect-scrollbar.css" />
+<link rel="stylesheet" href="css/jquery.switchButton.css" />
+
 
 <!-- DataTables -->
 <link href="assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>

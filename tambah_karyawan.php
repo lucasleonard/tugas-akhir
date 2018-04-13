@@ -2,11 +2,18 @@
 <html lang="en">
 <head>
   <?php
-  session_start();
   include 'resources.php'; 
+  include 'resources2.php';
+  include 'sql.php';
+  if(!isset($_SESSION['notif'])) {
+      echo "";
+  }
+  else {
+    echo $_SESSION['notif']."</br>";
+    unset($_SESSION['notif']);
+  }
   ?>
 </head>
-<?php include 'sql.php'; ?>
 <body>
   <!-- Preloader -->
   <div id="preloader">
@@ -21,9 +28,9 @@
         <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
           <li><a href="daftar_akun.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
-          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-cube"></i> <span>Produk</span></a>
-            <ul class="children" style="display: block";>
-              <li class="active"><a href="tambah_Produk.php"><i class="fa fa-caret-right"></i> <span>Tambah Produk Baru</span></a></li>
+          <li class="nav-parent"><a href=""><i class="fa fa-cube"></i> <span>Produk</span></a>
+            <ul class="children">
+              <li><a href="tambah_produk.php"><i class="fa fa-caret-right"></i> <span>Tambah Produk Baru</span></a></li>
               <li><a href="data_produk.php"><i class="fa fa-caret-right"></i> <span>Data Produk</span></a></li>
             </ul>
           </li>
@@ -33,9 +40,9 @@
               <li><a href="data_supplier.php"><i class="fa fa-caret-right"></i> <span>Data Supplier</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
-            <ul class="children">
-              <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
+          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
+            <ul class="children" style="display: block";>
+              <li class="active"><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
             </ul>
           </li>
@@ -72,7 +79,6 @@
         </ul>
       </div><!-- leftpanelinner -->
     </div><!-- leftpanel -->
-
     <div class="mainpanel">
       <div class="headerbar">
         <a class="menutoggle"><i class="fa fa-bars"></i></a>
@@ -94,114 +100,79 @@
         </div><!-- header-right -->
       </div><!-- headerbar -->
       <div class="pageheader">
-        <h2><i class="fa fa-cube"></i> Daftar Produk Baru </h2>
+        <h2><i class="fa fa-users"></i> Daftar Karyawan Baru </h2>
       </div>
       <div class="contentpanel">
-        <?php
-          if(!isset($_SESSION['notif'])) {
-              echo "";
-          }
-          else { 
-            if($_SESSION['notif'] == "error") { ?>
-              <div id="error-alert" class="alert alert-danger alert-solid" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="d-flex align-items-center justify-content-start">
-                  <i class="fa fa-times"></i>
-                  <span><strong>Error!</strong> Data produk gagal dimasukkan.</span>
-                </div><!-- d-flex -->
-              </div><!-- alert -->
-            <?php
-            unset($_SESSION['notif']);
-            }
-            else if ($_SESSION['notif'] == "sukses") { ?>
-              <div id="success-alert" class="alert alert-success alert-solid" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="d-flex align-items-center justify-content-start">
-                  <i class="fa fa-check-circle"></i>
-                  <span><strong>Sukses!</strong> Data produk berhasil dimasukkan.</span>
-                </div><!-- d-flex -->
-              </div><!-- alert -->
-            <?php 
-            unset($_SESSION['notif']);
-            }
-          } ?>
         <div class="row">
           <div class="panel-body panel-body-nopadding">
-            <form action="proses.php?cmd=insertProduk" method="POST" class="form-horizontal">
+            <form action="proses.php?cmd=insertKaryawan" method="POST" id="karyawanBaru" class="form-horizontal">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <h4 class="panel-title">Daftar Produk Baru</h4>
+                  <h4 class="panel-title">Daftar Karyawan Baru</h4>
                 </div>
-                <div class="panel-body">                
+                <div class="panel-body">
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Jenis Produk<span class="asterisk">*</span></label>
-                    <div class="col-sm-6">
-                      <select id="jenisProduk" name="jenisProduk" class="form-control" onchange="copy();" required>
-                        <option value="" disabled selected style="display: none;">[Pilih Jenis Produk]</option>
-                        <option value=1>Barang</option>
-                        <option value=2>Jasa</option>
+                    <label class="col-sm-4 control-label">Nama Karyawan<span class="asterisk">*</span></label>
+                    <div class="col-sm-4">
+                      <input type="text" placeholder="Nama Karyawan" required="true" name="namaKaryawan" class="form-control"/>
+                    </div>
+                  </div> 
+                  <div class="form-group">
+                    <label class="col-sm-4 control-label">Jabatan <span class="asterisk">*</span></label></label>
+                    <div class="col-sm-4">
+                      <select name="jabatanKaryawan" class="form-control select2" required="true">
+                        <option value="" disabled selected style="display: none;">[Pilih Jabatan]</option>
+                        <option value="K">Kapster</option>
+                        <option value="O">Operator</option>
+                        <option value="P">Penanggung Jawab</option>
                       </select>
                     </div>
-                  </div>
+                  </div>  
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Nama Produk<span class="asterisk">*</span></label>
-                    <div class="col-sm-6">
-                      <input name="namaProduk" class="form-control"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-3 control-label">Harga Jual<span class="asterisk">*</span></label>
-                    <div class="col-sm-6">
+                    <label class="col-sm-4 control-label">Nomor Telepon<span class="asterisk">*</span></label>
+                    <div class="col-sm-4">
                       <div class="input-group">
-                        <span class="input-group-addon">Rp.</span>
-                        <input type="number" name="hargaJualProduk" class="form-control" required/>
+                        <span class="input-group-addon"><i class="fa fa-phone tx-16 lh-0 op-6"></i></span>
+                        <input id="nomorTelepon" name="nomorTelepon" class="form-control" placeholder="(999) 999-9999" required />
                       </div>
                     </div>
                   </div>
-                  <div id="divMinStok"></div>                   
+                  <div class="form-group">
+                    <label class="col-sm-4 control-label">Tanggal Masuk<span class="asterisk">*</span></label>
+                    <div class="col-sm-4">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-calendar tx-16 lh-0 op-6"></i></span>
+                        <input type="date" name="tanggalMasuk" class="form-control" required="true" placeholder="MM/DD/YYYY">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-4 control-label">Gaji Pokok <span class="asterisk">*</span></label>
+                    <div class="col-sm-4">
+                      <input type="number" id="gajiPokok" name="gajiPokok" class="form-control" placeholder="Gaji Pokok" required />
+                    </div>
+                  </div>
                   <div class="panel-footer">
                     <div class="row">
-                      <div class="col-sm-9">
+                      <div class="col-sm-8">
                         <button id="submit" class="btn btn-primary" style="float: right; margin-left: 1%">Submit</button>
                         <button type="reset" class="btn btn-default" style="float: right;">Reset</button>
                       </div>
                     </div>
                   </div>
                 </div>
-                <!-- panel-body -->
               </div>
-              <!-- panel-default-->
-            </form>
-          </div>
-          <!-- panel -->
+              <!-- panel-body -->
+            </div>
+            <!-- panel -->
+          </form>
         </div>
       </div><!-- contentpanel -->
     </div><!-- mainpanel -->
   </section>
-  <?php include 'resources2.php'; ?>
 
   <script type="text/javascript">
-    function copy() {
-      if(document.getElementById('jenisProduk').value==2){
-        document.getElementById("divMinStok").innerHTML=''
-      }
-      else if(document.getElementById('jenisProduk').value==1){
-        document.getElementById("divMinStok").innerHTML=
-        '<div class="form-group">'+
-        '<label class="col-sm-3 control-label">Minimal Stok<span class="asterisk">*</span></label>'+
-        '<div class="col-sm-6">'+
-        '<input type="number" name="minStokProduk" class="form-control" required/>'+
-        '</div>'+
-        '</div>'
-      }
-    }
 
-    $("#success-alert").fadeTo(3000, 500).slideUp(500);
-    $("#error-alert").fadeTo(3000, 500).slideUp(500);
-    </script>
+  </script>
 </body>
 </html>
