@@ -4,7 +4,6 @@
 <meta name="author" content="">
 <link rel="shortcut icon" href="images/favicon.png" type="image/png">
 
-<title>Sistem Akuntansi Online</title>
 
 <link href="css/style.default.css" rel="stylesheet">
 
@@ -13,10 +12,13 @@
 <link rel="stylesheet" href="css/colorpicker.css" />
 <link rel="stylesheet" href="css/dropzone.css" />
 <link rel="stylesheet" href="css/select2.css" />
+<link rel="stylesheet" href="css/select2.min.css" />
 <link rel="stylesheet" href="css/fullcalendar.css" />
 <link rel="stylesheet" href="css/ionicons.css" />
 <link rel="stylesheet" href="css/perfect-scrollbar.css" />
 <link rel="stylesheet" href="css/jquery.switchButton.css" />
+<link rel="stylesheet" href="/css/font-awesome.css">
+<link rel="stylesheet" href="/css/bracket.css">
 
 
 <!-- DataTables -->

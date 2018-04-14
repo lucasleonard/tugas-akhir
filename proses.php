@@ -4,6 +4,25 @@ require './db.php';
 $cmd = $_GET['cmd'];
 
 switch ($cmd) {
+    case "login": //tambah_aset.php
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $sql = "SELECT * FROM user WHERE username = '".$user."' AND password = '".$password."'";
+        $result = mysqli_query($link,$sql);
+        if (!$result) {
+            $_SESSION['notif'] = "error";
+            header("Location: /gentlemen/login.php");
+        }
+        if(mysqli_num_rows($result)<1){
+            $_SESSION['notif'] = "loginSalah";
+            header("Location: /gentlemen/login.php");
+        }
+        else if(mysqli_num_rows($result)>0){
+            $_SESSION['notif'] = "loginBenar";
+            header("Location: /gentlemen/index.php");
+        }
+        break;
+
     case "insertAset": //tambah_aset.php
         $namaAset = $_POST['namaAset'];
         $hargaBeli = $_POST['hargaBeli'];
