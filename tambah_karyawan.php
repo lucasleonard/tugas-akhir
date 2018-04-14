@@ -6,13 +6,6 @@
   include 'resources.php'; 
   include 'resources2.php';
   include 'sql.php';
-  if(!isset($_SESSION['notif'])) {
-      echo "";
-  }
-  else {
-    echo $_SESSION['notif']."</br>";
-    unset($_SESSION['notif']);
-  }
   ?>
 </head>
 <body>
@@ -101,9 +94,41 @@
         </div><!-- header-right -->
       </div><!-- headerbar -->
       <div class="pageheader">
-        <h2><i class="fa fa-users"></i> Daftar Karyawan Baru </h2>
+        <h2><i class="fa fa-users"></i> Karyawan </h2>
       </div>
       <div class="contentpanel">
+      <?php
+        if(!isset($_SESSION['notif'])) {
+            echo "";
+        }
+        else { 
+          if($_SESSION['notif'] == "error") { ?>
+            <div id="error-alert" class="alert alert-danger alert-solid" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="d-flex align-items-center justify-content-start">
+                <i class="fa fa-times"></i>
+                <span><strong>Gagal!</strong> Data karyawan gagal dimasukkan.</span>
+              </div><!-- d-flex -->
+            </div><!-- alert -->
+            <?php
+            unset($_SESSION['notif']);
+          }
+          else if ($_SESSION['notif'] == "sukses") { ?>
+            <div id="success-alert" class="alert alert-success alert-solid" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="d-flex align-items-center justify-content-start">
+                <i class="fa fa-check-circle"></i>
+                <span><strong>Sukses!</strong> Data karyawan berhasil dimasukkan.</span>
+              </div><!-- d-flex -->
+            </div><!-- alert -->
+          <?php 
+          unset($_SESSION['notif']);
+          }
+        } ?>
         <div class="row">
           <div class="panel-body panel-body-nopadding">
             <form action="proses.php?cmd=insertKaryawan" method="POST" id="karyawanBaru" class="form-horizontal">
@@ -134,7 +159,7 @@
                     <div class="col-sm-4">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-phone tx-16 lh-0 op-6"></i></span>
-                        <input id="nomorTelepon" name="nomorTelepon" class="form-control" placeholder="(999) 999-9999" required />
+                        <input type="number" id="nomorTelepon" name="nomorTelepon" class="form-control" placeholder="(999) 999-9999" required />
                       </div>
                     </div>
                   </div>
@@ -176,7 +201,8 @@
   </section>
 
   <script type="text/javascript">
-
+    $("#success-alert").fadeTo(3000, 500).slideUp(500);
+    $("#error-alert").fadeTo(3000, 500).slideUp(500);
   </script>
 </body>
 </html>

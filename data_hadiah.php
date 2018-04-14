@@ -39,10 +39,10 @@
               <li><a href="data_produk.php"><i class="fa fa-caret-right"></i> <span>Data Produk</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-truck"></i> <span>Supplier</span></a>
-            <ul class="children" style="display: block";>
+          <li class="nav-parent"><a href=""><i class="fa fa-truck"></i> <span>Supplier</span></a>
+            <ul class="children">
               <li><a href="tambah_supplier.php"><i class="fa fa-caret-right"></i> <span>Tambah Supplier</span></a></li>
-              <li class="active"><a href="data_supplier.php"><i class="fa fa-caret-right"></i> <span>Data Supplier</span></a></li>
+              <li><a href="data_supplier.php"><i class="fa fa-caret-right"></i> <span>Data Supplier</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
@@ -51,10 +51,10 @@
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
-            <ul class="children">
+          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
+            <ul class="children style="display: block";">
               <li><a href="tambah_hadiah.php"><i class="fa fa-caret-right"></i> <span>Tambah Hadiah</span></a></li>
-              <li><a href="data_hadiah.php"><i class="fa fa-caret-right"></i> <span>Data Hadiah</span></a></li>
+              <li class="active"><a href="data_hadiah.php"><i class="fa fa-caret-right"></i> <span>Data Hadiah</span></a></li>
               <li><a href="data_poin.php"><i class="fa fa-caret-right"></i> <span>Data Poin Pelanggan</span></a></li>
               <li><a href="data_reservasi.php"><i class="fa fa-caret-right"></i> <span>Data Reservasi</span></a></li>
             </ul>
@@ -105,14 +105,14 @@
         </div><!-- header-right -->
       </div><!-- headerbar -->
       <div class="pageheader">
-        <h2><i class="fa fa-truck"></i> Supplier </h2>
+        <h2><i class="fa fa-truck"></i> Poin & Reservasi </h2>
       </div>
       <div class="contentpanel">
         <div class="row">
           <div class="panel-body panel-body-nopadding">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title">Data Supplier</h4>
+                <h4 class="panel-title">Data Hadiah</h4>
               </div>
               <div class="panel-body">
                 <div class="form-group">
@@ -124,10 +124,9 @@
                             <table id="datatable-buttons" class="table table-striped table-bordered">
                               <thead>
                                 <tr>
-                                  <th>Nama Supplier</th>
-                                  <th>Nama Supplier</th>
-                                  <th>No. Telepon</th>
-                                  <th>Alamat</th>
+                                  <th>Nama Hadiah</th>
+                                  <th>Jumlah Poin</th>
+                                  <th>Aktif</th>
                                   <th>Actions</th>
                                 </tr>
                               </thead>

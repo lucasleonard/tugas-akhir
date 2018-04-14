@@ -3,10 +3,11 @@
 <head>
   <?php
   session_start();
-  include 'resources.php'; 
+  include 'resources.php';
+  include 'resources2.php';
+  include 'sql.php';
   ?>
 </head>
-<?php include 'sql.php'; ?>
 <body>
   <!-- Preloader -->
   <div id="preloader">
@@ -15,7 +16,7 @@
   <section>
     <div class="leftpanel">
       <div class="logopanel">
-        <h1><span>[</span>GENTLEMEN<span>]</span></h1>
+        <h1><span>[</span> GENTLEMEN <span>]</span></h1>
       </div><!-- logopanel -->
       <div class="leftpanelinner">
         <h5 class="sidebartitle">Navigation</h5>
@@ -93,7 +94,7 @@
         </div><!-- header-right -->
       </div><!-- headerbar -->
       <div class="pageheader">
-        <h2><i class="fa fa-truck"></i> Daftar Supplier Baru </h2>
+        <h2><i class="fa fa-truck"></i> Supplier </h2>
       </div>
       <div class="contentpanel">
         <?php
@@ -130,8 +131,8 @@
           } ?>
         
         <div class="row">
-          <div class="panel-body panel-body-nopadding">
-            <form action="" method="POST" id="supplierBaru" class="form-horizontal">
+          <div class="panel-body panel-body-nopadding form-horizontal">
+            <!--<form action="" method="POST" id="supplierBaru" class="form-horizontal">-->
               <div class="panel panel-default">
                 <div class="panel-heading">
                 <h4 class="panel-title">Daftar Supplier Baru</h4>
@@ -155,9 +156,9 @@
                     <input name="nomorTelepon" class="form-control"/>
                   </div>
                 </div>
-                <div class="form-group" id="formBarang">
+                <div id="formBarang">
                   <div class="form-group" id="divBarang">
-                    <label class="col-sm-3 control-label">Barang Supplier</label>
+                    <label class="col-sm-3 control-label">Barang Supplier<span class="asterisk">*</span></label>
                     <div class="col-sm-6" id="namaBarang">
                       <select name="barangSupplier[]" class="form-control">
                         <option value="" disabled selected style="display: none;">[Pilih Barang]</option>
@@ -170,7 +171,7 @@
                     </div>
                   </div>  
                 </div>
-              </form>
+              <!--</form>-->
                 <div class="form-group">
                   <div id="divButton">
                     <div class="col-sm-9">
@@ -197,7 +198,6 @@
       </div><!-- contentpanel -->
     </div><!-- mainpanel -->
   </section>
-  <?php include 'resources2.php'; ?>
 
   <script type="text/javascript">
     var htmlNama = $('#divBarang:eq(0)')[0].outerHTML;

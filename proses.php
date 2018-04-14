@@ -22,14 +22,13 @@ switch ($cmd) {
         }
         break;
 
-    case "insertKaryawan": //tambah_supplier.php
+    case "insertKaryawan": //tambah_karyawan.php
         $namaKaryawan = $_POST['namaKaryawan'];
         $jabatanKaryawan = $_POST['jabatanKaryawan'];
         $nomorTelepon = $_POST['nomorTelepon'];
         $tanggalMasuk = $_POST['tanggalMasuk'];
         $gajiPokok = $_POST['gajiPokok'];
         $sql = "INSERT INTO `karyawan`(`nama`, `noTelp`, `jabatan`, `tanggalMasuk`, `gajiPokok`, `aktif`) VALUES ('".$namaKaryawan."', '".$nomorTelepon."', '".$jabatanKaryawan."', '".$tanggalMasuk."', ".$gajiPokok." , 1)";
-        //$sql = "INSERT INTO `supplier`(`nama`, `noTelp`, `alamat`) VALUES ('test', 'testt', 'test' )";
         $result = mysqli_query($link,$sql);
         if (!$result) {
             $_SESSION['notif'] = "error";
@@ -39,6 +38,19 @@ switch ($cmd) {
             $_SESSION['notif'] = "sukses";
             header("Location: tambah_karyawan.php");
         }
+        break;
+
+    case "insertHadiah": //tambah_karyawan.php
+        $namaHadiah = $_POST['namaHadiah'];
+        $jumlahPoin = $_POST['jumlahPoin'];
+        $sql = "INSERT INTO `hadiah`(`nama`, `jumlah`, `aktif`) VALUES ('".$namaHadiah."', ".$jumlahPoin.", 1)";
+        $result = mysqli_query($link,$sql);
+        if (!$result) {
+            $_SESSION['notif'] = "error";
+            header("Location: /gentlemen/tambah_hadiah.php");
+        }
+        $_SESSION['notif'] = "sukses";
+        header("Location: tambah_hadiah.php");
         break;
 
     case "hapusSupplier":        
@@ -59,7 +71,7 @@ switch ($cmd) {
         $namaSupplier = $_GET['namaSupplier'];
         $alamatSupplier = $_GET['alamatSupplier'];
         $nomorTelepon = $_GET['nomorTelepon'];
-        $sql = "INSERT INTO `supplier`(`nama`, `noTelp`, `alamat`) VALUES ('".$namaSupplier."', '".$nomorTelepon."', '".$alamatSupplier."' )";
+        $sql = "INSERT INTO `supplier`(`nama`, `noTelp`, `alamat`, `aktif`) VALUES ('".$namaSupplier."', '".$nomorTelepon."', '".$alamatSupplier."', 1 )";
         $result = mysqli_query($link,$sql);
         if (!$result) {
             die("SQL ERROR.".$sql);
@@ -75,12 +87,11 @@ switch ($cmd) {
             $sql = "INSERT INTO `supplier_has_barang`(`Supplier_idSupplier`, `Barang_kodeBarang`) VALUES (".$rowIdSupplier->topIdSupp.", ".$kodeBarang.")";
             $result = mysqli_query($link,$sql);
             if (!$result) {
-                $_SESSION['notif']= "error";
+                $_SESSION['notif']= "error2";
                 die("SQL ERROR.".$sql);
             }
         }
         $_SESSION['notif']= "sukses";
-        header("Location: /gentlemen/tambah_supplier.php");
         break;
 
     case "insertProduk": //tambah_produk.php
