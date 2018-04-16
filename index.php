@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <?php include 'resources.php'; ?>
 </head>
 <?php include 'sql.php'; ?>
+
 <body>
+  <?php include 'resources.php'; 
+  $expireAfter = 2;
+  if(isset($_SESSION['last_action'])){
+      // $secondsInactive = time() - $_SESSION['last_action'];
+      // $expireAfterSeconds = $expireAfter * 60;
+      // if($secondsInactive >= $expireAfterSeconds){
+      //     session_unset();
+      //     session_destroy();
+      // }
+    echo "asdasdadadasdasdasdasdasd";
+  }
+  else{
+    header("Location: /gentlemen/login.php");
+  }
+
+  ?>
   <!-- Preloader -->
   <div id="preloader">
     <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
@@ -12,7 +29,7 @@
   <section>
     <div class="leftpanel">
       <div class="logopanel">
-        <h1><span>[</span> ZUPPU <span>]</span></h1>
+        <h1><span>[</span> GENTLEMEN <span>]</span></h1>
       </div><!-- logopanel -->
       <div class="leftpanelinner">
         <h5 class="sidebartitle">Navigation</h5>
@@ -194,12 +211,12 @@
             </div><!-- panel -->
           </div>
         </div>
-
       </div>
     </section>
-    <?php include 'resources2.php'; ?>
   </body>
 
+
+  <?php include 'resources2.php'; ?>
   <script type="text/javascript">
     function periode(value)
     {

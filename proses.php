@@ -7,18 +7,19 @@ switch ($cmd) {
     case "login": //tambah_aset.php
         $username = $_POST['username'];
         $password = $_POST['password'];
-        $sql = "SELECT * FROM user WHERE username = '".$user."' AND password = '".$password."'";
+        $sql = "SELECT * FROM karyawan WHERE username = 'admin' AND password = 'admin'";
         $result = mysqli_query($link,$sql);
         if (!$result) {
             $_SESSION['notif'] = "error";
-            header("Location: /gentlemen/login.php");
+            die("SQL ERROR.".$sql);
         }
         if(mysqli_num_rows($result)<1){
+            $_SESSION['asd']= mysqli_num_rows($result);
             $_SESSION['notif'] = "loginSalah";
             header("Location: /gentlemen/login.php");
         }
         else if(mysqli_num_rows($result)>0){
-            $_SESSION['notif'] = "loginBenar";
+            $_SESSION['last_action'] = time();
             header("Location: /gentlemen/index.php");
         }
         break;
