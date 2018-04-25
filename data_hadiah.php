@@ -52,7 +52,7 @@
             </ul>
           </li>
           <li class="nav-parent nav-active active"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
-            <ul class="children style="display: block";">
+            <ul class="children" style="display: block";">
               <li><a href="tambah_hadiah.php"><i class="fa fa-caret-right"></i> <span>Tambah Hadiah</span></a></li>
               <li class="active"><a href="data_hadiah.php"><i class="fa fa-caret-right"></i> <span>Data Hadiah</span></a></li>
               <li><a href="data_poin.php"><i class="fa fa-caret-right"></i> <span>Data Poin Pelanggan</span></a></li>
@@ -135,7 +135,6 @@
                                 $hitung = 1;
                                 $index = 0;
                                 while ($row = mysqli_fetch_object($resultSupplier)) {
-                                  echo "<tr><td>" . $row->idSupplier. "</td>";
                                   echo "<td>" . $row->nama. "</td>";
                                   echo "<td>" . $row->noTelp . "</td>";
                                   echo "<td>" . $row->alamat . "</td>";

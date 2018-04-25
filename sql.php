@@ -22,6 +22,13 @@
     echo "SQL ERROR: ". $sql;
   }
 
+  // Mencari Karyawan aktif
+  $sql = "SELECT * FROM karyawan WHERE aktif=1";
+  $resultKaryawan = mysqli_query($link, $sql);
+  if(!$resultKaryawan){
+    echo "SQL ERROR: ". $sql;
+  }
+
   //Mencari data di Database "notabeli" untuk "nota_pembelian.php"
   $sql = "SELECT * FROM notabeli WHERE caraBayar = 'K' AND lunas = 0 GROUP BY noNota";
   $notabeli_kredit = mysqli_query($link, $sql);

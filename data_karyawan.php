@@ -1,21 +1,14 @@
 <?php
   session_start();
-  include 'resources.php'; 
   include 'sql.php';
-
-  if(isset($_POST['kode'])) {
-    $kode = $_POST['kode'];
-    $sqlP = "SELECT * FROM supplier WHERE idSupplier = ".$kode;
-    $resultP = mysqli_query($link, $sqlP);
-    $rowP = mysqli_fetch_object($resultP);
-    header("content-type: text/x-json");
-    echo json_encode($rowP);
-    exit(); 
-  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <?php
+  include 'resources.php'; 
+  ?>
+  <title>Gentlemen | Data Karyawan</title>
 </head>
 
 <body>
@@ -38,16 +31,16 @@
               <li><a href="data_produk.php"><i class="fa fa-caret-right"></i> <span>Data Produk</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-truck"></i> <span>Supplier</span></a>
-            <ul class="children" style="display: block";>
+          <li class="nav-parent"><a href=""><i class="fa fa-truck"></i> <span>Supplier</span></a>
+            <ul class="children">
               <li><a href="tambah_supplier.php"><i class="fa fa-caret-right"></i> <span>Tambah Supplier</span></a></li>
-              <li class="active"><a href="data_supplier.php"><i class="fa fa-caret-right"></i> <span>Data Supplier</span></a></li>
+              <li><a href="data_supplier.php"><i class="fa fa-caret-right"></i> <span>Data Supplier</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
-            <ul class="children">
+          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
+            <ul class="children" style="display: block";>
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
-              <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
+              <li class="active"><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -104,14 +97,14 @@
         </div><!-- header-right -->
       </div><!-- headerbar -->
       <div class="pageheader">
-        <h2><i class="fa fa-truck"></i> Supplier </h2>
+        <h2><i class="fa fa-users"></i> Karyawan </h2>
       </div>
       <div class="contentpanel">
         <div class="row">
           <div class="panel-body panel-body-nopadding">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title">Data Supplier</h4>
+                <h4 class="panel-title">Data Karyawan</h4>
               </div>
               <div class="panel-body">
                 <div class="form-group">
@@ -123,10 +116,11 @@
                             <table id="datatable-buttons" class="table table-striped table-bordered">
                               <thead>
                                 <tr>
-                                  <th>Nama Supplier</th>
-                                  <th>Nama Supplier</th>
+                                  <th>Nama Karyawan</th>
+                                  <th>Jabatan</th>
+                                  <th>Tanggal Masuk</th>
                                   <th>No. Telepon</th>
-                                  <th>Alamat</th>
+                                  <th>Gaji Pokok</th>
                                   <th>Actions</th>
                                 </tr>
                               </thead>
@@ -134,15 +128,22 @@
                                 <?php
                                 $hitung = 1;
                                 $index = 0;
-                                while ($row = mysqli_fetch_object($resultSupplier)) {
-                                  echo "<tr><td>" . $row->idSupplier. "</td>";
-                                  echo "<td>" . $row->nama. "</td>";
+                                while ($row = mysqli_fetch_object($resultKaryawan)) {
+                                  echo "<tr><td>" . $row->nama. "</td>";
+                                  if($row->jabatan == "K")
+                                    $jabatan = "Kapster";
+                                  else if($row->jabatan == "P")
+                                    $jabatan = "Penanggung Jawab";
+                                  else if($row->jabatan == "O")
+                                    $jabatan = "Operator";
+                                  echo "<td>" . $jabatan. "</td>";
+                                  echo "<td>" . $row->tanggalMasuk . "</td>";
                                   echo "<td>" . $row->noTelp . "</td>";
-                                  echo "<td>" . $row->alamat . "</td>";
+                                  echo "<td>" . $row->gajiPokok . "</td>";
                                   echo "<td>
-                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idSupplier . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idKaryawan . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
                                     <a href='#'><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
-                                    <a href='proses.php?cmd=hapusSupplier&i=".$row->idSupplier."'><i class='fa fa-ban'></i>
+                                    <a href='proses.php?cmd=hapusSupplier&i=".$row->idKaryawan."'><i class='fa fa-ban'></i>
                                   </td></tr>";
                                 } ?>
                               </tbody>
@@ -162,68 +163,10 @@
       </div><!-- contentpanel -->
     </div><!-- mainpanel -->
   </section>
-
-  <!-- .modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-  <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="exampleModalLabel"><strong>Edit Data Supplier</strong></h4>
-          </div>
-          <div class="modal-body">
-           <form action="proses.php?cmd=editSupplier" method="POST">
-              <div class="form-group">
-                <label class="control-label">Nama :</label>
-                <input name="namaSupplier" type="text" class="form-control" id="namaSupplier">
-              </div>
-              <div class="form-group">
-                <label class="control-label">No. Telepon :</label>
-                <input name="noTelepon" type="text" class="form-control" id="noTelepon">
-              </div>
-              <div class="form-group">
-                <label class="control-label">Alamat :</label>
-                <input name="alamatSupplier" type="text" class="form-control" id="alamatSupplier">
-              </div>
-              <div class="form-group">
-                <label class="control-label">List Barang :</label>
-              </div>
-              <div class="modal-footer">
-                  <input type="submit" class="btn btn-primary" id="kirim" value="SIMPAN"/>
-              </div>
-            </form>
-          </div><!--ModalBody-->
-      </div><!--Modal Content-->
-    </div><!--Modal Dialog-->
-  <!-- /.modal -->
 </body>
 
-  <?php  
+  <?php
   include 'resources2.php';
   ?>
-  
-  <script type="text/javascript">
-    //$(function() {
-      $("body").delegate('.edit', 'click', function(){
-          var idEdit = $(this).attr('ide');
-          $.ajax({
-            url     : "data_supplier.php",
-            type    : "POST",
-            data    : {
-              "kode": idEdit
-            },
-            success:function(show)
-            {
-              alert("SUCESS");
-              $("#namaSupplier").val(show.nama);
-              $("#noTelepon").val(show.noTelepon);
-              $("#alamatSupplier").val(show.alamat);
-            },
-            error: function(result) {
-              alert("Error");
-            }
-          });
-        });
-      //}); 
-    </script>
+
 </html>
