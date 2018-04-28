@@ -142,8 +142,11 @@
                     <div class="col-sm-6">
                       <select id="jenisProduk" name="jenisProduk" class="form-control" onchange="copy();" required>
                         <option value="" disabled selected style="display: none;">[Pilih Jenis Produk]</option>
-                        <option value=1>Barang</option>
-                        <option value=2>Jasa</option>
+                        <?php
+                          while($rowJenis = mysqli_fetch_object($resultJenis)){
+                            echo "<option value=".$rowJenis->idJenis.">".$rowJenis->nama."</option>";
+                          }
+                        ?>
                       </select>
                     </div>
                   </div>

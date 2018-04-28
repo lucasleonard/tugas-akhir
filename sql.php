@@ -1,6 +1,14 @@
 <?php
   require './db.php';
 
+
+  // Mencari Jenis Produk
+  $sql = "SELECT * FROM jenis";
+  $resultJenis = mysqli_query($link, $sql);
+  if(!$resultJenis){
+    echo "SQL ERROR: ". $sql;
+  }
+
   // Mencari Produk
   $sql = "SELECT * FROM barang";
   $resultBarang = mysqli_query($link, $sql);
@@ -26,6 +34,13 @@
   $sql = "SELECT * FROM karyawan WHERE aktif=1";
   $resultKaryawan = mysqli_query($link, $sql);
   if(!$resultKaryawan){
+    echo "SQL ERROR: ". $sql;
+  }
+
+  // Mencari Komisi Karyawan aktif
+  $sql = "SELECT * FROM barang_has_karyawan";
+  $resultBarangHasKaryawan = mysqli_query($link, $sql);
+  if(!$resultBarangHasKaryawan){
     echo "SQL ERROR: ". $sql;
   }
 

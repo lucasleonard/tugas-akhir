@@ -1,21 +1,28 @@
 <?php
   session_start();
-  include 'resources.php'; 
   include 'sql.php';
 
   if(isset($_POST['kode'])) {
     $kode = $_POST['kode'];
-    $sqlP = "SELECT * FROM supplier WHERE idSupplier = ".$kode;
+    $sqlP = "SELECT DISTINCT * FROM `supplier_has_barang` sb, `supplier` s WHERE s.idSupplier = ".$kode." AND sb.Supplier_idSupplier = ".$kode;
     $resultP = mysqli_query($link, $sqlP);
     $rowP = mysqli_fetch_object($resultP);
+    // $sqlBarangSupplier = "SELECT * FROM supplier_has_barang WHERE Supplier_idSupplier = ".$kode;
+    // $resultBarangSupplier = mysqli_query($link, $sqlBarangSupplier);
+    // $rowBarangSupplier = mysqli_fetch_object($resultBarangSupplier);
     header("content-type: text/x-json");
     echo json_encode($rowP);
+    //echo json_encode($rowBarangSupplier);
     exit(); 
   }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <?php
+  include 'resources.php'; 
+  ?>
+  <title> Gentlemen | Data Supplier </title>
 </head>
 
 <body>
@@ -124,7 +131,6 @@
                               <thead>
                                 <tr>
                                   <th>Nama Supplier</th>
-                                  <th>Nama Supplier</th>
                                   <th>No. Telepon</th>
                                   <th>Alamat</th>
                                   <th>Actions</th>
@@ -135,7 +141,6 @@
                                 $hitung = 1;
                                 $index = 0;
                                 while ($row = mysqli_fetch_object($resultSupplier)) {
-                                  echo "<tr><td>" . $row->idSupplier. "</td>";
                                   echo "<td>" . $row->nama. "</td>";
                                   echo "<td>" . $row->noTelp . "</td>";
                                   echo "<td>" . $row->alamat . "</td>";
@@ -195,7 +200,7 @@
           </div><!--ModalBody-->
       </div><!--Modal Content-->
     </div><!--Modal Dialog-->
-  <!-- /.modal -->
+  </div><!-- /.modal -->
 </body>
 
   <?php  
@@ -214,13 +219,15 @@
             },
             success:function(show)
             {
-              alert("SUCESS");
+              //alert("SUCESS");
               $("#namaSupplier").val(show.nama);
-              $("#noTelepon").val(show.noTelepon);
+              $("#noTelepon").val(show.noTelp);
               $("#alamatSupplier").val(show.alamat);
             },
             error: function(result) {
-              alert("Error");
+              alert(JSON.stringify(result));
+              //alert(result);
+              //alert("Ajax Error");
             }
           });
         });

@@ -4,7 +4,7 @@
 
   if(isset($_POST['kode'])) {
     $kode = $_POST['kode'];
-    $sqlP = "SELECT * FROM `karyawan` WHERE idKaryawan = ".$kode;
+    $sqlP = "SELECT * FROM `barang_has_karyawan` WHERE karyawan_idKaryawan = ".$kode;
     $resultP = mysqli_query($link, $sqlP);
     $rowP = mysqli_fetch_object($resultP);
     header("content-type: text/x-json");
@@ -18,7 +18,7 @@
   <?php
   include 'resources.php'; 
   ?>
-  <title>Gentlemen | Data Karyawan</title>
+  <title>Gentlemen | Komisi Karyawan</title>
 </head>
 
 <body>
@@ -50,7 +50,8 @@
           <li class="nav-parent nav-active active"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
             <ul class="children" style="display: block";>
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
-              <li class="active"><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
+              <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
+              <li class="active"><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Komisi Karyawan</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -122,7 +123,7 @@
               </button>
               <div class="d-flex align-items-center justify-content-start">
                 <i class="fa fa-times"></i>
-                <span><strong>Gagal!</strong> Data karyawan gagal diubah.</span>
+                <span><strong>Gagal!</strong> Komisi karyawan gagal diubah.</span>
               </div><!-- d-flex -->
             </div><!-- alert -->
             <?php
@@ -135,7 +136,7 @@
               </button>
               <div class="d-flex align-items-center justify-content-start">
                 <i class="fa fa-check-circle"></i>
-                <span><strong>Sukses!</strong> Data karyawan berhasil diubah.</span>
+                <span><strong>Sukses!</strong> Komisi karyawan berhasil diubah.</span>
               </div><!-- d-flex -->
             </div><!-- alert -->
           <?php 
@@ -146,48 +147,34 @@
           <div class="panel-body panel-body-nopadding">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title">Data Karyawan</h4>
+                <h4 class="panel-title">Komisi Karyawan</h4>
               </div>
               <div class="panel-body">
                 <div class="form-group">
                   <div class="panel panel-default">
                     <div class="panel-body">
                       <div class="row p-t-50">
+                        <div class="col-sm-3" style="margin-bottom:1%;">
+                          <?php
+                          while($rowKaryawan = mysqli_fetch_object($resultKaryawan)){
+                            echo "<select class='form-control select2' onchange='komisi(this.value)'>";
+                              echo "<option value='' disabled selected style='display: none;''>[Pilih Karyawan]</option>";
+                              echo "<option value=".$rowKaryawan->idKaryawan.">".$rowKaryawan->nama."</option> ";
+                            echo "</select>";
+                          }
+                          ?>
+                        </div>
                         <div class="col-sm-12">
                           <div class="m-b-20 table-responsive">
                             <table id="datatable-buttons" class="table table-striped table-bordered">
                               <thead>
                                 <tr>
-                                  <th>Nama Karyawan</th>
-                                  <th>Jabatan</th>
-                                  <th>Tanggal Masuk</th>
-                                  <th>No. Telepon</th>
-                                  <th>Gaji Pokok</th>
-                                  <th>Actions</th>
+                                  <th style="width: 35%">Jasa</th>
+                                  <th style="width: 40%">Komisi</th>
+                                  <th style="width: 25%">Actions</th>
                                 </tr>
                               </thead>
-                              <tbody>
-                                <?php
-                                $hitung = 1;
-                                $index = 0;
-                                while ($row = mysqli_fetch_object($resultKaryawan)) {
-                                  echo "<tr><td>" . $row->nama. "</td>";
-                                  if($row->jabatan == "K")
-                                    $jabatan = "Kapster";
-                                  else if($row->jabatan == "P")
-                                    $jabatan = "Penanggung Jawab";
-                                  else if($row->jabatan == "O")
-                                    $jabatan = "Operator";
-                                  echo "<td>" . $jabatan. "</td>";
-                                  echo "<td>" . $row->tanggalMasuk . "</td>";
-                                  echo "<td>" . $row->noTelp . "</td>";
-                                  echo "<td>" . $row->gajiPokok . "</td>";
-                                  echo "<td>
-                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idKaryawan . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
-                                    <a href='#'><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
-                                    <a href='proses.php?cmd=hapusSupplier&i=".$row->idKaryawan."'><i class='fa fa-ban'></i>
-                                  </td></tr>";
-                                } ?>
+                              <tbody id="list-komisi">
                               </tbody>
                             </table>
                           </div>
@@ -206,40 +193,23 @@
     </div><!-- mainpanel -->
   </section>
 
-
   <!-- .modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="exampleModalLabel"><strong>Edit Data Karyawan</strong></h4>
+              <h4 class="modal-title" id="exampleModalLabel"><strong>Edit Komisi Karyawan</strong></h4>
           </div>
           <div class="modal-body">
            <form action="proses.php?cmd=editKaryawan" method="POST">
               <div class="form-group">
-                <label class="control-label">Nama :</label>
-                <input name="namaKaryawan" type="text" class="form-control" id="namaKaryawan">
+                <label class="control-label">Jasa :</label>
+                <input name="jasaKaryawan" type="text" class="form-control" id="jasaKaryawan" disabled="true">
               </div>
               <div class="form-group">
-                <label class="control-label">Jabatan :</label>
-                <select name="jabatan" class="form-control" id="jabatan">
-                  <option value="K">Kapster</option>
-                  <option value="O">Operator</option>
-                  <option value="P">Penanggung Jawab</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="control-label">Tanggal Masuk :</label>
-                <input type="date" name="tanggalMasuk" type="text" class="form-control" id="tanggalMasuk">
-              </div>
-              <div class="form-group">
-                <label class="control-label">No. Telepon :</label>
-                <input name="noTelepon" type="text" class="form-control" id="noTelepon">
-              </div>
-              <div class="form-group">
-                <label class="control-label">Gaji Pokok :</label>
-                <input type="number" name="gajiPokok" type="text" class="form-control" id="gajiPokok">
+                <label class="control-label">Komisi :</label>
+                <input name="komisi" type="text" class="form-control" id="komisi">
               </div>
               <div class="modal-footer">
                   <input type="submit" class="btn btn-primary" id="kirim" value="SIMPAN"/>
@@ -260,26 +230,15 @@
         var idEdit = $(this).attr('ide');
         var jabatanTampung ;
         $.ajax({
-          url     : "data_karyawan.php",
+          url     : "data_komisi.php",
           type    : "POST",
           data    : {
             "kode": idEdit
           },
           success:function(show)
           {
-            $("#namaKaryawan").val(show.nama);
-            if(show.jabatan=="K")
-              $("#jabatan").val("K");
-            else if(show.jabatan=="P")
-              $("#jabatan").val("P");
-            else if(show.jabatan=="O")
-              $("#jabatan").val("O");
-            else
-              jabatanTampung="ERROR";
-            //$("#jabatan").val(jabatanTampung);
-            $("#tanggalMasuk").val(show.tanggalMasuk);
-            $("#noTelepon").val(show.noTelp);
-            $("#gajiPokok").val(show.gajiPokok);
+            $("#jasaKaryawan").val(show.Barang_kodeBarang);
+            $("#komisi").val(show.bonus);
           },
           error: function(result) {
             //alert(JSON.stringify(result));
@@ -294,4 +253,27 @@
       $("#success-alert").fadeTo(3000, 500).slideUp(500);
       $("#error-alert").fadeTo(3000, 500).slideUp(500);
     </script>
+
+    <script type="text/javascript">
+    function komisi(value)
+    {
+      $.ajax({
+        url: 'list-komisi.php',
+        type: "POST",
+        data: { idKaryawan : value },
+        success: function(data)
+        {
+          var table = $('#datatable-buttons').DataTable();
+          table.clear().draw();
+          var dataArr = data.split('@');
+          for($i = 0; $i < dataArr.length-1; $i++)
+          {
+            var dataArr2 = dataArr[$i].split(";");
+            table.row.add([dataArr2[0], dataArr2[1], dataArr2[2]]).draw();
+          }
+        }
+      });
+    }
+  </script>
+
 </html>

@@ -60,6 +60,24 @@ switch ($cmd) {
         }
         break;
 
+    case "editKaryawan": //data_karyawan.php
+        $namaKaryawan = $_POST['namaKaryawan'];
+        $jabatanKaryawan = $_POST['jabatan'];
+        $nomorTelepon = $_POST['noTelepon'];
+        $tanggalMasuk = $_POST['tanggalMasuk'];
+        $gajiPokok = $_POST['gajiPokok'];
+        $sql = "UPDATE `karyawan` SET `nama` = '".$namaKaryawan."', `noTelp` = '".$nomorTelepon."', `jabatan` = '".$jabatanKaryawan."', `tanggalMasuk` = '".$tanggalMasuk."', `gajiPokok` = ".$gajiPokok;
+        $result = mysqli_query($link,$sql);
+        if (!$result) {
+            $_SESSION['notif'] = "error";
+            header("Location: /gentlemen/data_karyawan.php");
+        }
+        else {
+            $_SESSION['notif'] = "sukses";
+            header("Location: data_karyawan.php");
+        }
+        break;
+
     case "insertHadiah": //tambah_karyawan.php
         $namaHadiah = $_POST['namaHadiah'];
         $jumlahPoin = $_POST['jumlahPoin'];
@@ -249,8 +267,7 @@ switch ($cmd) {
         header("Location: /gentlemen/nota_pembelian.php");
         break;
 
-
-    case "insertNotaPelunasanPenjualan": //nota_pembelian.php
+    case "insertNotaPelunasanPenjualan": //nota_penjualan.php
         $nomorNota = $_POST['nomorNotaPelunasan'];
         $jenisBayar = $_POST['jenisBayar'];        
         $hargaNormal = $_POST['getHargaNormal'];
@@ -286,6 +303,7 @@ switch ($cmd) {
         }
         header("Location: /gentlemen/nota_penjualan.php");
         break;    	
+    
     default:
         die("UNKNOWN");
 
