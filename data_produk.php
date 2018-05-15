@@ -1,3 +1,17 @@
+<?php
+  session_start();
+  include 'sql.php';
+
+  if(isset($_POST['kode'])) {
+    $kode = $_POST['kode'];
+    $sqlP = "SELECT * FROM `barang` WHERE kodeBarang = ".$kode;
+    $resultP = mysqli_query($link, $sqlP);
+    $rowP = mysqli_fetch_object($resultP);
+    header("content-type: text/x-json");
+    echo json_encode($rowP);
+    exit(); 
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +19,6 @@
   include 'resources.php'; 
   ?>
 </head>
-<?php include 'sql.php'; ?>
 <body>
   <!-- Preloader --> 
   <div id="preloader">
@@ -36,6 +49,7 @@
             <ul class="children">
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
+              <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -95,6 +109,38 @@
         <h2><i class="fa fa-cube"></i> Data Produk </h2>
       </div>
       <div class="contentpanel">
+        <?php
+        if(!isset($_SESSION['notif'])) {
+            echo "";
+        }
+        else { 
+          if($_SESSION['notif'] == "error") { ?>
+            <div id="error-alert" class="alert alert-danger alert-solid" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="d-flex align-items-center justify-content-start">
+                <i class="fa fa-times"></i>
+                <span><strong>Gagal!</strong> Data produk gagal diubah.</span>
+              </div><!-- d-flex -->
+            </div><!-- alert -->
+            <?php
+            unset($_SESSION['notif']);
+          }
+          else if ($_SESSION['notif'] == "sukses") { ?>
+            <div id="success-alert" class="alert alert-success alert-solid" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="d-flex align-items-center justify-content-start">
+                <i class="fa fa-check-circle"></i>
+                <span><strong>Sukses!</strong> Data produk berhasil diubah.</span>
+              </div><!-- d-flex -->
+            </div><!-- alert -->
+          <?php 
+          unset($_SESSION['notif']);
+          }
+        } ?>
         <div class="row">
           <div class="panel-body panel-body-nopadding">
             <form action="proses.php?cmd=insertNotaPelunasanPembelian" method="POST" id="pelunasanPembelian" class="form-horizontal">
@@ -119,6 +165,7 @@
                                     <th>Min Stok</th>
                                     <th>Stok</th>
                                     <th>Jenis</th>
+                                    <th>Actions</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -137,8 +184,16 @@
                                       $jenisProduk = "Jasa";
                                     else if($row->Jenis_idJenis == 1)
                                       $jenisProduk = "Barang";
+                                    else if($row->Jenis_idJenis == 3)
+                                      $jenisProduk = "Peralatan";
+                                    else if($row->Jenis_idJenis == 4)
+                                      $jenisProduk = "Perlengkapan";
                                     echo "<td>" . $jenisProduk . "</td>";
-                                    echo "</tr>";
+                                    echo "<td>
+                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->kodeBarang . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    <a href='#'><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    <a href='proses.php?cmd=hapusSupplier&i=".$row->kodeBarang."'><i class='fa fa-ban'></i>
+                                    </td></tr>";
                                     $hitung = $hitung +1;
                                     $index = $index+1;
                                   } ?>
@@ -160,9 +215,93 @@
       </div><!-- contentpanel -->
     </div><!-- mainpanel -->
   </section>
+
+  <!-- .modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="exampleModalLabel"><strong>Edit Data Produk</strong></h4>
+          </div>
+          <div class="modal-body">
+           <form action="proses.php?cmd=editProduk" method="POST">
+              <div class="form-group">
+                <input name="kodeBarang" type="text" class="form-control" id="kodeBarang" style="display: none;">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Nama :</label>
+                <input name="namaProduk" type="text" class="form-control" id="namaProduk">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Harga Beli(AVG) :</label>
+                <input disabled="true" name="harbaBeli" type="text" class="form-control" id="harbaBeli">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Harga Jual :</label>
+                <input name="hargaJual" type="text" class="form-control" id="hargaJual">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Min. Stok :</label>
+                <input type="number" name="minStok" type="text" class="form-control" id="minStok">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Stok :</label>
+                <input type="number" name="stok" type="text" class="form-control" id="stok">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Jenis :</label>
+                <select name="jenisProduk" class="form-control" id="jenisProduk">
+                  <option value=1>Barang</option>
+                  <option value=2>Jasa</option>
+                  <option value=3>Peralatan</option>
+                  <option value=4>Perlengkapan</option>
+                </select>
+              </div>
+              <div class="modal-footer">
+                  <input type="submit" class="btn btn-primary" id="kirim" value="SIMPAN"/>
+              </div>
+            </form>
+          </div><!--ModalBody-->
+      </div><!--Modal Content-->
+    </div><!--Modal Dialog-->
+  </div><!-- /.modal -->
+</body>
+
   <?php include 'resources2.php'; ?>
 
   <script type="text/javascript">
-  </script>
-</body>
+    $("body").delegate('.edit', 'click', function(){
+        var idEdit = $(this).attr('ide');
+        var jenisTampung;
+        $.ajax({
+          url     : "data_produk.php",
+          type    : "POST",
+          data    : {
+            "kode": idEdit
+          },
+          success:function(show)
+          {
+            $("#kodeBarang").val(show.kodeBarang);
+            $("#namaProduk").val(show.namaBarang);
+            $("#hargaBeli").val(show.hargaBeliRata2);
+            $("#hargaJual").val(show.hargaJual);
+            $("#stok").val(show.stok);
+            $("#minStok").val(show.minStok);
+            $("#jenisProduk").val(show.Jenis_idJenis);
+          },
+          error: function(result) {
+            //alert(JSON.stringify(result));
+            //alert(result);
+            alert("Ajax Error");
+          }
+        });
+      });
+    </script>
+    
+    <script type="text/javascript">
+      $("#success-alert").fadeTo(3000, 500).slideUp(500);
+      $("#error-alert").fadeTo(3000, 500).slideUp(500);
+    </script>
+
 </html>

@@ -1,5 +1,5 @@
 <?php
-  require './db.php';
+  require 'db.php';
 
 
   // Mencari Jenis Produk
@@ -23,7 +23,14 @@
     echo "SQL ERROR: ". $sql;
   }
 
-  // Mencari Supplier
+
+  // Mencari Produk -> Jasa
+  $sql = "SELECT * FROM barang WHERE Jenis_idJenis = 2";
+  $resultJasaSaja = mysqli_query($link, $sql);
+  if(!$resultJasaSaja){
+    echo "SQL ERROR: ". $sql;
+  }
+    // Mencari Supplier
   $sql = "SELECT * FROM supplier";
   $resultSupplier = mysqli_query($link, $sql);
   if(!$resultSupplier){
@@ -37,6 +44,13 @@
     echo "SQL ERROR: ". $sql;
   }
 
+  // Mencari Karyawan Kapster
+  $sql = "SELECT * FROM karyawan WHERE jabatan='K' AND aktif =1";
+  $resultKapster = mysqli_query($link, $sql);
+  if(!$resultKapster){
+    echo "SQL ERROR: ". $sql;
+  }
+
   // Mencari Komisi Karyawan aktif
   $sql = "SELECT * FROM barang_has_karyawan";
   $resultBarangHasKaryawan = mysqli_query($link, $sql);
@@ -44,11 +58,26 @@
     echo "SQL ERROR: ". $sql;
   }
 
-  //Mencari data di Database "notabeli" untuk "nota_pembelian.php"
-  $sql = "SELECT * FROM notabeli WHERE caraBayar = 'K' AND lunas = 0 GROUP BY noNota";
-  $notabeli_kredit = mysqli_query($link, $sql);
-  if(!$notabeli_kredit){
-    echo "SQL ERROR: ". $sql;
+  //Mencari hadiah aktif
+  $sql = "SELECT * FROM hadiah WHERE aktif = 1";
+  $resultHadiah = mysqli_query($link, $sql);
+  if(!$resultHadiah){
+    echo "SQL ERROR: ".$sql;
+  }
+
+
+  //Mencari Customer
+  $sql = "SELECT * FROM customer";
+  $resultCustomer = mysqli_query($link, $sql);
+  if(!$resultCustomer){
+    echo "SQL ERROR: ".$sql;
+  }
+
+  //Mencari Poin
+  $sql = "SELECT * FROM poin WHERE sudahTerpakai = 1";
+  $resultPoin = mysqli_query($link, $sql);
+  if(!$resultPoin){
+    echo "SQL ERROR: ".$sql;
   }
 
   // Mencari Kumpulan Periode

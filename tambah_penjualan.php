@@ -1,9 +1,13 @@
+<?php 
+session_start();
+include 'sql.php'; 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <?php include 'resources.php'; ?>
+  <title> Gentlemen | Tambah Penjualan </title>
 </head>
-<?php include 'sql.php'; ?>
 <body>
   <!-- Preloader -->
   <div id="preloader">
@@ -12,18 +16,50 @@
   <section>
     <div class="leftpanel">
       <div class="logopanel">
-        <h1><span>[</span> ZUPPU <span>]</span></h1>
+        <h1><span>[</span> GENTLEMEN <span>]</span></h1>
       </div><!-- logopanel -->
       <div class="leftpanelinner">
         <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
-          <li><a href="index.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
+          <li><a href="daftar_akun.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
+          <li class="nav-parent"><a href=""><i class="fa fa-cube"></i> <span>Produk</span></a>
+            <ul class="children">
+              <li><a href="tambah_produk.php"><i class="fa fa-caret-right"></i> <span>Tambah Produk Baru</span></a></li>
+              <li><a href="data_produk.php"><i class="fa fa-caret-right"></i> <span>Data Produk</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-parent"><a href=""><i class="fa fa-truck"></i> <span>Supplier</span></a>
+            <ul class="children">
+              <li><a href="tambah_supplier.php"><i class="fa fa-caret-right"></i> <span>Tambah Supplier</span></a></li>
+              <li><a href="data_supplier.php"><i class="fa fa-caret-right"></i> <span>Data Supplier</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-parent"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
+            <ul class="children">
+              <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
+              <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
+              <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
+            <ul class="children">
+              <li><a href="tambah_hadiah.php"><i class="fa fa-caret-right"></i> <span>Tambah Hadiah</span></a></li>
+              <li><a href="data_hadiah.php"><i class="fa fa-caret-right"></i> <span>Data Hadiah</span></a></li>
+              <li ><a href="data_poin.php"><i class="fa fa-caret-right"></i> <span>Data Poin Pelanggan</span></a></li>
+              <li><a href="data_reservasi.php"><i class="fa fa-caret-right"></i> <span>Data Reservasi</span></a></li>
+            </ul>
+          </li>
           <li class="nav-parent nav-active active"><a href=""><i class="fa fa-edit"></i> <span>Nota</span></a>
-            <ul class="children" style="display: block;">
-              <li><a href="tambah_pembelian.php"><i class="fa fa-caret-right"></i> <span>Tambah Nota Pembelian</span></a></li>
+            <ul class="children"  style="display:block;">
+              <li ><a href="tambah_pembelian.php"><i class="fa fa-caret-right"></i> <span>Tambah Nota Pembelian</span></a></li>
               <li class="active"><a href="tambah_penjualan.php"><i class="fa fa-caret-right"></i> <span>Tambah Nota Penjualan</span></a></li>
               <li><a href="nota_pembelian.php"><i class="fa fa-caret-right"></i> <span>Nota Pelunasan Pembelian</span></a></li>
-              <li><a href="nota_penjualan.php"><i class="fa fa-caret-right"></i> <span>Nota Pelunasan Penjualan</span></a></li>
+              </ul>
+          </li>
+          <li class="nav-parent"><a href=""><i class="fa fa-cogs"></i> <span>Aset</span></a>
+            <ul class="children">
+              <li><a href="tambah_aset.php"><i class="fa fa-caret-right"></i> <span>Tambah Aset</span></a></li>
+              <li><a href="data_aset.php"><i class="fa fa-caret-right"></i> <span>Data Aset</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-file-text-o"></i> <span>Laporan</span></a>
@@ -58,7 +94,7 @@
       </div><!-- header-right -->
     </div><!-- headerbar -->
     <div class="pageheader">
-      <h2><i class="fa fa-edit"></i> Tambah Nota Penjualan </h2>
+      <h2><i class="fa fa-edit"></i> Nota </h2>
     </div>
     <div class="contentpanel">
       <div class="row">
@@ -94,15 +130,13 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">Pelanggan <span class="asterisk">*</span></label>
+                    <label class="col-sm-3 control-label">Kapster </label>
                     <div class="col-sm-9">
-                      <select name="pelanggan" class="form-control">
-                        <option value="" disabled selected style="display: none;">[Pilih Pelanggan]</option>
+                      <select name="kapster" class="form-control" required="false">
+                        <option value="" disabled selected style="display: none;">[Pilih Kapster]</option>
                         <?php 
-                        $sqlPelanggan = "SELECT * FROM costumer";
-                        $resultPelanggan = mysqli_query($link, $sqlPelanggan);
-                        while($rowPelanggan = mysqli_fetch_object($resultPelanggan)){
-                          echo "<option value=".$rowPelanggan->idCostumer.">".$rowPelanggan->nama."</option>";
+                        while($rowKapster = mysqli_fetch_object($resultKapster)){
+                          echo "<option value=".$rowKapster->idKaryawan.">".$rowKapster->nama."</option>";
                         }
                         ?>
                       </select>
@@ -115,27 +149,12 @@
                         <option value="T">Tunai</option>
                         <option value="TR">Transfer</option>
                         <option value="K">Kredit</option>
-                        <option value="C">Cek</option>
                       </select>
                     </div>
                   </div>
                   <div id="caraBayar"></div>                    
-                  <div class="form-group" style="margin: 0; padding: 15px 0; border-top: 1px solid #d3d7db;">
-                    <label class="col-sm-3 control-label">Diskon Pelunasan</label>
-                    <div class="col-sm-9">                      
-                      <input type="text" name="diskonLangsung" class="form-control" placeholder="Masukan Diskon Pelunasan" />
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-3 control-label ">Tanggal Batas Diskon</label>
-                    <?php  $date = date("Y-m-d");
-                    $date = strtotime($date);
-                    $date2 = strtotime("+7 day", $date);?>
-                    <div class="col-sm-9">                      
-                      <input type="date" name="tanggalBatasNota" class="form-control" value="<?php echo date("Y-m-d", $date2);?>"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
+                  
+                  <div class="form-group" style="display: none">
                     <label class="col-sm-3 control-label">Status Kirim<span class="asterisk">*</span></label>
                     <div class="col-sm-9">
                       <select id="statusKirim" name="statusKirim" class="form-control" onchange="copy();" required>
@@ -153,7 +172,7 @@
                   <div class="form-group" id="divBarang">
                     <label class="col-sm-3 control-label">Barang <span class="asterisk">*</span></label>
                     <div class="col-sm-9">
-                      <select name="nama-barang[]" class="form-control">
+                      <select name="nama-barang[]" class="form-control" onchange="ubahHarga()">
                         <option value="" disabled selected style="display: none;">[Pilih Barang]</option>
                         <?php 
                         $sqlBarang = "SELECT * FROM barang";
@@ -174,7 +193,7 @@
                   <div class="form-group" id="divHarga">
                     <label class="col-sm-3 control-label">Harga Barang <span class="asterisk">*</span></label>
                     <div class="col-sm-9">
-                      <input type="number" min="0" name="harga-barang[]" class="form-control" placeholder="Harga Barang" required/>
+                      <input disabled="true" type="number" min="0" name="harga-barang[]" class="form-control" placeholder="Harga Barang" required/>
                     </div>
                   </div>
                 </div>
@@ -363,21 +382,12 @@
     else if(document.getElementById('jenisBayar').value=='TR'){
       document.getElementById("caraBayar").innerHTML=
       '<div class="form-group">'+
-      '<label class="col-sm-3 control-label ">Nama Pemilik Rekening <span class="asterisk">*</span></label>'+
-      '<div class="col-sm-9">'+
-      '<input type="text" name="namaPemilikRekening" class="form-control" placeholder="Nama Pemilik Rekening" required/>'+
-      '</div>'+
-      '</div>'+
-      '<div class="form-group">'+
       '<label class="col-sm-3 control-label ">Data Rekening <span class="asterisk">*</span></label>'+
-      '<div class="col-sm-5">'+
-      '<input type="number" min="0" name="nomorRekening" class="form-control" placeholder="Nomor Rekening" required/>'+
-      '</div>'+
-      '<div class="col-sm-4">'+
+      '<div class="col-sm-9">'+
       '<select name="getBankId" class="form-control" data-placeholder="Nama Bank" required>'+
+
       '<option value="" style="display:none">Pilih Bank</option>'+
-      '<option value="1">Bank Baca Baca</option>'+
-      '<option value="2">Bank Suka Sendiri</option>'+
+      '<?php while($row = mysqli_fetch_object($bank)){ echo "<option value=".$row->idBank.">".$row->nama."</option>";} ?>'+
       '</select>'+
       '</div>'+
       '</div>'
@@ -388,15 +398,6 @@
       '<label class="col-sm-3 control-label">Tanggal Jatuh Tempo <span class="asterisk">*</span></label>'+
       '<div class="col-sm-9">'+
       '<input type="date" name="tanggalJatuhTempo" class="form-control" value="<?php echo date("Y-m-d") ?>" required/>'+
-      '</div>'+
-      '</div>'
-    }
-    else if(document.getElementById('jenisBayar').value=='C'){
-      document.getElementById("caraBayar").innerHTML=
-      '<div class="form-group" style="margin-bottom:15px;">'+
-      '<label class="col-sm-3 control-label">Nomor Cek <span class="asterisk">*</span></label>'+
-      '<div class="col-sm-9">'+
-      '<input type="number" min="0" name="nomorCek" class="form-control" placeholder="Nomor Cek" required/>'+
       '</div>'+
       '</div>'
     }

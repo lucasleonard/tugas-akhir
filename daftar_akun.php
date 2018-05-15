@@ -1,16 +1,6 @@
 <?php
   session_start();
   include 'sql.php';
-
-  if(isset($_POST['kode'])) {
-    $kode = $_POST['kode'];
-    $sqlP = "SELECT * FROM `barang_has_karyawan` WHERE karyawan_idKaryawan = ".$kode;
-    $resultP = mysqli_query($link, $sqlP);
-    $rowP = mysqli_fetch_object($resultP);
-    header("content-type: text/x-json");
-    echo json_encode($rowP);
-    exit(); 
-  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +8,7 @@
   <?php
   include 'resources.php'; 
   ?>
-  <title>Gentlemen | Komisi Karyawan</title>
+  <title>Gentlemen | Daftar Akun</title>
 </head>
 
 <body>
@@ -34,7 +24,7 @@
       <div class="leftpanelinner">
         <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
-          <li><a href="daftar_akun.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
+          <li class="nav-parent nav-active active"><a href="daftar_akun.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
           <li class="nav-parent"><a href=""><i class="fa fa-cube"></i> <span>Produk</span></a>
             <ul class="children">
               <li><a href="tambah_produk.php"><i class="fa fa-caret-right"></i> <span>Tambah Produk Baru</span></a></li>
@@ -47,11 +37,11 @@
               <li><a href="data_supplier.php"><i class="fa fa-caret-right"></i> <span>Data Supplier</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
+          <li class="nav-parent"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
             <ul class="children" style="display: block";>
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
-              <li class="active"><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
+              <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -108,87 +98,62 @@
         </div><!-- header-right -->
       </div><!-- headerbar -->
       <div class="pageheader">
-        <h2><i class="fa fa-users"></i> Karyawan </h2>
+        <h2><i class="fa fa-list-ul"></i> Akun </h2>
       </div>
       <div class="contentpanel">
-        <?php
-        if(!isset($_SESSION['notif'])) {
-            echo "";
-        }
-        else { 
-          if($_SESSION['notif'] == "error") { ?>
-            <div id="error-alert" class="alert alert-danger alert-solid" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <div class="d-flex align-items-center justify-content-start">
-                <i class="fa fa-times"></i>
-                <span><strong>Gagal!</strong> Komisi karyawan gagal diubah.</span>
-              </div><!-- d-flex -->
-            </div><!-- alert -->
-            <?php
-            unset($_SESSION['notif']);
-          }
-          else if ($_SESSION['notif'] == "sukses") { ?>
-            <div id="success-alert" class="alert alert-success alert-solid" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <div class="d-flex align-items-center justify-content-start">
-                <i class="fa fa-check-circle"></i>
-                <span><strong>Sukses!</strong> Komisi karyawan berhasil diubah.</span>
-              </div><!-- d-flex -->
-            </div><!-- alert -->
-          <?php 
-          unset($_SESSION['notif']);
-          }
-        } ?>
         <div class="row">
-          <div class="panel-body panel-body-nopadding">
+          <div class="col-sm-12 col-md-12">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title">Komisi Karyawan</h4>
+                <h4 class="panel-title">Daftar Akun</h4>
               </div>
-              <div class="panel-body">
-                <div class="form-group">
-                  <div class="panel panel-default">
-                    <div class="panel-body">
-                      <div class="row p-t-50">
-                        <div class="col-sm-3" style="margin-bottom:1%;">
-                          <select class="form-control" onchange="komisi(this.value)">
-                          <option value="" disabled selected style="display: none;">Pilih Karyawan</option>
+              <form id="formTambahNotaBeli" class="form-horizontal">
+                <div class="panel-body" id="formAwal">
+                  <div class="form-group">
+
+                    <div class="col-sm-6 col-md-6">
+                      <label class="col-sm-2 control-label">Periode: <span class="asterisk">*</span></label>
+                      <div class="col-sm-9">
+                        <select class="form-control" onchange="periode(this.value)">
+                          <option value="" disabled selected style="display: none;">Pilih Periode</option>
                           <?php
-                          while($row = mysqli_fetch_object($resultKaryawan)) {
-                            echo '<option id="opti-periode" value="'.$row->idKaryawan.'">'.$row->nama.'</option>';
+                          while($row = mysqli_fetch_object($periode)) {
+                            echo '<option id="opti-periode" value="'.$row->idPeriode.'">' . date('d F Y', strtotime($row->tanggalAwal)) . " - " . date('d F Y', strtotime($row->tanggalAkhir)) . "</option>";
                           }
                           ?>
                         </select>
-                        </div>
-                        <div class="col-sm-12">
-                          <div class="m-b-20 table-responsive">
-                            <table id="datatable-colvid" class="table table-striped table-bordered">
-                              <thead>
-                                <tr>
-                                  <th >Jasa</th>
-                                  <th >Komisi</th>
-                                </tr>
-                              </thead>
-                              <tbody id="list-komisi">
-                              </tbody>
-                            </table>
-                            <button id="save">Save</button>
-                            <div id="msg"></div>
-                          </div>
-                        </div>
                       </div>
-                    </div><!-- panel-body -->
-                  </div><!-- panel -->
+                    </div>
+
+                    <div class="col-sm-6 col-md-6"> <!-- Split Form Tinggal Masuk-->
+                    </div>
+
+                  </div>
                 </div>
-              </div>
-            </div>
-              <!-- panel-body -->
+              </form>
+              <div class="panel-body">
+                <div class="row p-t-50">
+                  <div class="col-sm-12">
+                    <div class="m-b-20 table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered">
+                        <thead>
+                          <tr>
+                            <th style="width:6%;">No.</th>
+                            <th style="width:17%;">Nomor Akun</th>
+                            <th style="width:30%;">Nama</th>
+                            <th style="width:30%;">Saldo Awal</th>
+                            <th style="width:17%;">Saldo Normal</th>
+                          </tr>
+                        </thead>
+                        <tbody id="listingTable">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- panel-body -->
+            </div><!-- panel -->
           </div>
-            <!-- panel -->
         </div>
       </div><!-- contentpanel -->
     </div><!-- mainpanel -->
@@ -199,46 +164,31 @@
   include 'resources2.php';
   ?>
     
-    <script type="text/javascript">
-      $("#success-alert").fadeTo(3000, 500).slideUp(500);
-      $("#error-alert").fadeTo(3000, 500).slideUp(500);
-    </script>
-
-    <script type="text/javascript">
-    function komisi(value)
+  <script type="text/javascript">
+    $("#success-alert").fadeTo(3000, 500).slideUp(500);
+    $("#error-alert").fadeTo(3000, 500).slideUp(500);
+  </script>
+  
+  <script type="text/javascript">
+    function periode(value)
     {
       $.ajax({
-        url: 'list-komisi.php',
+        url: 'listingTable.php',
         type: "POST",
-        data: { idKaryawan : value },
+        data: { periodeId : value },
         success: function(data)
         {
-          var table = $('#datatable-colvid').DataTable();
+          var table = $('#datatable-buttons').DataTable();
           table.clear().draw();
-          var dataArr = data.split('@');
+          var dataArr = data.split('=');
           for($i = 0; $i < dataArr.length-1; $i++)
           {
-            var dataArr2 = dataArr[$i].split("^");
-            table.row.add([dataArr2[0], dataArr2[1], dataArr2[2]]).draw();
+            var dataArr2 = dataArr[$i].split(";");
+            table.row.add([dataArr2[0], dataArr2[1], dataArr2[2], dataArr2[3], dataArr2[4]]).draw();
           }
         }
       });
     }
-
-    $('#save').click(function() {
-      var data = []; 
-      $('td').each(function() {
-        var row = this.parentElement.rowIndex - 1; // excluding heading
-        while (row >= data.length) {
-            data.push([]);
-        }
-        data[row].push($(this).text());
-      });
-      $.post('save_table.php', {table: data}, function (msg) {
-          $('#msg').text(msg);
-      });
-    });
-
   </script>
 
 </html>

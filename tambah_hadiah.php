@@ -1,12 +1,15 @@
+<?php
+session_start();
+include 'sql.php';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <?php
-  session_start();
   include 'resources.php'; 
-  include 'resources2.php';
-  include 'sql.php';
   ?>
+  <title> Gentlemen | Daftar Hadiah </title>
 </head>
 <body>
   <!-- Preloader -->
@@ -38,6 +41,7 @@
             <ul class="children">
               <li ><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
+              <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
             </ul>
           </li>
           <li class="nav-parent nav-active active"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -167,9 +171,14 @@
       </div><!-- contentpanel -->
     </div><!-- mainpanel -->
   </section>
-
-  <script type="text/javascript">
-
-  </script>
 </body>
+
+    <?php
+      include 'resources2.php';
+    ?>
+
+    <script type="text/javascript">
+      $("#success-alert").fadeTo(3000, 500).slideUp(500);
+      $("#error-alert").fadeTo(3000, 500).slideUp(500);
+    </script>
 </html>

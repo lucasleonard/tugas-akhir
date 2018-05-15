@@ -51,6 +51,7 @@
             <ul class="children" style="display: block";>
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li class="active"><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
+              <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -218,6 +219,9 @@
           <div class="modal-body">
            <form action="proses.php?cmd=editKaryawan" method="POST">
               <div class="form-group">
+                <input name="idKaryawan" type="text" class="form-control" id="idKaryawan" style="display: none;">
+              </div>
+              <div class="form-group">
                 <label class="control-label">Nama :</label>
                 <input name="namaKaryawan" type="text" class="form-control" id="namaKaryawan">
               </div>
@@ -267,6 +271,7 @@
           },
           success:function(show)
           {
+            $("#idKaryawan").val(show.idKaryawan);
             $("#namaKaryawan").val(show.nama);
             if(show.jabatan=="K")
               $("#jabatan").val("K");

@@ -8,10 +8,7 @@ $('#datatable').dataTable();
 $('#datatable-keytable').DataTable({keys: true});
 $('#datatable-responsive').DataTable();
 $('#datatable-colvid').DataTable({
-    "dom": 'C<"clear">lfrtip',
-    "colVis": {
-        "buttonText": "Change columns"
-    }
+    paging: false,
 });
 $('#datatable-scroller').DataTable({
     ajax: "assets/plugins/datatables/json/scroller-demo.json",
@@ -63,4 +60,38 @@ var handleDataTableButtons = function () {
             }
         }
     }();
+
+
+var handleDataTableButtons = function () {
+        "use strict";
+        0 !== $("#datatable-buttons-simple").length && $("#datatable-buttons").DataTable({
+            dom: "Bfrtip",
+            buttons: [{
+                extend: "copy",
+                className: "btn-sm"
+            }, {
+                extend: "csv",
+                className: "btn-sm"
+            }, {
+                extend: "excel",
+                className: "btn-sm"
+            }, {
+                extend: "pdf",
+                className: "btn-sm"
+            }, {
+                extend: "print",
+                className: "btn-sm"
+            }],
+            responsive: !0
+        })
+    },
+    TableManageButtons = function () {
+        "use strict";
+        return {
+            init: function () {
+                handleDataTableButtons()
+            }
+        }
+    }();
 TableManageButtons.init();
+

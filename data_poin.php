@@ -4,7 +4,7 @@
 
   if(isset($_POST['kode'])) {
     $kode = $_POST['kode'];
-    $sqlP = "SELECT * FROM `barang_has_karyawan` WHERE karyawan_idKaryawan = ".$kode;
+    $sqlP = "SELECT * FROM hadiah WHERE idHadiah = ".$kode;
     $resultP = mysqli_query($link, $sqlP);
     $rowP = mysqli_fetch_object($resultP);
     header("content-type: text/x-json");
@@ -18,7 +18,7 @@
   <?php
   include 'resources.php'; 
   ?>
-  <title>Gentlemen | Komisi Karyawan</title>
+  <title> Gentlemen | Data Poin </title>
 </head>
 
 <body>
@@ -47,18 +47,18 @@
               <li><a href="data_supplier.php"><i class="fa fa-caret-right"></i> <span>Data Supplier</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
-            <ul class="children" style="display: block";>
+          <li class="nav-parent"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
+            <ul class="children">
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
-              <li class="active"><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
+              <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
             </ul>
           </li>
-          <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
-            <ul class="children">
+          <li class="nav-parent nav-active active"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
+            <ul class="children" style="display: block";">
               <li><a href="tambah_hadiah.php"><i class="fa fa-caret-right"></i> <span>Tambah Hadiah</span></a></li>
               <li><a href="data_hadiah.php"><i class="fa fa-caret-right"></i> <span>Data Hadiah</span></a></li>
-              <li><a href="data_poin.php"><i class="fa fa-caret-right"></i> <span>Data Poin Pelanggan</span></a></li>
+              <li class="active"><a href="data_poin.php"><i class="fa fa-caret-right"></i> <span>Data Poin Pelanggan</span></a></li>
               <li><a href="data_reservasi.php"><i class="fa fa-caret-right"></i> <span>Data Reservasi</span></a></li>
             </ul>
           </li>
@@ -108,7 +108,7 @@
         </div><!-- header-right -->
       </div><!-- headerbar -->
       <div class="pageheader">
-        <h2><i class="fa fa-users"></i> Karyawan </h2>
+        <h2><i class="fa fa-truck"></i> Poin & Reservasi </h2>
       </div>
       <div class="contentpanel">
         <?php
@@ -123,7 +123,7 @@
               </button>
               <div class="d-flex align-items-center justify-content-start">
                 <i class="fa fa-times"></i>
-                <span><strong>Gagal!</strong> Komisi karyawan gagal diubah.</span>
+                <span><strong>Gagal!</strong> Data hadiah gagal diubah.</span>
               </div><!-- d-flex -->
             </div><!-- alert -->
             <?php
@@ -136,7 +136,7 @@
               </button>
               <div class="d-flex align-items-center justify-content-start">
                 <i class="fa fa-check-circle"></i>
-                <span><strong>Sukses!</strong> Komisi karyawan berhasil diubah.</span>
+                <span><strong>Sukses!</strong> Data hadiah berhasil diubah.</span>
               </div><!-- d-flex -->
             </div><!-- alert -->
           <?php 
@@ -147,37 +147,42 @@
           <div class="panel-body panel-body-nopadding">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title">Komisi Karyawan</h4>
+                <h4 class="panel-title">Data Poin Pelanggan</h4>
               </div>
               <div class="panel-body">
                 <div class="form-group">
                   <div class="panel panel-default">
                     <div class="panel-body">
                       <div class="row p-t-50">
-                        <div class="col-sm-3" style="margin-bottom:1%;">
-                          <select class="form-control" onchange="komisi(this.value)">
-                          <option value="" disabled selected style="display: none;">Pilih Karyawan</option>
-                          <?php
-                          while($row = mysqli_fetch_object($resultKaryawan)) {
-                            echo '<option id="opti-periode" value="'.$row->idKaryawan.'">'.$row->nama.'</option>';
-                          }
-                          ?>
-                        </select>
-                        </div>
                         <div class="col-sm-12">
                           <div class="m-b-20 table-responsive">
-                            <table id="datatable-colvid" class="table table-striped table-bordered">
+                            <table id="datatable-buttons" class="table table-striped table-bordered">
                               <thead>
                                 <tr>
-                                  <th >Jasa</th>
-                                  <th >Komisi</th>
+                                  <th>Nama Customer</th>
+                                  <th>Jumlah Poin</th>
+                                  <th>Actions</th>
                                 </tr>
                               </thead>
-                              <tbody id="list-komisi">
+                              <tbody>
+                                <?php
+                                $hitung = 1;
+                                $index = 0;
+                                while ($row = mysqli_fetch_object($resultCustomer)) {
+                                  echo "<td>" . $row->nama. "</td>";
+                                  $sql = "SELECT COUNT(*) as total FROM `poin` WHERE sudahTerpakai = 1 AND Customer_idCustomer =".$row->idCustomer;
+                                  $resultTotal = mysqli_query($link, $sql);
+                                  while($rowTotal = mysqli_fetch_object($resultTotal)){
+                                    echo "<td>" . $rowTotal->total. "</td>";
+                                  }
+                                  echo "<td>
+                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idCustomer . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    <a href='#'><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    <a href='proses.php?cmd=hapusSupplier&i=".$row->idCustomer."'><i class='fa fa-ban'></i>
+                                  </td></tr>";
+                                } ?>
                               </tbody>
                             </table>
-                            <button id="save">Save</button>
-                            <div id="msg"></div>
                           </div>
                         </div>
                       </div>
@@ -193,52 +198,66 @@
       </div><!-- contentpanel -->
     </div><!-- mainpanel -->
   </section>
-</body>
 
+  <!-- .modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="exampleModalLabel"><strong>Edit Data Supplier</strong></h4>
+          </div>
+          <div class="modal-body">
+           <form action="proses.php?cmd=editHadiah" method="POST">
+              <div class="form-group">
+                <input name="idHadiah" type="text" class="form-control" id="idHadiah" style="display: none;">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Nama :</label>
+                <input name="namaHadiah" type="text" class="form-control" id="namaHadiah">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Jumlah Poin :</label>
+                <input type="number" min="1" max="10" name="jumlah" type="text" class="form-control" id="jumlah">
+              </div>
+              <div class="modal-footer">
+                  <input type="submit" class="btn btn-primary" id="kirim" value="SIMPAN"/>
+              </div>
+            </form>
+          </div><!--ModalBody-->
+      </div><!--Modal Content-->
+    </div><!--Modal Dialog-->
+  <!-- /.modal -->
+</body>
   <?php
-  include 'resources2.php';
+    include 'resources2.php';
   ?>
+  <script type="text/javascript">
+    //$(function() {
+      $("body").delegate('.edit', 'click', function(){
+          var idEdit = $(this).attr('ide');
+          $.ajax({
+            url     : "data_hadiah.php",
+            type    : "POST",
+            data    : {
+              "kode": idEdit
+            },
+            success:function(show)
+            {
+              $("#namaHadiah").val(show.nama);
+              $("#jumlah").val(show.jumlah);
+              $("#idHadiah").val(show.idHadiah);
+            },
+            error: function(result) {
+              alert("Error");
+            }
+          });
+        });
+      //}); 
+    </script>
     
     <script type="text/javascript">
       $("#success-alert").fadeTo(3000, 500).slideUp(500);
       $("#error-alert").fadeTo(3000, 500).slideUp(500);
     </script>
-
-    <script type="text/javascript">
-    function komisi(value)
-    {
-      $.ajax({
-        url: 'list-komisi.php',
-        type: "POST",
-        data: { idKaryawan : value },
-        success: function(data)
-        {
-          var table = $('#datatable-colvid').DataTable();
-          table.clear().draw();
-          var dataArr = data.split('@');
-          for($i = 0; $i < dataArr.length-1; $i++)
-          {
-            var dataArr2 = dataArr[$i].split("^");
-            table.row.add([dataArr2[0], dataArr2[1], dataArr2[2]]).draw();
-          }
-        }
-      });
-    }
-
-    $('#save').click(function() {
-      var data = []; 
-      $('td').each(function() {
-        var row = this.parentElement.rowIndex - 1; // excluding heading
-        while (row >= data.length) {
-            data.push([]);
-        }
-        data[row].push($(this).text());
-      });
-      $.post('save_table.php', {table: data}, function (msg) {
-          $('#msg').text(msg);
-      });
-    });
-
-  </script>
-
 </html>

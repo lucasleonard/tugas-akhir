@@ -2,17 +2,14 @@
   session_start();
   include 'sql.php';
 
+  
   if(isset($_POST['kode'])) {
     $kode = $_POST['kode'];
-    $sqlP = "SELECT DISTINCT * FROM `supplier_has_barang` sb, `supplier` s WHERE s.idSupplier = ".$kode." AND sb.Supplier_idSupplier = ".$kode;
+    $sqlP = "SELECT * FROM `supplier` WHERE idSupplier = ".$kode;
     $resultP = mysqli_query($link, $sqlP);
     $rowP = mysqli_fetch_object($resultP);
-    // $sqlBarangSupplier = "SELECT * FROM supplier_has_barang WHERE Supplier_idSupplier = ".$kode;
-    // $resultBarangSupplier = mysqli_query($link, $sqlBarangSupplier);
-    // $rowBarangSupplier = mysqli_fetch_object($resultBarangSupplier);
     header("content-type: text/x-json");
     echo json_encode($rowP);
-    //echo json_encode($rowBarangSupplier);
     exit(); 
   }
 ?>
@@ -55,6 +52,7 @@
             <ul class="children">
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
+              <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -114,6 +112,38 @@
         <h2><i class="fa fa-truck"></i> Supplier </h2>
       </div>
       <div class="contentpanel">
+        <?php
+        if(!isset($_SESSION['notif'])) {
+            echo "";
+        }
+        else { 
+          if($_SESSION['notif'] == "error") { ?>
+            <div id="error-alert" class="alert alert-danger alert-solid" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="d-flex align-items-center justify-content-start">
+                <i class="fa fa-times"></i>
+                <span><strong>Gagal!</strong> Data supplier gagal diubah.</span>
+              </div><!-- d-flex -->
+            </div><!-- alert -->
+            <?php
+            unset($_SESSION['notif']);
+          }
+          else if ($_SESSION['notif'] == "sukses") { ?>
+            <div id="success-alert" class="alert alert-success alert-solid" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="d-flex align-items-center justify-content-start">
+                <i class="fa fa-check-circle"></i>
+                <span><strong>Sukses!</strong> Data supplier berhasil diubah.</span>
+              </div><!-- d-flex -->
+            </div><!-- alert -->
+          <?php 
+          unset($_SESSION['notif']);
+          }
+        } ?>
         <div class="row">
           <div class="panel-body panel-body-nopadding">
             <div class="panel panel-default">
@@ -179,6 +209,9 @@
           <div class="modal-body">
            <form action="proses.php?cmd=editSupplier" method="POST">
               <div class="form-group">
+                <input name="idSupplier" type="text" class="form-control" id="idSupplier" style="display: none;">
+              </div>
+              <div class="form-group">
                 <label class="control-label">Nama :</label>
                 <input name="namaSupplier" type="text" class="form-control" id="namaSupplier">
               </div>
@@ -206,31 +239,33 @@
   <?php  
   include 'resources2.php';
   ?>
-  
+
   <script type="text/javascript">
-    //$(function() {
-      $("body").delegate('.edit', 'click', function(){
-          var idEdit = $(this).attr('ide');
-          $.ajax({
-            url     : "data_supplier.php",
-            type    : "POST",
-            data    : {
-              "kode": idEdit
-            },
-            success:function(show)
-            {
-              //alert("SUCESS");
-              $("#namaSupplier").val(show.nama);
-              $("#noTelepon").val(show.noTelp);
-              $("#alamatSupplier").val(show.alamat);
-            },
-            error: function(result) {
-              alert(JSON.stringify(result));
-              //alert(result);
-              //alert("Ajax Error");
-            }
-          });
-        });
-      //}); 
-    </script>
+    $("body").delegate('.edit', 'click', function(){
+      var idEdit = $(this).attr('ide');
+      var jenisTampung;
+      $.ajax({
+        url     : "data_supplier.php",
+        type    : "POST",
+        data    : {
+          "kode": idEdit
+        },
+        success:function(show)
+        {
+          $("#idSupplier").val(show.idSupplier);
+          $("#namaSupplier").val(show.nama);
+          $("#noTelepon").val(show.noTelp);
+          $("#alamatSupplier").val(show.alamat);
+        },
+        error: function(result) {
+          alert("Ajax Error");
+        }
+      });
+    });
+  </script>
+
+  <script type="text/javascript">
+    $("#success-alert").fadeTo(3000, 500).slideUp(500);
+    $("#error-alert").fadeTo(3000, 500).slideUp(500);
+  </script>
 </html>

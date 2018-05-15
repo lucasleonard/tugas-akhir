@@ -61,12 +61,13 @@ switch ($cmd) {
         break;
 
     case "editKaryawan": //data_karyawan.php
+        $idKaryawan = $_POST['idKaryawan'];
         $namaKaryawan = $_POST['namaKaryawan'];
         $jabatanKaryawan = $_POST['jabatan'];
         $nomorTelepon = $_POST['noTelepon'];
         $tanggalMasuk = $_POST['tanggalMasuk'];
         $gajiPokok = $_POST['gajiPokok'];
-        $sql = "UPDATE `karyawan` SET `nama` = '".$namaKaryawan."', `noTelp` = '".$nomorTelepon."', `jabatan` = '".$jabatanKaryawan."', `tanggalMasuk` = '".$tanggalMasuk."', `gajiPokok` = ".$gajiPokok;
+        $sql = "UPDATE `karyawan` SET `nama` = '".$namaKaryawan."', `noTelp` = '".$nomorTelepon."', `jabatan` = '".$jabatanKaryawan."', `tanggalMasuk` = '".$tanggalMasuk."', `gajiPokok` = ".$gajiPokok. " WHERE idKaryawan = ".$idKaryawan;
         $result = mysqli_query($link,$sql);
         if (!$result) {
             $_SESSION['notif'] = "error";
@@ -78,7 +79,25 @@ switch ($cmd) {
         }
         break;
 
-    case "insertHadiah": //tambah_karyawan.php
+    case "insertKomisi": //tambah_komisi.php
+        $idKaryawan = $_POST['idKaryawan'];
+        $jasaKaryawan = $_POST['jasaKaryawan'];
+        $komisi = $_POST['komisi'];
+        $tanggalMasuk = $_POST['tanggalMasuk'];
+        $gajiPokok = $_POST['gajiPokok'];
+        $sql = "INSERT INTO `karyawan`(`nama`, `noTelp`, `jabatan`, `tanggalMasuk`, `gajiPokok`, `aktif`) VALUES ('".$namaKaryawan."', '".$nomorTelepon."', '".$jabatanKaryawan."', '".$tanggalMasuk."', ".$gajiPokok." , 1)";
+        $result = mysqli_query($link,$sql);
+        if (!$result) {
+            $_SESSION['notif'] = "error";
+            header("Location: /gentlemen/tambah_karyawan.php");
+        }
+        else {
+            $_SESSION['notif'] = "sukses";
+            header("Location: tambah_karyawan.php");
+        }
+        break;
+
+    case "insertHadiah": //tambah_hadiah.php
         $namaHadiah = $_POST['namaHadiah'];
         $jumlahPoin = $_POST['jumlahPoin'];
         $sql = "INSERT INTO `hadiah`(`nama`, `jumlah`, `aktif`) VALUES ('".$namaHadiah."', ".$jumlahPoin.", 1)";
@@ -87,8 +106,59 @@ switch ($cmd) {
             $_SESSION['notif'] = "error";
             header("Location: /gentlemen/tambah_hadiah.php");
         }
-        $_SESSION['notif'] = "sukses";
-        header("Location: tambah_hadiah.php");
+        else{
+                $_SESSION['notif'] = "sukses";
+                header("Location: tambah_hadiah.php");
+        }
+        break;
+
+    case "editHadiah": //data_hadiah.php
+        $idHadiah = $_POST['idHadiah'];
+        $namaHadiah = $_POST['namaHadiah'];
+        $jumlah = $_POST['jumlah'];
+        $sql = "UPDATE `hadiah` SET `nama` = '".$namaHadiah."', `jumlah` = ".$jumlah." WHERE idHadiah = ".$idHadiah;
+        $result = mysqli_query($link,$sql);
+        if (!$result) {
+            $_SESSION['notif'] = "error";
+            header("Location: /gentlemen/data_hadiah.php");
+        }
+        else {
+            $_SESSION['notif'] = "sukses";
+            header("Location: data_hadiah.php");
+        }
+        break;
+
+    case "insertSupplier": //tambah_supplier.php
+        $namaSupplier = $_GET['namaSupplier'];
+        $alamatSupplier = $_GET['alamatSupplier'];
+        $nomorTelepon = $_GET['nomorTelepon'];
+        $sql = "INSERT INTO `supplier`(`nama`, `noTelp`, `alamat`, `aktif`) VALUES ('".$namaSupplier."', '".$nomorTelepon."', '".$alamatSupplier."', 1 )";
+        $result = mysqli_query($link,$sql);
+        if (!$result) {
+            $_SESSION['notif'] = "error";
+            die(header('location: tambah_supplier.php'));
+        }
+        else {
+            $_SESSION['notif'] = "sukses";
+            header("Location: tambah_supplier.php");
+        }
+        break;
+
+    case "editSupplier": //data_supplier.php
+        $idSupplier = $_POST['idSupplier'];
+        $namaSupplier = $_POST['namaSupplier'];
+        $noTelepon = $_POST['noTelepon'];
+        $alamatSupplier = $_POST['alamatSupplier'];
+        $sql = "UPDATE `supplier` SET `nama` = '".$namaSupplier."', `noTelp` = '".$noTelepon."', `alamat` = '".$alamatSupplier."' WHERE idSupplier = ".$idSupplier;
+        $result = mysqli_query($link,$sql);
+        if (!$result) {
+            $_SESSION['notif'] = "error";
+            header("Location: /gentlemen/data_supplier.php");
+        }
+        else {
+            $_SESSION['notif'] = "sukses";
+            header("Location: data_supplier.php");
+        }
         break;
 
     case "hapusSupplier":        
@@ -102,17 +172,6 @@ switch ($cmd) {
         else {
             $_SESSION['notif'] = "sukses";
             header("Location: data_supplier.php");
-        }
-        break;
-
-    case "insertSupplier": //tambah_supplier.php
-        $namaSupplier = $_GET['namaSupplier'];
-        $alamatSupplier = $_GET['alamatSupplier'];
-        $nomorTelepon = $_GET['nomorTelepon'];
-        $sql = "INSERT INTO `supplier`(`nama`, `noTelp`, `alamat`, `aktif`) VALUES ('".$namaSupplier."', '".$nomorTelepon."', '".$alamatSupplier."', 1 )";
-        $result = mysqli_query($link,$sql);
-        if (!$result) {
-            die("SQL ERROR.".$sql);
         }
         break;
 
@@ -139,7 +198,7 @@ switch ($cmd) {
         if(isset($_POST['minStokProduk']))
             $minStokProduk = $_POST['minStokProduk'];
         $jenisProduk = $_POST['jenisProduk'];
-        $sql = "INSERT INTO `barang`(`namaBarang`, `hargaJual`, `minStok`, `Jenis_idJenis`) VALUES ('".$namaProduk."', ".$hargaJual.", ".$minStokProduk.", ".$jenisProduk.")";
+        $sql = "INSERT INTO `barang`(`namaBarang`, `hargaJual`, `stok`, `minStok`, `Jenis_idJenis`) VALUES ('".$namaProduk."', ".$hargaJual.", 0, ".$minStokProduk.", ".$jenisProduk.")";
         $result = mysqli_query($link,$sql);
         if (!$result) {
             $_SESSION['notif'] = "error";
@@ -150,6 +209,80 @@ switch ($cmd) {
         header("Location: /gentlemen/tambah_produk.php");
         break;
 
+    case "editProduk": //data_produk.php
+        $kodeBarang = $_POST['kodeBarang'];
+        $namaBarang = $_POST['namaProduk'];
+        $hargaJual = $_POST['hargaJual'];
+        $stok = $_POST['stok'];
+        $minStok = $_POST['minStok'];
+        $jenisProduk = $_POST['jenisProduk'];
+        $sql = "UPDATE `barang` SET `namaBarang` = '".$namaBarang."', `hargaJual` = ".$hargaJual.", `stok` = ".$stok.", `minStok` = ".$minStok.", `Jenis_idJenis` = ".$jenisProduk. " WHERE kodeBarang = ".$kodeBarang;
+        $result = mysqli_query($link,$sql);
+        if (!$result) {
+            $_SESSION['notif'] = "error";
+            die("SQL ERROR.".$sql);
+            //header("Location: /gentlemen/data_produk.php");
+        }
+        else {
+            $_SESSION['notif'] = "sukses";
+            header("Location: data_produk.php");
+        }
+        break;
+
+    case "insertNotaBeli": //tambah_pembelian.php
+        $noNota = $_GET['noNota'];
+        $tanggal = $_GET['tanggal'];
+        $caraBayar = $_GET['jenisBayar'];
+        $statusKirim = $_GET['statusKirim'];
+        $idSupplier = $_GET['idSupplier'];
+        $tanggalJatuhTempo = NULL;
+        $namaPemilikRekening = NULL;
+        $nomorRekening = NULL;
+        $idBank = NULL;
+        $dibayarOleh = NULL;
+        $biayaKirim = 0;
+        if(isset($_GET['dibayarOleh'])){
+            $dibayarOleh = $_GET['dibayarOleh'];
+        }
+        if(isset($_GET['biayaKirim'])){
+            $biayaKirim = $_GET['biayaKirim'];
+        }
+        if(isset($_GET['tanggalJatuhTempo'])){
+            $tanggalJatuhTempo = $_GET['tanggalJatuhTempo'];
+        }
+        if(isset($_GET['namaPemilikRekening'])){
+            $namaPemilikRekening = $_GET['namaPemilikRekening'];
+        }
+        if(isset($_GET['nomorRekening'])){
+            $nomorRekening = $_GET['nomorRekening'];
+        }
+        if(isset($_GET['idBank'])){
+            $idBank = $_GET['idBank'];
+        }
+        $sql = "INSERT INTO `notabeli`(`tanggalJatuhTempo`, `noNota`, `tanggal`, `caraBayar`, `StatusKirim`, `biayaKirim`, `dibayarOleh`, `Supplier_idSupplier`, `caraBayarPengiriman`, `noRekening`, `namaPemilikRekening`, `Bank_idBank`)
+
+            VALUES ('".$tanggalJatuhTempo."', '".$noNota."', '".$tanggal."', '".$caraBayar."', '".$statusKirim."', '".$biayaKirim."', '".$dibayarOleh."','".$idSupplier."', '".$caraBayar."', '".$nomorRekening."', '".$namaPemilikRekening."',".$idBank.");";
+        $result = mysqli_query($link,$sql);
+        if(!$result){
+            die ("SQL ERROR : ".$sql);
+        }
+        break;
+
+    case "insertNotaBeliBarang": //tambah_pembelian.php
+        $noNota = $_GET['noNota'];
+        $kodeBarang = $_GET['kodeBarang'];
+        $jumlah = $_GET['jumlah'];
+        $harga = $_GET['harga'];
+        $sql = "INSERT INTO `notabeli_has_barang` (`NotaBeli_noNota`, `Barang_kodeBarang`, `harga`, `jumlah`) VALUES ('".$noNota."', '".$kodeBarang."', '".$harga."', '".$jumlah."');";
+        $result = mysqli_query($link,$sql);
+        if($result){
+            echo "LOL";
+        }
+        break;
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     case "insertNotaJual": //tambah_penjualan.php
         $noNota = $_GET['noNota'];
         $idPelanggan = $_GET['pelanggan'];
@@ -177,59 +310,7 @@ switch ($cmd) {
         }
         break;
 
-    case "insertNotaBeli": //tambah_pembelian.php
-        $noNota = $_GET['noNota'];
-        $tanggal = $_GET['tanggal'];
-        $caraBayar = $_GET['jenisBayar'];
-        $statusKirim = $_GET['statusKirim'];
-        $diskonPelunasan = $_GET['diskonPelunasan'];
-        $diskonLangsung = $_GET['diskonLangsung'];
-        $idSupplier = $_GET['idSupplier'];
-        $tanggalBatasDiskon = $_GET['tanggalBatasDiskon'];
-        $biayaKirim = $_GET['biayaKirim'];
-        $dibayarOleh = $_GET['dibayarOleh'];
-        $tanggalJatuhTempo = NULL;
-        $nomorCek = NULL;
-        $namaPemilikRekening = NULL;
-        $nomorRekening = NULL;
-        $idBank = NULL;
-        if(isset($_GET['tanggalJatuhTempo'])){
-            $tanggalJatuhTempo = $_GET['tanggalJatuhTempo'];
-        }
-        if(isset($_GET['nomorCek'])){
-            $nomorCek = $_GET['nomorCek'];
-        }
-        if(isset($_GET['namaPemilikRekening'])){
-            $namaPemilikRekening = $_GET['namaPemilikRekening'];
-        }
-        if(isset($_GET['nomorRekening'])){
-            $nomorRekening = $_GET['nomorRekening'];
-        }
-        if(isset($_GET['idBank'])){
-            $idBank = $_GET['idBank'];
-        }
-                
-        
-        $sql = "INSERT INTO `notabeli`(`noNota`, `tanggal`, `caraBayar`, `StatusKirim`, `tanggalJatuhTempo`, `diskonLangsung`, `DiskonPelunasan`, `tanggalBatasDiskon`, `biayaKirim`, `dibayarOleh`, `Supplier_idSupplier`, `lunas`, `jenisPengiriman`, `caraBayarPengiriman`)
-
-            VALUES ('".$noNota."', '".$tanggal."', '".$caraBayar."', '".$statusKirim."', '".$tanggalJatuhTempo."', '".$diskonLangsung."', '".$diskonPelunasan."', '".$tanggalBatasDiskon."', '".$biayaKirim."', '".$dibayarOleh."','".$idSupplier."', 0, 0, 0);";
-        $result = mysqli_query($link,$sql);
-        if($result){
-            echo "LOL";
-        }
-    	break;
-
-    case "insertNotaBeliBarang": //tambah_pembelian.php
-        $noNota = $_GET['noNota'];
-        $kodeBarang = $_GET['kodeBarang'];
-        $jumlah = $_GET['jumlah'];
-        $harga = $_GET['harga'];
-        $sql = "INSERT INTO `notabeli_has_barang` (`NotaBeli_noNota`, `Barang_kodeBarang`, `harga`, `jumlah`) VALUES ('".$noNota."', '".$kodeBarang."', '".$harga."', '".$jumlah."');";
-        $result = mysqli_query($link,$sql);
-        if($result){
-            echo "LOL";
-        }
-        break;
+    
 
     case "insertNotaPelunasanPembelian": //nota_pembelian.php
         $nomorNota = $_POST['nomorNotaPelunasan'];

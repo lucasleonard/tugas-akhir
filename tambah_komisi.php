@@ -1,26 +1,15 @@
-<?php
-  session_start();
-  include 'sql.php';
-
-  if(isset($_POST['kode'])) {
-    $kode = $_POST['kode'];
-    $sqlP = "SELECT * FROM `barang_has_karyawan` WHERE karyawan_idKaryawan = ".$kode;
-    $resultP = mysqli_query($link, $sqlP);
-    $rowP = mysqli_fetch_object($resultP);
-    header("content-type: text/x-json");
-    echo json_encode($rowP);
-    exit(); 
-  }
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <?php
+  session_start();
   include 'resources.php'; 
+  include 'sql.php';
   ?>
-  <title>Gentlemen | Komisi Karyawan</title>
-</head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
+  <title> Gentlemen | Tambah Komisi Karyawan </title>
+</head>
 <body>
   <!-- Preloader -->
   <div id="preloader">
@@ -29,7 +18,7 @@
   <section>
     <div class="leftpanel">
       <div class="logopanel">
-        <h1><span>[</span> GENTLEMEN <span>]</span></h1>
+        <h1><span>[</span>GENTLEMEN<span>]</span></h1>
       </div><!-- logopanel -->
       <div class="leftpanelinner">
         <h5 class="sidebartitle">Navigation</h5>
@@ -51,7 +40,8 @@
             <ul class="children" style="display: block";>
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
-              <li class="active"><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
+              <li class="active"><a href="tambah_komisi.php"><i class="fa fa-caret-right"></i> <span>Tambah Komisi</span></a></li>
+              <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -111,7 +101,7 @@
         <h2><i class="fa fa-users"></i> Karyawan </h2>
       </div>
       <div class="contentpanel">
-        <?php
+      <?php
         if(!isset($_SESSION['notif'])) {
             echo "";
         }
@@ -123,7 +113,7 @@
               </button>
               <div class="d-flex align-items-center justify-content-start">
                 <i class="fa fa-times"></i>
-                <span><strong>Gagal!</strong> Komisi karyawan gagal diubah.</span>
+                <span><strong>Gagal!</strong> Data komisi karyawan gagal dimasukkan.</span>
               </div><!-- d-flex -->
             </div><!-- alert -->
             <?php
@@ -136,7 +126,7 @@
               </button>
               <div class="d-flex align-items-center justify-content-start">
                 <i class="fa fa-check-circle"></i>
-                <span><strong>Sukses!</strong> Komisi karyawan berhasil diubah.</span>
+                <span><strong>Sukses!</strong> Data komisi karyawan berhasil dimasukkan.</span>
               </div><!-- d-flex -->
             </div><!-- alert -->
           <?php 
@@ -145,100 +135,120 @@
         } ?>
         <div class="row">
           <div class="panel-body panel-body-nopadding">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h4 class="panel-title">Komisi Karyawan</h4>
-              </div>
-              <div class="panel-body">
-                <div class="form-group">
-                  <div class="panel panel-default">
-                    <div class="panel-body">
-                      <div class="row p-t-50">
-                        <div class="col-sm-3" style="margin-bottom:1%;">
-                          <select class="form-control" onchange="komisi(this.value)">
-                          <option value="" disabled selected style="display: none;">Pilih Karyawan</option>
-                          <?php
-                          while($row = mysqli_fetch_object($resultKaryawan)) {
-                            echo '<option id="opti-periode" value="'.$row->idKaryawan.'">'.$row->nama.'</option>';
+            <form action="proses.php?cmd=insertKomisi" method="POST" id="karyawanBaru" class="form-horizontal">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">Tambah Komisi Karyawan</h4>
+                </div>
+                <div class="panel-body">
+                  <div class="form-group">
+                    <label class="col-sm-4 control-label">Karyawan<span class="asterisk">*</span></label>
+                    <div class="col-sm-4">
+                      <select name="idKaryawan" id="idKaryawan" class="form-control select2" required="true">
+                        <option value="" disabled selected style="display: none;">[Pilih Karyawan]</option>
+                        <?php
+                          while($row=mysqli_fetch_object($resultKapster)){
+                            echo "<option value=".$row->idKaryawan.">".$row->nama."</option>";
                           }
-                          ?>
-                        </select>
-                        </div>
-                        <div class="col-sm-12">
+                        ?>
+                      </select>
+                    </div>
+                  </div> 
+                  <div class="col-sm-12">
                           <div class="m-b-20 table-responsive">
                             <table id="datatable-colvid" class="table table-striped table-bordered">
                               <thead>
                                 <tr>
-                                  <th >Jasa</th>
-                                  <th >Komisi</th>
+                                  <th>Jasa / Layanan</th>
+                                  <th>Komisi</th>
                                 </tr>
                               </thead>
-                              <tbody id="list-komisi">
+                              <tbody>
+                                <?php
+                                $hitung = 1;
+                                $index = 0;
+                                while ($row = mysqli_fetch_object($resultJasaSaja)) {
+                                  echo "<tr><td>" . $row->namaBarang. "</td>";
+                                  //$sql = "SELECT * FROM barang_has_karyawan WHERE Barang_kodeBarang = ".$row->kodeBarang." AND Karyawan_idKaryawan = "..;
+                                  echo "<td>" . $row->jabatan. "</td>";
+                                  echo "<td>
+                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idKaryawan . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    <a href='#'><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    <a href='proses.php?cmd=hapusSupplier&i=".$row->idKaryawan."'><i class='fa fa-ban'></i>
+                                  </td></tr>";
+                                } ?>
                               </tbody>
                             </table>
-                            <button id="save">Save</button>
-                            <div id="msg"></div>
                           </div>
                         </div>
+                  <!-- <div class="form-group">
+                    <label class="col-sm-4 control-label">Jasa / Layanan<span class="asterisk">*</span></label>
+                    <div class="col-sm-4">
+                      <select name="jasaKaryawan" id="jasaKaryawan" class="form-control select2" required="true">
+                        <option value="" disabled selected style="display: none;">[Pilih Jasa]</option>
+                        <?php
+                          while($row=mysqli_fetch_object($resultJasaSaja)){
+                            echo "<option value=".$row->kodeBarang.">".$row->namaBarang."</option>";
+                          }
+                        ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-4 control-label">Komisi <span class="asterisk">*</span></label>
+                    <div class="col-sm-4">
+                      <div class="input-group">
+                        <span class="input-group-addon">Rp</span>
+                        <input type="number" id="komisi" name="komisi" class="form-control" placeholder="Komisi" required />
                       </div>
-                    </div><!-- panel-body -->
-                  </div><!-- panel -->
+                    </div>
+                  </div> -->
+                  <div class="panel-footer">
+                    <div class="row">
+                      <div class="col-sm-8">
+                        <button id="submit" class="btn btn-primary" style="float: right; margin-left: 1%">Submit</button>
+                        <button type="reset" class="btn btn-default" style="float: right;">Reset</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
               <!-- panel-body -->
-          </div>
+            </div>
             <!-- panel -->
+          </form>
         </div>
       </div><!-- contentpanel -->
     </div><!-- mainpanel -->
   </section>
-</body>
 
   <?php
   include 'resources2.php';
   ?>
-    
-    <script type="text/javascript">
-      $("#success-alert").fadeTo(3000, 500).slideUp(500);
-      $("#error-alert").fadeTo(3000, 500).slideUp(500);
-    </script>
 
-    <script type="text/javascript">
-    function komisi(value)
-    {
-      $.ajax({
-        url: 'list-komisi.php',
-        type: "POST",
-        data: { idKaryawan : value },
-        success: function(data)
-        {
-          var table = $('#datatable-colvid').DataTable();
-          table.clear().draw();
-          var dataArr = data.split('@');
-          for($i = 0; $i < dataArr.length-1; $i++)
-          {
-            var dataArr2 = dataArr[$i].split("^");
-            table.row.add([dataArr2[0], dataArr2[1], dataArr2[2]]).draw();
-          }
-        }
-      });
-    }
-
-    $('#save').click(function() {
-      var data = []; 
-      $('td').each(function() {
-        var row = this.parentElement.rowIndex - 1; // excluding heading
-        while (row >= data.length) {
-            data.push([]);
-        }
-        data[row].push($(this).text());
-      });
-      $.post('save_table.php', {table: data}, function (msg) {
-          $('#msg').text(msg);
-      });
-    });
-
+  <script type="text/javascript">
+    $("#success-alert").fadeTo(3000, 500).slideUp(500);
+    $("#error-alert").fadeTo(3000, 500).slideUp(500);
   </script>
+  
+<!-- <script>
+  $('#idKaryawan').on('change', function() {
+    var selected = $(this).val();
+    $("#jasaKaryawan option").each(function(item){
+      console.log(selected) ;  
+      var element =  $(this) ; 
+      console.log(element.data("tag")) ; 
+      if (element.data("tag") != selected){
+        element.hide() ; 
+      }else{
+        element.show();
+      }
+    }) ; 
+    
+    $("#jasaKaryawan").val($("#jasaKaryawan option:visible:first").val());
+    
+});
+</script> -->
 
+</body>
 </html>

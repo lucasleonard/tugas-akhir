@@ -1,12 +1,10 @@
 <?php
   session_start();
-  include 'resources.php'; 
-  include 'resources2.php';
   include 'sql.php';
 
   if(isset($_POST['kode'])) {
     $kode = $_POST['kode'];
-    $sqlP = "SELECT * FROM supplier WHERE idSupplier = ".$kode;
+    $sqlP = "SELECT * FROM hadiah WHERE idHadiah = ".$kode;
     $resultP = mysqli_query($link, $sqlP);
     $rowP = mysqli_fetch_object($resultP);
     header("content-type: text/x-json");
@@ -17,6 +15,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <?php
+  include 'resources.php'; 
+  ?>
+  <title> Gentlemen | Data Hadiah </title>
 </head>
 
 <body>
@@ -49,6 +51,7 @@
             <ul class="children">
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
+              <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
             </ul>
           </li>
           <li class="nav-parent nav-active active"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -108,6 +111,38 @@
         <h2><i class="fa fa-truck"></i> Poin & Reservasi </h2>
       </div>
       <div class="contentpanel">
+        <?php
+        if(!isset($_SESSION['notif'])) {
+            echo "";
+        }
+        else { 
+          if($_SESSION['notif'] == "error") { ?>
+            <div id="error-alert" class="alert alert-danger alert-solid" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="d-flex align-items-center justify-content-start">
+                <i class="fa fa-times"></i>
+                <span><strong>Gagal!</strong> Data hadiah gagal diubah.</span>
+              </div><!-- d-flex -->
+            </div><!-- alert -->
+            <?php
+            unset($_SESSION['notif']);
+          }
+          else if ($_SESSION['notif'] == "sukses") { ?>
+            <div id="success-alert" class="alert alert-success alert-solid" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="d-flex align-items-center justify-content-start">
+                <i class="fa fa-check-circle"></i>
+                <span><strong>Sukses!</strong> Data hadiah berhasil diubah.</span>
+              </div><!-- d-flex -->
+            </div><!-- alert -->
+          <?php 
+          unset($_SESSION['notif']);
+          }
+        } ?>
         <div class="row">
           <div class="panel-body panel-body-nopadding">
             <div class="panel panel-default">
@@ -126,7 +161,6 @@
                                 <tr>
                                   <th>Nama Hadiah</th>
                                   <th>Jumlah Poin</th>
-                                  <th>Aktif</th>
                                   <th>Actions</th>
                                 </tr>
                               </thead>
@@ -134,14 +168,13 @@
                                 <?php
                                 $hitung = 1;
                                 $index = 0;
-                                while ($row = mysqli_fetch_object($resultSupplier)) {
+                                while ($row = mysqli_fetch_object($resultHadiah)) {
                                   echo "<td>" . $row->nama. "</td>";
-                                  echo "<td>" . $row->noTelp . "</td>";
-                                  echo "<td>" . $row->alamat . "</td>";
+                                  echo "<td>" . $row->jumlah . "</td>";
                                   echo "<td>
-                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idSupplier . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idHadiah . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
                                     <a href='#'><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
-                                    <a href='proses.php?cmd=hapusSupplier&i=".$row->idSupplier."'><i class='fa fa-ban'></i>
+                                    <a href='proses.php?cmd=hapusSupplier&i=".$row->idHadiah."'><i class='fa fa-ban'></i>
                                   </td></tr>";
                                 } ?>
                               </tbody>
@@ -171,21 +204,17 @@
               <h4 class="modal-title" id="exampleModalLabel"><strong>Edit Data Supplier</strong></h4>
           </div>
           <div class="modal-body">
-           <form action="proses.php?cmd=editSupplier" method="POST">
+           <form action="proses.php?cmd=editHadiah" method="POST">
+              <div class="form-group">
+                <input name="idHadiah" type="text" class="form-control" id="idHadiah" style="display: none;">
+              </div>
               <div class="form-group">
                 <label class="control-label">Nama :</label>
-                <input name="namaSupplier" type="text" class="form-control" id="namaSupplier">
+                <input name="namaHadiah" type="text" class="form-control" id="namaHadiah">
               </div>
               <div class="form-group">
-                <label class="control-label">No. Telepon :</label>
-                <input name="noTelepon" type="text" class="form-control" id="noTelepon">
-              </div>
-              <div class="form-group">
-                <label class="control-label">Alamat :</label>
-                <input name="alamatSupplier" type="text" class="form-control" id="alamatSupplier">
-              </div>
-              <div class="form-group">
-                <label class="control-label">List Barang :</label>
+                <label class="control-label">Jumlah Poin :</label>
+                <input type="number" min="1" max="10" name="jumlah" type="text" class="form-control" id="jumlah">
               </div>
               <div class="modal-footer">
                   <input type="submit" class="btn btn-primary" id="kirim" value="SIMPAN"/>
@@ -195,23 +224,25 @@
       </div><!--Modal Content-->
     </div><!--Modal Dialog-->
   <!-- /.modal -->
-
+</body>
+  <?php
+    include 'resources2.php';
+  ?>
   <script type="text/javascript">
     //$(function() {
       $("body").delegate('.edit', 'click', function(){
           var idEdit = $(this).attr('ide');
           $.ajax({
-            url     : "data_supplier.php",
+            url     : "data_hadiah.php",
             type    : "POST",
             data    : {
               "kode": idEdit
             },
             success:function(show)
             {
-              alert("SUCESS");
-              $("#namaSupplier").val(show.nama);
-              $("#noTelepon").val(show.noTelepon);
-              $("#alamatSupplier").val(show.alamat);
+              $("#namaHadiah").val(show.nama);
+              $("#jumlah").val(show.jumlah);
+              $("#idHadiah").val(show.idHadiah);
             },
             error: function(result) {
               alert("Error");
@@ -220,5 +251,9 @@
         });
       //}); 
     </script>
-</body>
+    
+    <script type="text/javascript">
+      $("#success-alert").fadeTo(3000, 500).slideUp(500);
+      $("#error-alert").fadeTo(3000, 500).slideUp(500);
+    </script>
 </html>

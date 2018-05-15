@@ -12,18 +12,50 @@
   <section>
     <div class="leftpanel">
       <div class="logopanel">
-        <h1><span>[</span> ZUPPU <span>]</span></h1>
+        <h1><span>[</span> GENTLEMEN <span>]</span></h1>
       </div><!-- logopanel -->
       <div class="leftpanelinner">
         <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
-          <li><a href="index.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
+          <li><a href="daftar_akun.php"><i class="fa fa-list-ul"></i> <span>Daftar Akun</span></a></li>
+          <li class="nav-parent"><a href=""><i class="fa fa-cube"></i> <span>Produk</span></a>
+            <ul class="children">
+              <li><a href="tambah_produk.php"><i class="fa fa-caret-right"></i> <span>Tambah Produk Baru</span></a></li>
+              <li><a href="data_produk.php"><i class="fa fa-caret-right"></i> <span>Data Produk</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-parent"><a href=""><i class="fa fa-truck"></i> <span>Supplier</span></a>
+            <ul class="children">
+              <li><a href="tambah_supplier.php"><i class="fa fa-caret-right"></i> <span>Tambah Supplier</span></a></li>
+              <li><a href="data_supplier.php"><i class="fa fa-caret-right"></i> <span>Data Supplier</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-parent"><a href=""><i class="fa fa-users"></i> <span>Karyawan</span></a>
+            <ul class="children">
+              <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
+              <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
+              <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
+            <ul class="children">
+              <li><a href="tambah_hadiah.php"><i class="fa fa-caret-right"></i> <span>Tambah Hadiah</span></a></li>
+              <li><a href="data_hadiah.php"><i class="fa fa-caret-right"></i> <span>Data Hadiah</span></a></li>
+              <li ><a href="data_poin.php"><i class="fa fa-caret-right"></i> <span>Data Poin Pelanggan</span></a></li>
+              <li><a href="data_reservasi.php"><i class="fa fa-caret-right"></i> <span>Data Reservasi</span></a></li>
+            </ul>
+          </li>
           <li class="nav-parent nav-active active"><a href=""><i class="fa fa-edit"></i> <span>Nota</span></a>
-            <ul class="children" style="display: block;">
+            <ul class="children"  style="display:block;">
               <li class="active"><a href="tambah_pembelian.php"><i class="fa fa-caret-right"></i> <span>Tambah Nota Pembelian</span></a></li>
               <li><a href="tambah_penjualan.php"><i class="fa fa-caret-right"></i> <span>Tambah Nota Penjualan</span></a></li>
               <li><a href="nota_pembelian.php"><i class="fa fa-caret-right"></i> <span>Nota Pelunasan Pembelian</span></a></li>
-              <li><a href="nota_penjualan.php"><i class="fa fa-caret-right"></i> <span>Nota Pelunasan Penjualan</span></a></li>
+              </ul>
+          </li>
+          <li class="nav-parent"><a href=""><i class="fa fa-cogs"></i> <span>Aset</span></a>
+            <ul class="children">
+              <li><a href="tambah_aset.php"><i class="fa fa-caret-right"></i> <span>Tambah Aset</span></a></li>
+              <li><a href="data_aset.php"><i class="fa fa-caret-right"></i> <span>Data Aset</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-file-text-o"></i> <span>Laporan</span></a>
@@ -115,38 +147,16 @@
                           <option value="T">Tunai</option>
                           <option value="TR">Transfer</option>
                           <option value="K">Kredit</option>
-                          <option value="C">Cek</option>
                         </select>
                       </div>
                     </div>
                     <div id="caraBayar"></div>
-                    <div class="form-group" style="margin: 0; padding: 15px 0; border-top: 1px solid #d3d7db;">
-                      <label class="col-sm-3 control-label">Diskon Langsung</label>
-                      <div class="col-sm-9">                      
-                        <input type="number" min="0" name="diskonLangsung" class="form-control" placeholder="Masukan Diskon Langsung" />
-                      </div>
-                    </div>                 
-                    <div class="form-group">
-                      <label class="col-sm-3 control-label">Diskon Pelunasan</label>
-                      <div class="col-sm-9">                      
-                        <input type="number" min="0" name="diskonPelunasan" class="form-control" placeholder="Masukan Diskon Pelunasan" />
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-sm-3 control-label ">Batas Diskon Pelunasan</label>
-                      <?php  $date = date("Y-m-d");
-                      $date = strtotime($date);
-                      $date2 = strtotime("+7 day", $date);?>
-                      <div class="col-sm-9">
-                        <input type="date" name="tanggalBatasNota" class="form-control" value="<?php echo date("Y-m-d", $date2);?>"/>
-                      </div>
-                    </div>
                     <div class="form-group">
                       <label class="col-sm-3 control-label">Status Kirim<span class="asterisk">*</span></label>
                       <div class="col-sm-9">
                         <select id="statusKirim" name="statusKirim" class="form-control" onchange="copystatusKirim();" required>
-                          <option value="DT">Diterima Langsung</option>
-                          <option value="DK">Dikirim</option>
+                          <option value=1>Diterima Langsung</option>
+                          <option value=0>Dikirim</option>
                         </select>
                       </div>
                     </div>
@@ -162,10 +172,8 @@
                         <select name="nama-barang[]" class="form-control">
                           <option value="" disabled selected style="display: none;">[Pilih Barang]</option>
                           <?php 
-                          $sqlBarang = "SELECT * FROM barang";
-                          $resultBarang = mysqli_query($link, $sqlBarang);
-                          while($rowBarang = mysqli_fetch_object($resultBarang)){
-                            echo "<option value=".$rowBarang->kodeBarang.">".$rowBarang->namaBarang."</option>";
+                          while($rowBarangSaja = mysqli_fetch_object($resultBarangSaja)){
+                            echo "<option value=".$rowBarangSaja->kodeBarang.">".$rowBarangSaja->namaBarang."</option>";
                           }
                           ?>
                         </select>
@@ -206,65 +214,12 @@
             <!-- panel -->
           </div>
         </div>
-
-        <!-- row -->
-        <div class="row">
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <div class="row p-t-50">
-                <div class="col-sm-12">
-                  <div class="m-b-20 table-responsive">
-                    <table id="datatable-buttons" class="table table-striped table-bordered">
-                      <thead>
-                        <tr>
-                          <th>No. Nota</th>
-                          <th>Tanggal</th>                          
-                          <th>Cara Bayar</th>
-                          <th>Status Kirim</th>
-                          <th>Tanggal Jatuh Tempo</th>
-                          <th>Diskon Langsung</th>
-                          <th>Diskon Pelunasan</th>
-                          <th>Batas Diskon</th>
-                          <th>Biaya Kirim</th>
-                          <th>Dibayar Oleh</th>
-                          <th>Supplier ID</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php
-                        $hitung = 1;
-                        $index = 0;
-                        while ($row = mysqli_fetch_object($notabeli)) {
-                          echo "<tr data-index='".$index."'>";
-                          echo "<td>" . $row->noNota . "</td>";
-                          echo "<td>" . $row->tanggal . "</td>";
-                          echo "<td>" . $row->caraBayar . "</td>";
-                          echo "<td>" . $row->StatusKirim . "</td>";
-                          echo "<td>" . $row->tanggalJatuhTempo . "</td>";
-                          echo "<td>" . $row->diskonLangsung . "</td>";
-                          echo "<td>" . $row->DiskonPelunasan . "</td>";
-                          echo "<td>" . $row->tanggalBatasDiskon . "</td>";
-                          echo "<td>" . $row->biayaKirim . "</td>";
-                          echo "<td>" . $row->dibayarOleh . "</td>";
-                          echo "<td>" . $row->Supplier_idSupplier . "</td>";
-                          echo "</tr>";
-                          $hitung = $hitung +1;
-                          $index = $index+1;
-                        } ?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div><!-- panel-body -->
-          </div><!-- panel -->
-        </div><!-- row -->
       </div><!-- contentpanel -->
     </div><!-- mainpanel -->
   </section>
-  <?php include 'resources2.php'; ?>
 </body>
 
+<?php include 'resources2.php'; ?>
 <script type="text/javascript">
   var htmlNama = $('#divBarang:eq(0)')[0].outerHTML;
   var htmlJumlah = $('#divJumlah:eq(0)')[0].outerHTML;
@@ -280,24 +235,18 @@
     var jumlah = [];
     var harga=[];
     var noNota;
-    var jenisBayar;
-    var idSupplier;
     var tanggal;
-    var diskonPelunasan;
-    var diskonLangsung;
-    var tanggalBatasDiskon;
+    var idSupplier;
+    var jenisBayar;
+    var statusKirim;
     var biayaKirim;
     var dibayarOleh;
-    var tanggalJatuhTempo;
 
     $('input[name="nomorNota"]').each( function(){ noNota = $(this).val(); });
-    $('select[name="jenisBayar"]').each( function(){ jenisBayar = $(this).val(); });
-    $('select[name="supplier"]').each( function(){ idSupplier = $(this).val(); });
     $('input[name="tanggalNota"]').each( function(){ tanggal = $(this).val(); });
-    $('input[name="diskonPelunasan"]').each( function(){ diskonPelunasan = $(this).val(); });
-    $('input[name="diskonLangsung"]').each( function(){ diskonLangsung = $(this).val(); });
-    $('input[name="tanggalBatasNota"]').each( function(){ tanggalBatasDiskon = $(this).val(); });
-    $('input[name="tanggalJatuhTempo"]').each( function(){ tanggalJatuhTempo = $(this).val(); });
+    $('select[name="supplier"]').each( function(){ idSupplier = $(this).val(); });
+    $('select[name="jenisBayar"]').each( function(){ jenisBayar = $(this).val(); });
+    $('input[name="statusKirim"]').each( function(){ statusKirim = $(this).val(); });
     $('input[name="biayaKirim"]').each( function(){ biayaKirim = $(this).val(); });
     $('select[name="dibayarOleh"]').each( function(){ dibayarOleh = $(this).val(); });
     $('select[name="nama-barang[]"]').each( function(){ nama.push($(this).val()); });
@@ -312,11 +261,12 @@
       idSupplier:idSupplier,
       tanggal:tanggal,
       jenisBayar:jenisBayar,
-      diskonPelunasan:diskonPelunasan,
-      diskonLangsung:diskonLangsung,
-      tanggalBatasDiskon:tanggalBatasDiskon,
-      tanggalJatuhTempo:tanggalJatuhTempo,
+      statusKirim:statusKirim,
       biayaKirim:biayaKirim,
+      /*tanggalJatuhTempo:tanggalJatuhTempo,
+      nomorRekening:nomorRekening,
+      namaPemilikRekening:namaPemilikRekening,
+      Bank_idBank:Bank_idBank,*/
       dibayarOleh:dibayarOleh
     },
     success: function(result){
@@ -331,16 +281,17 @@
           harga:harga[i] 
         },
         success: function(result) {
+          alert(result);
           location.reload();
         },
         error: function(result) {
-          alert("ROBBY");
+          alert("Ajax Error 001");
         }
       });
       }
     },
     error: function(result) {
-      alert("ROBBY");
+      alert("Ajax Error 002");
     }
   });
   });
@@ -401,38 +352,40 @@
       '<label class="col-sm-12 control-label"><center>Detail Pengiriman <span class="asterisk">*</span></center></label>'+
       '</div>'+
       '<div class="form-group">'+
-      '<div class="col-sm-6">'+
-      '<div class="input-group">'+
-      '<span class="input-group-addon">Rp.</span>'+
-      '<input type="number" min="0" name="biayaKirim" class="form-control" placeholder="Biaya Kirim" required/>'+
+        '<div class="col-sm-6">'+
+          '<div class="input-group">'+
+            '<span class="input-group-addon">Rp.</span>'+
+            '<input type="number" min="0" name="biayaKirim" class="form-control" placeholder="Biaya Kirim" required/>'+
+          '</div>'+
+        '</div>'+
+        '<div class="col-sm-6">'+
+          '<select name="dibayarOleh" id="dibayarOleh" class="form-control" onchange="funcDibayarOleh();" required>'+
+            '<option value="" disabled selected style="display: none;">Dibayar Oleh</option>'+
+            '<option value="pelanggan">Gentlemen</option>'+
+            '<option value="penjual">Penjual / Supplier</option>'+
+          '</select>'+
+        '</div>'+
       '</div>'+
-      '</div>'+
-      '<div class="col-sm-6">'+
-      '<select name="jenisPengiriman" class="form-control" required>'+
-      '<option value="" disabled selected style="display: none;">Dikirim Oleh</option>'+
-      '<option value="JNE">JNE</option>'+
-      '<option value="TIKI">TIKI</option>'+
-      '<option value="J&T">J&T</option>'+
-      '</select>'+
-      '</div>'+
-      '</div>'+
+      '<div id="jenisBayarOngkir"></div>'
+    }
+  }
+
+/*  function funcDibayarOleh(){
+    if(document.getElementById('dibayarOleh').value=='penjual'){
+      document.getElementById("jenisBayarOngkir").innerHTML=''
+    }
+    else if(document.getElementById('dibayarOleh').value=='pelanggan'){
+      document.getElementById("jenisBayarOngkir").innerHTML=
       '<div class="form-group">'+
-      '<div class="col-sm-6">'+
-      '<select name="dibayarOleh" class="form-control" required>'+
-      '<option value="" disabled selected style="display: none;">Dibayar Oleh</option>'+
-      '<option value="pelanggan">Pelanggan</option>'+
-      '<option value="perusahaan">Perusahaan</option>'+
-      '</select>'+
+        '<div class="col-sm-12">'+
+          '<select id="jenisBayarOngkir" name="jenisBayarOngkir" class="form-control" onchange="copyjenisBayarOngkir();" required>'+
+            '<option value="" disabled selected style="display: none;">Cara Bayar Pengiriman</option>'+
+            '<option value="T">Tunai</option>'+
+            '<option value="TR">Transfer</option>'+
+          '</select>'+
+        '</div>'+
       '</div>'+
-      '<div class="col-sm-6">'+
-      '<select id="jenisBayarOngkir" name="jenisBayarOngkir" class="form-control" onchange="copyjenisBayarOngkir();" required>'+
-      '<option value="" disabled selected style="display: none;">Cara Bayar</option>'+
-      '<option value="T">Tunai</option>'+
-      '<option value="TR">Transfer</option>'+
-      '</select>'+
-      '</div>'+
-      '<div id="caraBayarOngkir"></div>'+
-      '</div>'
+      '<div id="caraBayarOngkir"></div>'
     }
   }
 
@@ -443,26 +396,26 @@
     else if(document.getElementById('jenisBayarOngkir').value=='TR'){
       document.getElementById("caraBayarOngkir").innerHTML=
       '<div class="form-group">'+
-      '<label class="col-sm-3 control-label" style="margin-top:15px;">Nama Pemilik Rekening <span class="asterisk">*</span></label>'+
-      '<div class="col-sm-9" style="margin-top:15px;">'+
-      '<input type="text" name="namaPemilikRekening" class="form-control" placeholder="Nama Pemilik Rekening" required/>'+
-      '</div>'+
+        '<label class="col-sm-3 control-label" style="margin-top:15px;">Nama Pemilik Rekening <span class="asterisk">*</span></label>'+
+        '<div class="col-sm-9" style="margin-top:15px;">'+
+          '<input type="text" name="namaPemilikRekening" class="form-control" placeholder="Nama Pemilik Rekening" required/>'+
+        '</div>'+
       '</div>'+
       '<div class="form-group">'+
-      '<label class="col-sm-3 control-label ">Data Rekening <span class="asterisk">*</span></label>'+
-      '<div class="col-sm-5">'+
-      '<input type="number" min="0" name="nomorRekening" class="form-control" placeholder="Nomor Rekening" required/>'+
-      '</div>'+
-      '<div class="col-sm-4">'+
-      '<select name="getBankId" class="form-control" data-placeholder="Nama Bank" required>'+
-      '<option value="" style="display:none">Pilih Bank</option>'+
-      '<option value="1">Bank Baca Baca</option>'+
-      '<option value="2">Bank Suka Sendiri</option>'+
-      '</select>'+
-      '</div>'+
-      '</div>'
+        '<label class="col-sm-3 control-label ">Data Rekening <span class="asterisk">*</span></label>'+
+        '<div class="col-sm-5">'+
+          '<input type="number" min="0" name="nomorRekening" class="form-control" placeholder="Nomor Rekening" required/>'+
+        '</div>'+
+        '<div class="col-sm-4">'+
+          '<select name="getBankId" class="form-control" data-placeholder="Nama Bank" required>'+
+          '<option value="" style="display:none">Pilih Bank</option>'+
+          '<option value="1">Bank Baca Baca</option>'+
+          '<option value="2">Bank Suka Sendiri</option>'+
+          '</select>'+
+        '</div>'
     }
-  }
+  }*/
+
 </script>
 
 </html>
