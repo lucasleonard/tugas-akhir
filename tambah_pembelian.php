@@ -1,9 +1,13 @@
+<?php 
+session_start();
+include 'sql.php'; 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <?php include 'resources.php'; ?>
+  <title> Gentlemen | Nota Pembelian </title>
 </head>
-<?php include 'sql.php'; ?>
 <body>
   <!-- Preloader -->
   <div id="preloader">
@@ -35,6 +39,7 @@
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
               <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
+              <li><a href="data_gaji.php"><i class="fa fa-caret-right"></i> <span>View Gaji Karyawan</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -91,7 +96,7 @@
         </div><!-- header-right -->
       </div><!-- headerbar -->
       <div class="pageheader">
-        <h2><i class="fa fa-edit"></i> Tambah Nota Pembelian </h2>
+        <h2><i class="fa fa-edit"></i> Nota </h2>
       </div>
       <div class="contentpanel">
         <div class="row">

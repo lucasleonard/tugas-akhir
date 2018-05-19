@@ -42,6 +42,7 @@ include 'sql.php';
               <li ><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
               <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
+              <li><a href="data_gaji.php"><i class="fa fa-caret-right"></i> <span>View Gaji Karyawan</span></a></li>
             </ul>
           </li>
           <li class="nav-parent nav-active active"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -98,7 +99,7 @@ include 'sql.php';
         </div><!-- header-right -->
       </div><!-- headerbar -->
       <div class="pageheader">
-        <h2><i class="fa fa-users"></i> Poin dan Reservasi </h2>
+        <h2><i class="fa fa-gift"></i> Poin dan Reservasi </h2>
       </div>
       <div class="contentpanel">
       <?php

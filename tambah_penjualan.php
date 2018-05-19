@@ -6,7 +6,7 @@ include 'sql.php';
 <html lang="en">
 <head>
   <?php include 'resources.php'; ?>
-  <title> Gentlemen | Tambah Penjualan </title>
+  <title> Gentlemen | Nota Penjualan </title>
 </head>
 <body>
   <!-- Preloader -->
@@ -39,6 +39,7 @@ include 'sql.php';
               <li><a href="tambah_karyawan.php"><i class="fa fa-caret-right"></i> <span>Tambah Karyawan</span></a></li>
               <li><a href="data_karyawan.php"><i class="fa fa-caret-right"></i> <span>Data Karyawan</span></a></li>
               <li><a href="data_komisi.php"><i class="fa fa-caret-right"></i> <span>Data Komisi</span></a></li>
+              <li><a href="data_gaji.php"><i class="fa fa-caret-right"></i> <span>View Gaji Karyawan</span></a></li>
             </ul>
           </li>
           <li class="nav-parent"><a href=""><i class="fa fa-gift"></i> <span>Poin & Reservasi</span></a>
@@ -172,7 +173,7 @@ include 'sql.php';
                   <div class="form-group" id="divBarang">
                     <label class="col-sm-3 control-label">Barang <span class="asterisk">*</span></label>
                     <div class="col-sm-9">
-                      <select name="nama-barang[]" class="form-control" onchange="ubahHarga()">
+                      <select name="nama-barang[]" id="nama-barang[]" class="form-control nama-barang" onchange="ubahHargaBarang(this.value, this)">
                         <option value="" disabled selected style="display: none;">[Pilih Barang]</option>
                         <?php 
                         $sqlBarang = "SELECT * FROM barang";
@@ -187,20 +188,20 @@ include 'sql.php';
                   <div class="form-group" id="divJumlah">
                     <label class="col-sm-3 control-label">Jumlah Barang <span class="asterisk">*</span></label>
                     <div class="col-sm-9">
-                      <input type="number" min="0" name="jumlah-barang[]" class="form-control" placeholder="Jumlah Barang" required/>
+                      <input type="number" value=1 min="1" id="jumlah-barang[]" name="jumlah-barang[]" class="form-control jumlah-barang" placeholder="Jumlah Barang" onchange="ubahHargaJumlah(this.value, this)" required/>
                     </div>
                   </div>
                   <div class="form-group" id="divHarga">
                     <label class="col-sm-3 control-label">Harga Barang <span class="asterisk">*</span></label>
                     <div class="col-sm-9">
-                      <input disabled="true" type="number" min="0" name="harga-barang[]" class="form-control" placeholder="Harga Barang" required/>
+                      <input disabled="true" name="harga-barang[]" id="harga-barang[]" class="form-control harga-barang" indexKe="0" placeholder="Harga Barang" required/>
                     </div>
                   </div>
                 </div>
 
                 <div id="divButton">
                   <div class="col-sm-12">
-                    <button style="float: right;" id="next" class="btn btn-primary">Tambah Barang</button>
+                    <button style="float: right;" id="next" class="btn btn-info"><i class="fa fa-plus-circle"></i> Tambah Barang</button>
                   </div>
                 </div>
               </div>
@@ -219,59 +220,6 @@ include 'sql.php';
           <!-- panel -->
         </div>
       </div>
-
-      <!-- row -->
-      <div class="row">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div class="row p-t-50">
-              <div class="col-sm-12">
-                <div class="m-b-20 table-responsive">
-                  <table id="datatable-buttons" class="table table-striped table-bordered">
-                    <thead>
-                      <tr>
-                        <th>No. Nota</th>
-                        <th>Tanggal</th>                          
-                        <th>Cara Bayar</th>
-                        <th>Status Kirim</th>
-                        <th>Tanggal Jatuh Tempo</th>
-                        <th>Diskon Langsung</th>
-                        <th>Diskon Pelunasan</th>
-                        <th>Batas Diskon</th>
-                        <th>Biaya Kirim</th>
-                        <th>Dibayar Oleh</th>
-                        <th>Costumer ID</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <?php
-                      $hitung = 1;
-                      $index = 0;
-                      while ($row = mysqli_fetch_object($notajual)) {
-                        echo "<tr data-index='".$index."'>";
-                        echo "<td>" . $row->noNota . "</td>";
-                        echo "<td>" . $row->tanggal . "</td>";
-                        echo "<td>" . $row->caraBayar . "</td>";
-                        echo "<td>" . $row->StatusKirim . "</td>";
-                        echo "<td>" . $row->tanggalJatuhTempo . "</td>";
-                        echo "<td>" . $row->diskonLangsung . "</td>";
-                        echo "<td>" . $row->DiskonPelunasan . "</td>";
-                        echo "<td>" . $row->tanggalBatasDiskon . "</td>";
-                        echo "<td>" . $row->biayaKirim . "</td>";
-                        echo "<td>" . $row->dibayarOleh . "</td>";
-                        echo "<td>" . $row->Costumer_idCostumer . "</td>";
-                        echo "</tr>";
-                        $hitung = $hitung +1;
-                        $index = $index+1;
-                      } ?>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div><!-- panel-body -->
-        </div><!-- panel -->
-      </div><!-- row -->
     </div><!-- contentpanel -->
 
   </div><!-- mainpanel -->
@@ -289,25 +237,21 @@ include 'sql.php';
     $('#formBarang').append(htmlHarga);
   });
 
-  $("#submit").click(function() {
+  /*$("#submit").click(function() {
     var nama = [];
     var jumlah = [];
     var harga=[];
     var noNota;
-    var pelanggan;
     var tanggal;
-    var diskonPelunasan;
-    var tanggalBatasDiskon;
-    var biayaKirim;
-    var dibayarOleh;
+    var kapster;
+    var pelanggan;
+    var jenisBayar;
 
     $('input[name="nomorNota"]').each( function(){ noNota = $(this).val(); });
-    $('select[name="pelanggan"]').each( function(){ pelanggan = $(this).val(); });
     $('input[name="tanggalNota"]').each( function(){ tanggal = $(this).val(); });
-    $('input[name="diskonLangsung"]').each( function(){ diskonPelunasan = $(this).val(); });
+    $('select[name="kapster"]').each( function(){ kapster = $(this).val(); });
     $('input[name="tanggalBatasNota"]').each( function(){ tanggalBatasDiskon = $(this).val(); });
-    $('input[name="biayaKirim"]').each( function(){ biayaKirim = $(this).val(); });
-    $('select[name="dibayarOleh"]').each( function(){ dibayarOleh = $(this).val(); });
+    $('select[name="jenisBayar"]').each( function(){ jenisBayar.push($(this).val()); });
     $('select[name="nama-barang[]"]').each( function(){ nama.push($(this).val()); });
     $('input[name="jumlah-barang[]"]').each( function(){ jumlah.push($(this).val()); });
     $('input[name="harga-barang[]"]').each( function(){ harga.push($(this).val()); });
@@ -317,9 +261,9 @@ include 'sql.php';
       url: "proses.php",
       data: { cmd:'insertNotaJual',
       noNota:noNota,
-      pelanggan:pelanggan,
       tanggal:tanggal,
-      diskonPelunasan:diskonPelunasan,
+      kapster:kapster,
+      jenisBayar:jenisBayar,
       tanggalBatasDiskon:tanggalBatasDiskon,
       biayaKirim:biayaKirim,
       dibayarOleh:dibayarOleh
@@ -348,7 +292,7 @@ include 'sql.php';
       alert("ROBBY");
     }});
   });
-
+*/
   function copy() {
     //statusKirim
     if(document.getElementById('statusKirim').value=='DT'){
@@ -403,4 +347,42 @@ include 'sql.php';
     }
   }
 </script>
+
+<script type="text/javascript">
+    function ubahHargaBarang(value, value2)
+    {
+      var indexBarang = $('.nama-barang').index(value2);
+      var jumlahBarang = document.getElementsByClassName('jumlah-barang')[indexBarang].value;
+      $.ajax({
+        url: 'harga_barang.php',
+        type: "POST",
+        data: { kodeBarang : value },
+        success: function(data)
+        {
+          var total = jumlahBarang * data;
+          total = total.toLocaleString();
+          document.getElementsByClassName('harga-barang')[indexBarang].value = total;
+
+        }
+      });
+    }
+
+    function ubahHargaJumlah(value, value2)
+    {
+      var indexBarang = $('.jumlah-barang').index(value2)
+      var namaBarang = document.getElementsByClassName('nama-barang')[indexBarang].value;
+      var jumlahBarang = document.getElementsByClassName('jumlah-barang')[indexBarang].value;
+      $.ajax({
+        url: 'harga_barang.php',
+        type: "POST",
+        data: { kodeBarang : namaBarang },
+        success: function(data)
+        {
+          var total = jumlahBarang * data;
+          total = total.toLocaleString();
+          document.getElementsByClassName('harga-barang')[indexBarang].value = total; 
+        }
+      });
+    }
+  </script>
 </html>
