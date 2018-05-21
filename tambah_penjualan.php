@@ -1,6 +1,9 @@
 <?php 
 session_start();
 include 'sql.php'; 
+if(!isset($_COOKIE['loginU'])) {
+    header('location: login.php');
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -143,6 +146,19 @@ include 'sql.php';
                       </select>
                     </div>
                   </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">Pelanggan </label>
+                    <div class="col-sm-9">
+                      <input type="tel" name="pelanggan" id="pelanggan" class="form-control" required="false" placeholder="123-4567-8901" list="listPelanggan">
+                      <datalist id="listPelanggan" name="listPelanggan">
+                        <?php 
+                        while($rowCustomer = mysqli_fetch_object($resultCustomer)){
+                          echo "<option value=".$rowCustomer->noTelp.">".$rowCustomer->nama."</option>";
+                        }
+                        ?>
+                      </datalist>
+                    </div>
+                  </div>
                   <div class="form-group" style="margin: 0; padding: 15px 0; border-top: 1px solid #d3d7db;">
                     <label class="col-sm-3 control-label">Jenis Pembayaran<span class="asterisk">*</span></label>
                     <div class="col-sm-9">
@@ -237,7 +253,7 @@ include 'sql.php';
     $('#formBarang').append(htmlHarga);
   });
 
-  /*$("#submit").click(function() {
+  $("#submit").click(function() {
     var nama = [];
     var jumlah = [];
     var harga=[];
@@ -246,12 +262,16 @@ include 'sql.php';
     var kapster;
     var pelanggan;
     var jenisBayar;
+    var bank;
+    var tanggalJatuhTempo;
 
     $('input[name="nomorNota"]').each( function(){ noNota = $(this).val(); });
     $('input[name="tanggalNota"]').each( function(){ tanggal = $(this).val(); });
     $('select[name="kapster"]').each( function(){ kapster = $(this).val(); });
-    $('input[name="tanggalBatasNota"]').each( function(){ tanggalBatasDiskon = $(this).val(); });
-    $('select[name="jenisBayar"]').each( function(){ jenisBayar.push($(this).val()); });
+    $('input[name="pelanggan"]').each( function(){ pelanggan = $(this).val(); });
+    $('select[name="jenisBayar"]').each( function(){ jenisBayar = $(this).val(); });
+    $('select[name="getBankId"]').each( function(){ bank = $(this).val(); });
+    $('input[name="tanggalJatuhTempo"]').each( function(){ tanggalJatuhTempo = $(this).val(); });
     $('select[name="nama-barang[]"]').each( function(){ nama.push($(this).val()); });
     $('input[name="jumlah-barang[]"]').each( function(){ jumlah.push($(this).val()); });
     $('input[name="harga-barang[]"]').each( function(){ harga.push($(this).val()); });
@@ -263,13 +283,14 @@ include 'sql.php';
       noNota:noNota,
       tanggal:tanggal,
       kapster:kapster,
+      pelanggan:pelanggan,
       jenisBayar:jenisBayar,
-      tanggalBatasDiskon:tanggalBatasDiskon,
-      biayaKirim:biayaKirim,
-      dibayarOleh:dibayarOleh
+      bank:bank,
+      tanggalJatuhTempo:tanggalJatuhTempo
     },                  
     success: function(result){
-      for( i = 0 ;i < nama.length ; i++){
+      alert("Success 1");
+      /*for( i = 0 ;i < nama.length ; i++){
         $.ajax({
           type: "GET",
           url: "proses.php",
@@ -283,16 +304,16 @@ include 'sql.php';
           location.reload();
         },
         error: function(result) {
-          alert("ROBBY");
+          alert(result);
         }
       });
-      }
+      }*/
     },
     error: function(result) {
-      alert("ROBBY");
+      alert("Error Ajax 101");
     }});
   });
-*/
+
   function copy() {
     //statusKirim
     if(document.getElementById('statusKirim').value=='DT'){
@@ -362,7 +383,6 @@ include 'sql.php';
           var total = jumlahBarang * data;
           total = total.toLocaleString();
           document.getElementsByClassName('harga-barang')[indexBarang].value = total;
-
         }
       });
     }

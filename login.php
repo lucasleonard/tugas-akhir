@@ -4,7 +4,10 @@
 	<?php
 	session_start();
 	include 'resources.php'; 
-	include 'sql.php';
+	//include 'sql.php';
+	if(isset($_COOKIE['loginU'])) {
+	    header('location: tambah_pembelian.php');
+	} 
 	?>
 	<title>Login Gentlemen's System</title>
 </head>
@@ -21,7 +24,7 @@
               </button>
               <div class="d-flex align-items-center justify-content-start">
                 <i class="fa fa-times"></i>
-                <span><strong>Error!</strong> Username / Password salah!<?php echo $_SESSION['asd']; ?></span>
+                <span><strong>Error!</strong> Username / Password tidak cocok </span>
               </div><!-- d-flex -->
             </div><!-- alert -->
             <?php
@@ -34,10 +37,10 @@
 	</div>
 	<div class="col-md-4"></div>
 
-	<div class="col-md-4" style="margin-top: 20%; ">
+	<div class="col-md-4" style="margin-top: 10%; ">
 		<form action="proses.php?cmd=login" method="POST" id="login">
 		<div class="form-control" style="width:100%; margin:0 auto">
-	        <h1><?php echo $_SESSION['last_action']; ?>Silahkan Login untuk melanjutkan</h1>
+	        <h1>Silahkan Login untuk melanjutkan</h1>
 	        <div class="form-group">
 	          <input class="form-control" type="text" name="username" placeholder="Masukkan username" style="font-size: 150%" required="true">
 	        </div><!-- form-group -->
@@ -48,15 +51,15 @@
 	  	</div>
 	  	</form>
   	</div>
-
 	<div class="col-md-4"></div>
-
 </body>
 
 	<?php
 	include 'resources2.php';
-
-            unset($_SESSION['asd']);
 	?>
+    <script type="text/javascript">
+      $("#success-alert").fadeTo(3000, 500).slideUp(500);
+      $("#error-alert").fadeTo(3000, 500).slideUp(500);
+    </script>
 
 </html>

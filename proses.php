@@ -4,24 +4,31 @@ require './db.php';
 $cmd = $_GET['cmd'];
 
 switch ($cmd) {
-    case "login": //tambah_aset.php
+    case "login": //login.php
         $username = $_POST['username'];
         $password = $_POST['password'];
-        $sql = "SELECT * FROM karyawan WHERE username = 'admin' AND password = 'admin'";
+        $password = md5($password);
+        $sql = "SELECT * FROM karyawan WHERE username = '".$username."' AND password = '".$password."'";
         $result = mysqli_query($link,$sql);
         if (!$result) {
             $_SESSION['notif'] = "error";
             die("SQL ERROR.".$sql);
         }
         if(mysqli_num_rows($result)<1){
-            $_SESSION['asd']= mysqli_num_rows($result);
             $_SESSION['notif'] = "loginSalah";
             header("Location: /gentlemen/login.php");
         }
         else if(mysqli_num_rows($result)>0){
-            $_SESSION['last_action'] = time();
-            header("Location: /gentlemen/index.php");
+            setcookie("idU", $username, time() + 7200); 
+            setcookie("loginU", TRUE, time() + 7200);
+            header("Location: /gentlemen/tambah_pembelian.php");
         }
+        break;
+
+    case "logout":
+        setcookie("idU", null, time() -1);
+        setcookie("loginU", FALSE, time() -1);
+        header('location: login.php');
         break;
 
     case "insertAset": //tambah_aset.php
@@ -282,12 +289,12 @@ switch ($cmd) {
 
     case "insertNotaJual": //tambah_penjualan.php
         $noNota = $_GET['noNota'];
-        $idPelanggan = $_GET['pelanggan'];
         $tanggal = $_GET['tanggal'];
-        $diskonPelunasan = $_GET['diskonPelunasan'];
-        $tanggalBatasDiskon = $_GET['tanggalBatasDiskon'];
-        $biayaKirim = $_GET['biayaKirim'];
-        $dibayarOleh = $_GET['dibayarOleh'];
+        $kapster = $_GET['kapster'];
+        $telpPelanggan = $_GET['pelanggan'];
+        $jenisBayar = $_GET['jenisBayar'];
+        $bank = $_GET['bank'];
+        $tanggalJatuhTempo = $_GET['tanggalJatuhTempo'];
         $sql = "INSERT INTO `notajual` (`noNota`, `tanggal`, `DiskonPelunasan`, `tanggalBatasDiskon`, `biayaKirim`, `dibayarOleh`, `Costumer_idCostumer`) VALUES ('".$noNota."', '".$tanggal."', '".$diskonPelunasan."', '".$tanggalBatasDiskon."', '".$biayaKirim."', '".$dibayarOleh."','".$idPelanggan."');";
         $result = mysqli_query($link,$sql);
         if($result){

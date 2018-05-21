@@ -1,7 +1,8 @@
 <?php
   require 'db.php';
-
-
+  if(!isset($_COOKIE['loginU'])) {
+    header('location: login.php');
+} 
   // Mencari Jenis Produk
   $sql = "SELECT * FROM jenis";
   $resultJenis = mysqli_query($link, $sql);
@@ -142,4 +143,7 @@
   $cekNomorNota = "SELECT COUNT(*) as jumlah FROM notajual WHERE tanggal = '".date("Y-m-d")."'";
   $resultCekNomorNotaJual = mysqli_query($link, $cekNomorNota);
 
+
+////////////////////////////////////////////////////
+ 
 ?>

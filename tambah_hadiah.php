@@ -87,11 +87,16 @@ include 'sql.php';
               <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                   <img src="images/photos/loggeduser.png" alt="" />
-                  Admin
+                  <?php
+                    $sql = "SELECT * FROM karyawan WHERE username = '".$_COOKIE['idU']."'";
+                    $resultAd = mysqli_query($link, $sql);
+                    $rowAd = mysqli_fetch_array($resultAd);
+                    echo $rowAd['nama'];
+                  ?>
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                  <li><a href="signin.html"><i class="glyphicon glyphicon-log-out"></i> Log Out</a></li>
+                  <li><a href="proses.php?cmd=logout"><i class="glyphicon glyphicon-log-out"></i> Log Out</a></li>
                 </ul>
               </div>
             </li>
