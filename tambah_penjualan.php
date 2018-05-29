@@ -149,14 +149,18 @@ if(!isset($_COOKIE['loginU'])) {
                   <div class="form-group">
                     <label class="col-sm-3 control-label">Pelanggan </label>
                     <div class="col-sm-9">
-                      <input type="tel" name="pelanggan" id="pelanggan" class="form-control" required="false" placeholder="123-4567-8901" list="listPelanggan" cekPoin="javascript:this.setAttribute("value", this.value);">
+                      <input type="tel" name="pelanggan" id="pelanggan" class="form-control" placeholder="123-4567-8901" list="listPelanggan">
                       <datalist id="listPelanggan" name="listPelanggan">
                         <?php 
                         while($rowCustomer = mysqli_fetch_object($resultCustomer)){
                           $sql = "SELECT COUNT(*) as total FROM poin WHERE sudahTerpakai=1 AND Customer_idCustomer=".$rowCustomer->idCustomer;
                           $resultPelangganPoin = mysqli_query($link, $sql);
                           while($rowCustomer2 = mysqli_fetch_object($resultPelangganPoin)){
+<<<<<<< HEAD
                             echo "<option value=".$rowCustomer->noTelp.">".$rowCustomer2->total."</option>";
+=======
+                            echo "<option value='".$rowCustomer->noTelp."'>".$rowCustomer->nama." - ".$rowCustomer2->total."</option>";
+>>>>>>> origin/master
                           }
                         }
                         ?>
@@ -388,12 +392,12 @@ if(!isset($_COOKIE['loginU'])) {
   }
 
   function cekPoin() {
-    var text = $( "#hadiah option:selected" ).text();
+    var text = $("#hadiah option:selected").text();
     var splitText = text.split(" ", 1);
     var hadiahTerpilih = parseInt(splitText);
-//    var pelanggan = document.getElementById('divPelanggan').innerHTML;
-    var pelanggan = $('input[name=pelanggan]').innerHTML;
-    alert(pelanggan);
+    var pelanggan = $('#pelanggan').val();
+    var poin_pelanggan = $("#listPelanggan option[value='" + pelanggan + "']").html().split(' - ')[1];
+    alert(poin_pelanggan);
   }
 </script>
 
