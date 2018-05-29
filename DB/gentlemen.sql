@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2018 at 01:44 PM
+-- Generation Time: May 29, 2018 at 08:16 AM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -86,6 +86,14 @@ CREATE TABLE `bank` (
   `nama` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `bank`
+--
+
+INSERT INTO `bank` (`idBank`, `nama`) VALUES
+(1, 'BCA'),
+(2, 'Bank Mandiri');
+
 -- --------------------------------------------------------
 
 --
@@ -99,6 +107,7 @@ CREATE TABLE `barang` (
   `hargaBeliRata2` double DEFAULT NULL,
   `stok` int(11) DEFAULT NULL,
   `minStok` int(11) DEFAULT NULL,
+  `aktif` tinyint(1) DEFAULT NULL,
   `Jenis_idJenis` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -106,10 +115,12 @@ CREATE TABLE `barang` (
 -- Dumping data for table `barang`
 --
 
-INSERT INTO `barang` (`kodeBarang`, `namaBarang`, `hargaJual`, `hargaBeliRata2`, `stok`, `minStok`, `Jenis_idJenis`) VALUES
-(4, 'barang 2', 12345, NULL, NULL, 100, 1),
-(5, 'barang', 100, NULL, NULL, 10, 1),
-(6, 'Standard Haircut', 60000, NULL, NULL, 1, 2);
+INSERT INTO `barang` (`kodeBarang`, `namaBarang`, `hargaJual`, `hargaBeliRata2`, `stok`, `minStok`, `aktif`, `Jenis_idJenis`) VALUES
+(1, 'Barang 1', 50000, NULL, 0, 10, NULL, 1),
+(2, 'Barang 2', 60000, NULL, 0, 20, NULL, 1),
+(3, 'Barang 3', 75000, NULL, 0, 20, NULL, 1),
+(4, 'Jasa 1', 60000, NULL, 0, 1, NULL, 2),
+(5, 'Jasa 2', 12345, NULL, 0, 1, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -123,6 +134,15 @@ CREATE TABLE `barang_has_karyawan` (
   `bonus` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `barang_has_karyawan`
+--
+
+INSERT INTO `barang_has_karyawan` (`Barang_kodeBarang`, `Karyawan_idKaryawan`, `bonus`) VALUES
+(4, 1, 8000),
+(4, 3, 10000),
+(5, 1, 1234);
+
 -- --------------------------------------------------------
 
 --
@@ -134,6 +154,14 @@ CREATE TABLE `customer` (
   `nama` varchar(45) DEFAULT NULL,
   `noTelp` varchar(13) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`idCustomer`, `nama`, `noTelp`) VALUES
+(1, 'Geo', '031237123'),
+(2, 'Vanni', '0897665233');
 
 -- --------------------------------------------------------
 
@@ -147,6 +175,15 @@ CREATE TABLE `hadiah` (
   `jumlah` varchar(13) NOT NULL,
   `aktif` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `hadiah`
+--
+
+INSERT INTO `hadiah` (`idHadiah`, `nama`, `jumlah`, `aktif`) VALUES
+(1, 'Default', '0', 1),
+(2, 'Hadiah 1', '5', 1),
+(3, 'Hadiah 2', '10', 1);
 
 -- --------------------------------------------------------
 
@@ -204,13 +241,24 @@ CREATE TABLE `jurnal_has_akun` (
 
 CREATE TABLE `karyawan` (
   `idKaryawan` int(11) NOT NULL,
-  `nama` varchar(45) DEFAULT NULL,
+  `username` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `nama` varchar(45) NOT NULL,
   `tanggalMasuk` date DEFAULT NULL,
-  `no_telp` varchar(13) DEFAULT NULL,
-  `gajiPokok` int(11) DEFAULT NULL,
-  `jabatan` enum('K','O','P') DEFAULT NULL,
+  `noTelp` varchar(13) DEFAULT NULL,
+  `gajiPokok` int(11) NOT NULL,
+  `jabatan` enum('K','O','P') NOT NULL,
   `aktif` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `karyawan`
+--
+
+INSERT INTO `karyawan` (`idKaryawan`, `username`, `password`, `nama`, `tanggalMasuk`, `noTelp`, `gajiPokok`, `jabatan`, `aktif`) VALUES
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Lucas', '2018-05-15', '081939856000', 1000000, 'P', 1),
+(3, 'Leo', '', 'Leonard', '2018-05-15', '081939856001', 1050000, 'K', 1),
+(4, 'Lenovo', '', 'Lenovo', '2018-05-08', '081939856002', 1500000, 'O', 1);
 
 -- --------------------------------------------------------
 
@@ -246,10 +294,11 @@ CREATE TABLE `notabeli` (
   `caraBayar` enum('T','TR','K') DEFAULT NULL,
   `StatusKirim` tinyint(1) DEFAULT NULL,
   `biayaKirim` int(11) DEFAULT NULL,
-  `lunas` tinyint(1) DEFAULT NULL,
   `caraBayarPengiriman` enum('T','TR','K') DEFAULT NULL,
   `noRekening` varchar(45) DEFAULT NULL,
   `namaPemilikRekening` varchar(45) DEFAULT NULL,
+  `dibayarOleh` enum('gentlemen','penjual') DEFAULT NULL,
+  `tanggalJatuhTempo` date NOT NULL,
   `Bank_idBank` int(11) NOT NULL,
   `Supplier_idSupplier` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -289,6 +338,16 @@ CREATE TABLE `notajual` (
   `Hadiah_idHadiah` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `notajual`
+--
+
+INSERT INTO `notajual` (`noNota`, `tanggal`, `nominalSeharusnya`, `diskon`, `nominalBayar`, `caraBayar`, `noRekening`, `namaPemilikRekening`, `Customer_idCustomer`, `Bank_idBank`, `Karyawan_idKaryawan`, `Karyawan_idKaryawan1`, `Hadiah_idHadiah`) VALUES
+('12345678901', '2018-05-01', NULL, NULL, 100000, 'T', NULL, NULL, 1, 1, 4, 1, 1),
+('12345678902', '2018-04-30', NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, 4, 3, 1),
+('12345678903', '2018-05-02', NULL, NULL, 100000, 'T', NULL, NULL, 1, 1, 4, 1, 1),
+('12345678904', '2018-04-03', NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, 4, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -301,6 +360,16 @@ CREATE TABLE `notajual_has_barang` (
   `Barang_kodeBarang` int(11) NOT NULL,
   `NotaJual_noNota` char(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `notajual_has_barang`
+--
+
+INSERT INTO `notajual_has_barang` (`harga`, `jumlah`, `Barang_kodeBarang`, `NotaJual_noNota`) VALUES
+(60000, 2, 4, '12345678901'),
+(60000, 1, 4, '12345678902'),
+(60000, 1, 4, '12345678903'),
+(60000, 1, 4, '12345678904');
 
 -- --------------------------------------------------------
 
@@ -363,6 +432,14 @@ CREATE TABLE `poin` (
   `Hadiah_idHadiah` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `poin`
+--
+
+INSERT INTO `poin` (`idPoin`, `sudahTerpakai`, `Customer_idCustomer`, `Hadiah_idHadiah`) VALUES
+(1, 1, 1, 1),
+(2, 1, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -373,23 +450,17 @@ CREATE TABLE `supplier` (
   `idSupplier` int(11) NOT NULL,
   `nama` varchar(45) NOT NULL,
   `noTelp` varchar(13) NOT NULL,
-  `alamat` varchar(45) DEFAULT NULL
+  `alamat` varchar(45) DEFAULT NULL,
+  `aktif` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `supplier`
 --
 
-INSERT INTO `supplier` (`idSupplier`, `nama`, `noTelp`, `alamat`) VALUES
-(1, 'test', 'testt', 'test'),
-(2, 'ets', 'st', 'tset'),
-(3, 'supp1', 'qweee', 'lets'),
-(4, 'supp2', '29080', 'oaijsdf'),
-(5, 'test', '22', 'insert'),
-(6, 'est 2', '2323', 'oisdjf'),
-(7, 'insertHas', '22323', 'ashudj'),
-(8, 'insert2Barang', '013244', 'roual'),
-(9, 'supplier A', '031326712', 'tenggilis');
+INSERT INTO `supplier` (`idSupplier`, `nama`, `noTelp`, `alamat`, `aktif`) VALUES
+(1, 'Supplier 1', '081939856000', 'Tenggilis Mejoyo', 1),
+(2, 'Supplier 2', '081939856002', 'Alamatrtyu', 1);
 
 -- --------------------------------------------------------
 
@@ -407,10 +478,9 @@ CREATE TABLE `supplier_has_barang` (
 --
 
 INSERT INTO `supplier_has_barang` (`Supplier_idSupplier`, `Barang_kodeBarang`) VALUES
-(7, 5),
-(8, 4),
-(8, 5),
-(9, 5);
+(1, 1),
+(1, 2),
+(2, 3);
 
 --
 -- Indexes for dumped tables
@@ -502,7 +572,8 @@ ALTER TABLE `jurnal_has_akun`
 -- Indexes for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  ADD PRIMARY KEY (`idKaryawan`);
+  ADD PRIMARY KEY (`idKaryawan`),
+  ADD UNIQUE KEY `username_UNIQUE` (`username`);
 
 --
 -- Indexes for table `laporan`
@@ -609,15 +680,45 @@ ALTER TABLE `supplier_has_barang`
 --
 
 --
+-- AUTO_INCREMENT for table `aset`
+--
+ALTER TABLE `aset`
+  MODIFY `idAset` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `bank`
+--
+ALTER TABLE `bank`
+  MODIFY `idBank` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT for table `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `kodeBarang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `kodeBarang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `customer`
+--
+ALTER TABLE `customer`
+  MODIFY `idCustomer` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `hadiah`
+--
+ALTER TABLE `hadiah`
+  MODIFY `idHadiah` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `karyawan`
+--
+ALTER TABLE `karyawan`
+  MODIFY `idKaryawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `poin`
+--
+ALTER TABLE `poin`
+  MODIFY `idPoin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `idSupplier` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `idSupplier` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- Constraints for dumped tables
 --
