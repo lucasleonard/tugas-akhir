@@ -149,14 +149,31 @@ if(!isset($_COOKIE['loginU'])) {
                   <div class="form-group">
                     <label class="col-sm-3 control-label">Pelanggan </label>
                     <div class="col-sm-9">
-                      <input type="tel" name="pelanggan" id="pelanggan" class="form-control" required="false" placeholder="123-4567-8901" list="listPelanggan">
+                      <input type="tel" name="pelanggan" id="pelanggan" class="form-control" required="false" placeholder="123-4567-8901" list="listPelanggan" cekPoin="javascript:this.setAttribute("value", this.value);">
                       <datalist id="listPelanggan" name="listPelanggan">
                         <?php 
                         while($rowCustomer = mysqli_fetch_object($resultCustomer)){
-                          echo "<option value=".$rowCustomer->noTelp.">".$rowCustomer->nama."</option>";
+                          $sql = "SELECT COUNT(*) as total FROM poin WHERE sudahTerpakai=1 AND Customer_idCustomer=".$rowCustomer->idCustomer;
+                          $resultPelangganPoin = mysqli_query($link, $sql);
+                          while($rowCustomer2 = mysqli_fetch_object($resultPelangganPoin)){
+                            echo "<option value=".$rowCustomer->noTelp.">".$rowCustomer->nama." - ".$rowCustomer2->total."</option>";
+                          }
                         }
                         ?>
                       </datalist>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">Hadiah </label>
+                    <div class="col-sm-9">
+                      <select name="hadiah" id="hadiah" class="form-control" required="false" onchange="cekPoin();">
+                        <option value="" disabled selected style="display: none;">[Pilih Hadiah]</option>
+                        <?php 
+                        while($rowHadiah = mysqli_fetch_object($resultHadiah)){
+                          echo "<option value=".$rowHadiah->idHadiah.">".$rowHadiah->jumlah." - ".$rowHadiah->nama."</option>";
+                        }
+                        ?>
+                      </select>
                     </div>
                   </div>
                   <div class="form-group" style="margin: 0; padding: 15px 0; border-top: 1px solid #d3d7db;">
@@ -214,7 +231,7 @@ if(!isset($_COOKIE['loginU'])) {
                     </div>
                   </div>
                 </div>
-
+                
                 <div id="divButton">
                   <div class="col-sm-12">
                     <button style="float: right;" id="next" class="btn btn-info"><i class="fa fa-plus-circle"></i> Tambah Barang</button>
@@ -366,6 +383,15 @@ if(!isset($_COOKIE['loginU'])) {
       '</div>'+
       '</div>'
     }
+  }
+
+  function cekPoin() {
+    var text = $( "#hadiah option:selected" ).text();
+    var splitText = text.split(" ", 1);
+    var hadiahTerpilih = parseInt(splitText);
+//    var pelanggan = document.getElementById('divPelanggan').innerHTML;
+    var pelanggan = $('input[name=pelanggan]').innerHTML;
+    alert(pelanggan);
   }
 </script>
 

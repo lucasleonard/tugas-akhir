@@ -74,6 +74,13 @@
     echo "SQL ERROR: ".$sql;
   }
 
+  //Mencari Poin X Pelanggan}
+  $sql = "SELECT c.*, COUNT(*) as total FROM poin p
+          INNER JOIN customer c
+          on c.idCustomer = p.Customer_idCustomer
+          WHERE p.sudahTerpakai = 1";
+  $resultPelangganPoin = mysqli_query($link, $sql);
+
   //Mencari Poin
   $sql = "SELECT * FROM poin WHERE sudahTerpakai = 1";
   $resultPoin = mysqli_query($link, $sql);

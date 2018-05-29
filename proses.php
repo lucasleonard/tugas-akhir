@@ -282,8 +282,8 @@ switch ($cmd) {
         $harga = $_GET['harga'];
         $sql = "INSERT INTO `notabeli_has_barang` (`NotaBeli_noNota`, `Barang_kodeBarang`, `harga`, `jumlah`) VALUES ('".$noNota."', '".$kodeBarang."', '".$harga."', '".$jumlah."');";
         $result = mysqli_query($link,$sql);
-        if($result){
-            echo "LOL";
+        if(!$result){
+            die ("SQL ERROR : ".$sql);
         }
         break;
 
@@ -292,13 +292,14 @@ switch ($cmd) {
         $tanggal = $_GET['tanggal'];
         $kapster = $_GET['kapster'];
         $telpPelanggan = $_GET['pelanggan'];
+        $hadiah = $_GET['hadiah'];
         $jenisBayar = $_GET['jenisBayar'];
         $bank = $_GET['bank'];
         $tanggalJatuhTempo = $_GET['tanggalJatuhTempo'];
-        $sql = "INSERT INTO `notajual` (`noNota`, `tanggal`, `DiskonPelunasan`, `tanggalBatasDiskon`, `biayaKirim`, `dibayarOleh`, `Costumer_idCostumer`) VALUES ('".$noNota."', '".$tanggal."', '".$diskonPelunasan."', '".$tanggalBatasDiskon."', '".$biayaKirim."', '".$dibayarOleh."','".$idPelanggan."');";
+        $sql = "INSERT INTO `notajual` (`noNota`, `tanggal`, `caraBayar`, `Karyawan_idKaryawan`, `Karyawan_idKaryawan1`, `Hadiah_idHadiah`, `Customer_idCustomer`, `Bank_idBank`, `tanggalJatuhTempo`) VALUES ('".$noNota."', '".$tanggal."', '".$jenisBayar."', ".$_COOKIE['loginU'].", ".$kapster.", ".$hadiah.", ".$pelanggan.", ".$bank.", '".$tanggalJatuhTempo."')";
         $result = mysqli_query($link,$sql);
-        if($result){
-            echo "LOL";
+        if(!$result){
+            die ("SQL ERROR : ".$sql);
         }
         break;  
 
@@ -309,8 +310,8 @@ switch ($cmd) {
         $harga = $_GET['harga'];
         $sql = "INSERT INTO `notajual_has_barang` (`NotaJual_noNota`, `Barang_kodeBarang`, `harga`, `jumlah`) VALUES ('".$noNota."', '".$kodeBarang."', '".$harga."', '".$jumlah."');";
         $result = mysqli_query($link,$sql);
-        if($result){
-            echo "LOL";
+        if(!$result){
+            die ("SQL ERROR : ".$sql);
         }
         break;
 
