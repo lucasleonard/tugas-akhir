@@ -156,11 +156,7 @@ if(!isset($_COOKIE['loginU'])) {
                           $sql = "SELECT COUNT(*) as total FROM poin WHERE sudahTerpakai=1 AND Customer_idCustomer=".$rowCustomer->idCustomer;
                           $resultPelangganPoin = mysqli_query($link, $sql);
                           while($rowCustomer2 = mysqli_fetch_object($resultPelangganPoin)){
-<<<<<<< HEAD
-                            echo "<option value=".$rowCustomer->noTelp.">".$rowCustomer2->total."</option>";
-=======
-                            echo "<option value='".$rowCustomer->noTelp."'>".$rowCustomer->nama." - ".$rowCustomer2->total."</option>";
->>>>>>> origin/master
+                            echo "<option value='".$rowCustomer->noTelp."'>".$rowCustomer2->total."</option>";
                           }
                         }
                         ?>
