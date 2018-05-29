@@ -156,7 +156,7 @@ if(!isset($_COOKIE['loginU'])) {
                           $sql = "SELECT COUNT(*) as total FROM poin WHERE sudahTerpakai=1 AND Customer_idCustomer=".$rowCustomer->idCustomer;
                           $resultPelangganPoin = mysqli_query($link, $sql);
                           while($rowCustomer2 = mysqli_fetch_object($resultPelangganPoin)){
-                            echo "<option value=".$rowCustomer->noTelp.">".$rowCustomer->nama." - ".$rowCustomer2->total."</option>";
+                            echo "<option value=".$rowCustomer->noTelp.">".$rowCustomer2->total."</option>";
                           }
                         }
                         ?>
@@ -167,7 +167,7 @@ if(!isset($_COOKIE['loginU'])) {
                     <label class="col-sm-3 control-label">Hadiah </label>
                     <div class="col-sm-9">
                       <select name="hadiah" id="hadiah" class="form-control" required="false" onchange="cekPoin();">
-                        <option value="" disabled selected style="display: none;">[Pilih Hadiah]</option>
+                        <option value="1" disabled selected style="display: none;">[Pilih Hadiah]</option>
                         <?php 
                         while($rowHadiah = mysqli_fetch_object($resultHadiah)){
                           echo "<option value=".$rowHadiah->idHadiah.">".$rowHadiah->jumlah." - ".$rowHadiah->nama."</option>";
@@ -278,6 +278,7 @@ if(!isset($_COOKIE['loginU'])) {
     var tanggal;
     var kapster;
     var pelanggan;
+    var hadiah;
     var jenisBayar;
     var bank;
     var tanggalJatuhTempo;
@@ -302,11 +303,12 @@ if(!isset($_COOKIE['loginU'])) {
       kapster:kapster,
       pelanggan:pelanggan,
       jenisBayar:jenisBayar,
+      hadiah:hadiah,
       bank:bank,
       tanggalJatuhTempo:tanggalJatuhTempo
     },                  
     success: function(result){
-      alert("Success 1");
+      alert(result);
       /*for( i = 0 ;i < nama.length ; i++){
         $.ajax({
           type: "GET",

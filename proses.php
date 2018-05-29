@@ -21,7 +21,7 @@ switch ($cmd) {
         else if(mysqli_num_rows($result)>0){
             setcookie("idU", $username, time() + 7200); 
             setcookie("loginU", TRUE, time() + 7200);
-            header("Location: /gentlemen/tambah_pembelian.php");
+            header("Location: /gentlemen/tambah_penjualan.php");
         }
         break;
 
@@ -291,8 +291,8 @@ switch ($cmd) {
         $noNota = $_GET['noNota'];
         $tanggal = $_GET['tanggal'];
         $kapster = $_GET['kapster'];
-        $telpPelanggan = $_GET['pelanggan'];
         $hadiah = $_GET['hadiah'];
+        $telpPelanggan = $_GET['pelanggan'];
         $jenisBayar = $_GET['jenisBayar'];
         $bank = $_GET['bank'];
         $tanggalJatuhTempo = $_GET['tanggalJatuhTempo'];
