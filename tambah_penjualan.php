@@ -392,7 +392,7 @@ if(!isset($_COOKIE['loginU'])) {
     var splitText = text.split(" ", 1);
     var hadiahTerpilih = parseInt(splitText);
     var pelanggan = $('#pelanggan').val();
-    var poin_pelanggan = $("#listPelanggan option[value='" + pelanggan + "']").html().split(' - ')[1];
+    var poin_pelanggan = $("#listPelanggan option[value='" + pelanggan + "']").html();
     alert(poin_pelanggan);
   }
 </script>
