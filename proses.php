@@ -290,13 +290,41 @@ switch ($cmd) {
     case "insertNotaJual": //tambah_penjualan.php
         $noNota = $_GET['noNota'];
         $tanggal = $_GET['tanggal'];
-        $kapster = $_GET['kapster'];
-        $hadiah = $_GET['hadiah'];
-        $telpPelanggan = $_GET['pelanggan'];
         $jenisBayar = $_GET['jenisBayar'];
-        $bank = $_GET['bank'];
-        $tanggalJatuhTempo = $_GET['tanggalJatuhTempo'];
-        $sql = "INSERT INTO `notajual` (`noNota`, `tanggal`, `caraBayar`, `Karyawan_idKaryawan`, `Karyawan_idKaryawan1`, `Hadiah_idHadiah`, `Customer_idCustomer`, `Bank_idBank`, `tanggalJatuhTempo`) VALUES ('".$noNota."', '".$tanggal."', '".$jenisBayar."', ".$_COOKIE['loginU'].", ".$kapster.", ".$hadiah.", ".$pelanggan.", ".$bank.", '".$tanggalJatuhTempo."')";
+        $sql = "SELECT * FROM karyawan WHERE username = '".$_COOKIE['idU']."'";
+        $result = mysqli_query($link, $sql);
+        while($row = mysqli_fetch_object($result))
+            $operator = $row->idKaryawan;
+        if(isset($_GET['kapster'])){
+            if($_GET['kapster']!= NULL)
+                $kapster = $_GET['kapster'];
+            else
+                $kapster = 1;
+        }
+        else
+            $kapster = 1;
+        if(isset($_GET['hadiah'])){
+            if($_GET['hadiah']!=NULL)
+                $hadiah = $_GET['hadiah'];
+            else
+                $hadiah = 1;
+        }
+        else
+            $hadiah = 1;
+        if(isset($_GET['pelanggan'])){
+            $sql = "SELECT * FROM customer WHERE noTelp = '".$_GET['pelanggan']."'";
+            $resultIdPelanggan = mysqli_query($link, $sql);
+            while($row = mysqli_fetch_object($resultIdPelanggan)){
+                $idPelanggan = $row->idCustomer;
+            }
+        }
+        else
+            $idPelanggan = 1;
+        if(isset($_GET['bank']))
+            $bank = $_GET['bank'];
+        else
+            $bank = 1;
+        $sql = "INSERT INTO `notajual` (`noNota`, `tanggal`, `caraBayar`, `Karyawan_idKaryawan`, `Karyawan_idKaryawan1`, `Hadiah_idHadiah`, `Customer_idCustomer`, `Bank_idBank`) VALUES ('".$noNota."', '".$tanggal."', '".$jenisBayar."', ".$operator.", ".$kapster.", ".$hadiah.", 1, ".$bank.")";
         $result = mysqli_query($link,$sql);
         if(!$result){
             die ("SQL ERROR : ".$sql);
