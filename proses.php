@@ -291,6 +291,8 @@ switch ($cmd) {
         $noNota = $_GET['noNota'];
         $tanggal = $_GET['tanggal'];
         $jenisBayar = $_GET['jenisBayar'];
+        $totalHarga = str_replace(",", "", $_GET['totalHarga']);
+        $totalHarga = (int)$totalHarga;
         $sql = "SELECT * FROM karyawan WHERE username = '".$_COOKIE['idU']."'";
         $result = mysqli_query($link, $sql);
         while($row = mysqli_fetch_object($result))
@@ -324,7 +326,7 @@ switch ($cmd) {
             $bank = $_GET['bank'];
         else
             $bank = 1;
-        $sql = "INSERT INTO `notajual` (`noNota`, `tanggal`, `caraBayar`, `Karyawan_idKaryawan`, `Karyawan_idKaryawan1`, `Hadiah_idHadiah`, `Customer_idCustomer`, `Bank_idBank`) VALUES ('".$noNota."', '".$tanggal."', '".$jenisBayar."', ".$operator.", ".$kapster.", ".$hadiah.", 1, ".$bank.")";
+        $sql = "INSERT INTO `notajual` (`nominalBayar`, `noNota`, `tanggal`, `caraBayar`, `Karyawan_idKaryawan`, `Karyawan_idKaryawan1`, `Hadiah_idHadiah`, `Customer_idCustomer`, `Bank_idBank`) VALUES (".$totalHarga.", '".$noNota."', '".$tanggal."', '".$jenisBayar."', ".$operator.", ".$kapster.", ".$hadiah.", 1, ".$bank.")";
         $result = mysqli_query($link,$sql);
         if(!$result){
             die ("SQL ERROR : ".$sql);
@@ -335,7 +337,8 @@ switch ($cmd) {
         $noNota = $_GET['noNota'];
         $kodeBarang = $_GET['kodeBarang'];
         $jumlah = $_GET['jumlah'];
-        $harga = $_GET['harga'];
+        $harga = str_replace(",", "", $_GET['harga']);
+        $harga = (int)$harga/$jumlah; 
         $sql = "INSERT INTO `notajual_has_barang` (`NotaJual_noNota`, `Barang_kodeBarang`, `harga`, `jumlah`) VALUES ('".$noNota."', '".$kodeBarang."', '".$harga."', '".$jumlah."');";
         $result = mysqli_query($link,$sql);
         if(!$result){

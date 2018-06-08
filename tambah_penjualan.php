@@ -241,7 +241,7 @@ if(!isset($_COOKIE['loginU'])) {
                 <div class="form-group" id="divHargaTotal">
                   <label class="col-sm-3 control-label">Total Harga</label>
                     <div class="col-sm-9">
-                      <input type="number" disabled="true" name="total-harga" id="total-harga" class="form-control total-harga" style="background-color: transparent; border: transparent;" value=0 />
+                      <input type="text" disabled="true" name="total-harga" id="total-harga" class="form-control total-harga" style="background-color: transparent; border: transparent; font-size: 150%; font-weight:bold" value=0 />
                     </div>
                 </div>
               </div>
@@ -287,6 +287,7 @@ if(!isset($_COOKIE['loginU'])) {
     var hadiah;
     var jenisBayar;
     var bank;
+    var totalHarga;
 
     $('input[name="nomorNota"]').each( function(){ noNota = $(this).val(); });
     $('input[name="tanggalNota"]').each( function(){ tanggal = $(this).val(); });
@@ -298,6 +299,7 @@ if(!isset($_COOKIE['loginU'])) {
     $('select[name="nama-barang[]"]').each( function(){ nama.push($(this).val()); });
     $('input[name="jumlah-barang[]"]').each( function(){ jumlah.push($(this).val()); });
     $('input[name="harga-barang[]"]').each( function(){ harga.push($(this).val()); });
+    $('input[name="total-harga"]').each( function(){ totalHarga = $(this).val(); });
 
     $.ajax({ 
       type: "GET",
@@ -309,11 +311,12 @@ if(!isset($_COOKIE['loginU'])) {
       pelanggan:pelanggan,
       jenisBayar:jenisBayar,
       hadiah:hadiah,
-      bank:bank
+      bank:bank,
+      totalHarga:totalHarga
     },                  
     success: function(result){
       alert(result);
-      /*for( i = 0 ;i < nama.length ; i++){
+      for( i = 0 ;i < nama.length ; i++){
         $.ajax({
           type: "GET",
           url: "proses.php",
@@ -330,7 +333,7 @@ if(!isset($_COOKIE['loginU'])) {
           alert(result);
         }
       });
-      }*/
+      }
     },
     error: function(result) {
       alert("Error Ajax 101");
@@ -406,6 +409,7 @@ if(!isset($_COOKIE['loginU'])) {
     {
       var indexBarang = $('.nama-barang').index(value2);
       var jumlahBarang = document.getElementsByClassName('jumlah-barang')[indexBarang].value;
+      var jumlahArray = $('input[name="harga-barang[]"]').length;
       $.ajax({
         url: 'harga_barang.php',
         type: "POST",
@@ -413,14 +417,17 @@ if(!isset($_COOKIE['loginU'])) {
         success: function(data)
         {
           var total = jumlahBarang * data;
-          var total2 = total;
           total = total.toLocaleString();
           document.getElementsByClassName('harga-barang')[indexBarang].value = total;
           var tot=0;
-          for(var i=0;i<jumlahBarang;i++){
-            tot += parseInt(document.getElementsByClassName('harga-barang')[i].value);
+          for(var i=0;i<jumlahArray;i++){
+            var hilangKoma = (document.getElementsByClassName('harga-barang')[i].value).replace(",","");
+            var tampung = parseInt(hilangKoma);
+            if(isNaN(tampung)==false){
+              tot += tampung;
+              document.getElementById('total-harga').value = tot.toLocaleString();
+            }
           }
-          document.getElementById('total-harga').value = tot;
         }
       });
     }
@@ -430,6 +437,7 @@ if(!isset($_COOKIE['loginU'])) {
       var indexBarang = $('.jumlah-barang').index(value2)
       var namaBarang = document.getElementsByClassName('nama-barang')[indexBarang].value;
       var jumlahBarang = document.getElementsByClassName('jumlah-barang')[indexBarang].value;
+      var jumlahArray = $('input[name="harga-barang[]"]').length;
       $.ajax({
         url: 'harga_barang.php',
         type: "POST",
@@ -439,8 +447,15 @@ if(!isset($_COOKIE['loginU'])) {
           var total = jumlahBarang * data;
           total = total.toLocaleString();
           document.getElementsByClassName('harga-barang')[indexBarang].value = total; 
-          total = parseFloat(total)*1000+document.getElementById('total-harga').value;
-          document.getElementById('total-harga').value = total;
+          var tot=0;
+          for(var i=0;i<jumlahArray;i++){
+            var hilangKoma = (document.getElementsByClassName('harga-barang')[i].value).replace(",","");
+            var tampung = parseInt(hilangKoma);
+            if(isNaN(tampung)==false){
+              tot += tampung;
+              document.getElementById('total-harga').value = tot.toLocaleString();
+            }
+          }
         }
       });
     }
