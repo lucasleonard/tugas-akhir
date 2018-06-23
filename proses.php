@@ -331,7 +331,28 @@ switch ($cmd) {
         if(!$result){
             die ("SQL ERROR : ".$sql);
         }
+
+
+        //JURNALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+        $keterangan = "Transaksi Penjualan ";
+        if($jenisBayar=="T")
+            $keterangan =  $keterangan."Tunai";
+        else if($jenisBayar == "TR")
+            $keterangan =  $keterangan."Transfer ";
+        else if($jenisBayar=="K")
+            $keterangan =  $keterangan."Kredit ";
+        
+        $sqlCariJurnal = "SELECT * FROM jurnal WHERE tanggal = '".$tanggal."' AND keteranganTransaksi = '".$keterangan."'";
+        $resultCariJurnal = mysqli_query($link, $sqlCariJurnal);
+        if(mysqli_num_rows($resultCariJurnal)==0){
+            $sqlJurnal = "INSERT INTO `jurnal` (`tanggal`, `keteranganTransaksi`, `Periode_idPeriode`) VALUES ('".$tanggal."', '".$keterangan."', '000001')";
+            $resultJurnal = mysqli_query($link,$sqlJurnal);
+            if(!$resultJurnal){
+                die ("SQL ERROR : ".$sqlJurnal);
+            }
+        }
         break;  
+
 
     case "insertNotaJualBarang": //tambah_penjualan.php
         $noNota = $_GET['noNota'];

@@ -4,14 +4,32 @@
 	<?php
 	session_start();
 	include 'resources.php'; 
-	//include 'sql.php';
 	if(isset($_COOKIE['loginU'])) {
 	    header('location: tambah_pembelian.php');
 	} 
 	?>
+	<style>
+		hr.style-two {
+		    border: 0;
+		    height: 1px;
+		    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+		}
+		.bg { 
+		    /* The image used */
+		    background-image: url("Logo-login.jpg");
+
+		    /* Full height */
+		    height: 100%; 
+
+		    /* Center and scale the image nicely */
+		    background-position: center;
+		    background-repeat: no-repeat;
+		    /*background-size: cover;*/
+		}
+	</style>
 	<title>Login Gentlemen's System</title>
 </head>
-<body>
+<body class="bg">
 	<?php
         if(!isset($_SESSION['notif'])) {
             echo "";
@@ -39,16 +57,18 @@
 
 	<div class="col-md-4" style="margin-top: 10%; ">
 		<form action="proses.php?cmd=login" method="POST" id="login">
-		<div class="form-control" style="width:100%; margin:0 auto">
-	        <h1>Silahkan Login untuk melanjutkan</h1>
-	        <div class="form-group">
-	          <input class="form-control" type="text" name="username" placeholder="Masukkan username" style="font-size: 150%" required="true">
-	        </div><!-- form-group -->
-	        <div class="form-group">
-	          <input class="form-control" type="password" name="password" placeholder="Masukkan password" style="font-size: 150%" required="true">
-	        </div><!-- form-group -->
-	        <button class="btn btn-info btn-block" style="font-size: 125%">Login</button>
-	  	</div>
+			<hr class="style-two">
+				<h1 style="text-align: center;color: black">Admin Login</h1>
+			<hr class="style-two">
+			<div class="form-control" style="width:100%; margin:0 auto">
+				<div class="form-group">
+		          <input class="form-control" type="text" name="username" placeholder="Masukkan username" style="font-size: 150%" required="true">
+		        </div><!-- form-group -->
+		        <div class="form-group">
+		          <input class="form-control" type="password" name="password" placeholder="Masukkan password" style="font-size: 150%" required="true">
+		        </div><!-- form-group -->
+		        <button class="btn btn-info btn-block" style="font-size: 125%">Login</button>
+		  	</div>
 	  	</form>
   	</div>
 	<div class="col-md-4"></div>

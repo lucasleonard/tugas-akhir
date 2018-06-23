@@ -377,7 +377,7 @@ if(!isset($_COOKIE['loginU'])) {
       '<div class="col-sm-9">'+
       '<select name="getBankId" class="form-control" data-placeholder="Nama Bank" required>'+
 
-      '<option value="" style="display:none">Pilih Bank</option>'+
+      '<option value="1" style="display:none">Pilih Bank</option>'+
       '<?php while($row = mysqli_fetch_object($bank)){ echo "<option value=".$row->idBank.">".$row->nama."</option>";} ?>'+
       '</select>'+
       '</div>'+
