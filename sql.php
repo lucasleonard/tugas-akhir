@@ -66,7 +66,6 @@
     echo "SQL ERROR: ".$sql;
   }
 
-
   //Mencari Customer
   $sql = "SELECT * FROM customer";
   $resultCustomer = mysqli_query($link, $sql);
@@ -86,6 +85,13 @@
   $resultPoin = mysqli_query($link, $sql);
   if(!$resultPoin){
     echo "SQL ERROR: ".$sql;
+  }
+
+  //Mencari Periode aktif
+  $sql = "SELECT * FROM periode WHERE aktif = 1";
+  $resultPeriodeAktif = mysqli_query($link, $sql);
+  if(!$resultPeriodeAktif){
+    echo "SQL ERROR: ". $sql;
   }
 
   // Mencari Kumpulan Periode

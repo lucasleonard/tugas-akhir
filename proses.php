@@ -1,6 +1,7 @@
 <?php
 session_start();
 require './db.php';
+include 'sql.php'; 
 $cmd = $_GET['cmd'];
 
 switch ($cmd) {
@@ -331,31 +332,13 @@ switch ($cmd) {
         if(!$result){
             die ("SQL ERROR : ".$sql);
         }
-
-
-        //JURNALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-        $keterangan = "Transaksi Penjualan ";
-        if($jenisBayar=="T")
-            $keterangan =  $keterangan."Tunai";
-        else if($jenisBayar == "TR")
-            $keterangan =  $keterangan."Transfer ";
-        else if($jenisBayar=="K")
-            $keterangan =  $keterangan."Kredit ";
-        
-        $sqlCariJurnal = "SELECT * FROM jurnal WHERE tanggal = '".$tanggal."' AND keteranganTransaksi = '".$keterangan."'";
-        $resultCariJurnal = mysqli_query($link, $sqlCariJurnal);
-        if(mysqli_num_rows($resultCariJurnal)==0){
-            $sqlJurnal = "INSERT INTO `jurnal` (`tanggal`, `keteranganTransaksi`, `Periode_idPeriode`) VALUES ('".$tanggal."', '".$keterangan."', '000001')";
-            $resultJurnal = mysqli_query($link,$sqlJurnal);
-            if(!$resultJurnal){
-                die ("SQL ERROR : ".$sqlJurnal);
-            }
-        }
         break;  
 
 
     case "insertNotaJualBarang": //tambah_penjualan.php
         $noNota = $_GET['noNota'];
+        $tanggal = $_GET['tanggal'];
+        $jenisBayar = $_GET['jenisBayar'];
         $kodeBarang = $_GET['kodeBarang'];
         $jumlah = $_GET['jumlah'];
         $harga = str_replace(",", "", $_GET['harga']);
@@ -365,6 +348,35 @@ switch ($cmd) {
         if(!$result){
             die ("SQL ERROR : ".$sql);
         }
+
+        //JURNALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+        while($row = mysqli_fetch_object($resultPeriodeAktif))
+            $idPeriode = $row->idPeriode;
+        $sql = "SELECT nama FROM jenis WHERE idJenis IN (SELECT Jenis_idJenis FROM barang WHERE kodeBarang = ".$kodeBarang.")";
+        $resultJenis = mysqli_query($link, $sql);
+        while($row = mysqli_fetch_object($resultJenis))
+            $keterangan = "Transaksi Penjualan ".$row->nama;
+        if($jenisBayar=="T")
+            $keterangan =  $keterangan." Tunai";
+        else if($jenisBayar == "TR")
+            $keterangan =  $keterangan." Transfer ";
+        else if($jenisBayar=="K")
+            $keterangan =  $keterangan." Kredit ";
+
+        //masukin ke db jurnal
+        $sqlCariJurnal = "SELECT * FROM jurnal WHERE tanggal = '".$tanggal."' AND keteranganTransaksi = '".$keterangan."'";
+        $resultCariJurnal = mysqli_query($link, $sqlCariJurnal);
+        if(mysqli_num_rows($resultCariJurnal)==0){
+            $sqlJurnal = "INSERT INTO `jurnal` (`tanggal`, `keteranganTransaksi`, `Periode_idPeriode`) VALUES ('".$tanggal."', '".$keterangan."', '".$idPeriode."')";
+            $resultJurnal = mysqli_query($link,$sqlJurnal);
+            if(!$resultJurnal){
+                die ("SQL ERROR : ".$sqlJurnal);
+            }
+        }
+        //masukin ke db jurnal_has_akun
+        
+
+
         break;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

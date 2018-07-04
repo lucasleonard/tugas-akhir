@@ -322,6 +322,8 @@ if(!isset($_COOKIE['loginU'])) {
           url: "proses.php",
           data: { cmd:'insertNotaJualBarang',
           noNota:noNota,
+        tanggal:tanggal,
+          jenisBayar:jenisBayar,
           kodeBarang:nama[i],
           jumlah:jumlah[i],
           harga:harga[i]
@@ -330,7 +332,7 @@ if(!isset($_COOKIE['loginU'])) {
           location.reload();
         },
         error: function(result) {
-          alert(result);
+          alert("Error Ajax 102");
         }
       });
       }
