@@ -202,7 +202,7 @@ if(!isset($_COOKIE['loginU'])) {
               </div>
 
               <div class="col-sm-6 col-md-6">
-                <div id="formBarang"> 
+                <div id="formBarang">
                   <div class="form-group" id="divBarang">
                     <label class="col-sm-3 control-label">Barang <span class="asterisk">*</span></label>
                     <div class="col-sm-9">

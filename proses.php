@@ -374,9 +374,9 @@ switch ($cmd) {
             }
         }
         //masukin ke db jurnal_has_akun
-        
-
-
+        while($row = mysqli_fetch_object($resultTopJurnal))
+            $idJurnal = $row->topJurnal;
+        $sqlJurnalAkun = "INSERT INTO `jurnal_has_akun` (`Jurnal_idJurnal`, `Akun_noAkun`, `urutan`, `nominalDebet`, `nominalKredit`) VALUES (".$topJurnal.",``,,,)"
         break;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

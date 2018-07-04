@@ -101,6 +101,13 @@
     echo "SQL ERROR: ". $sql;
   }
 
+  //Mencari Nomor Jurnal terbaru
+  $sql = "SELECT MAX(idJurnal) as topJurnal FROM `jurnal`";
+  $resultTopJurnal = mysqli_query($link, $sql);
+  if(!$resultTopJurnal){
+    echo "SQL ERROR: ". $sql;
+  }
+
   // Mencari Daftar Akun berdasarkan Periode
   $sql = "SELECT pha.*, a.nama, a.saldoNormal FROM periode_has_akun pha, periode p, akun a WHERE pha.Periode_idPeriode = p.idPeriode and a.noAkun = pha.Akun_noAkun and a.noAkun <> '000'";
   $daftarakun = mysqli_query($link, $sql);
