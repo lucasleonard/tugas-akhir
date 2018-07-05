@@ -101,6 +101,23 @@ if(!isset($_COOKIE['loginU'])) {
       <h2><i class="fa fa-edit"></i> Nota </h2>
     </div>
     <div class="contentpanel">
+      <?php
+          if(!isset($_SESSION['notifStok'])) {
+              echo "asdsadasd";
+          }
+          else { ?>
+            <div id="error-alert" class="alert alert-warning alert-solid" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="d-flex align-items-center justify-content-start">
+                <i class="fa fa-bell"></i>
+                <span>Jumlah stok <?php echo $_SESSION['notifStok']; ?> menipis</span>
+              </div><!-- d-flex -->
+            </div><!-- alert -->
+            <?php
+            unset($_SESSION['notifStok']);            
+          } ?>
       <div class="row">
         <div class="panel-body panel-body-nopadding">
           <div class="panel panel-default">
@@ -315,7 +332,7 @@ if(!isset($_COOKIE['loginU'])) {
       totalHarga:totalHarga
     },                  
     success: function(result){
-      alert(result);
+      //alert(result);
       for( i = 0 ;i < nama.length ; i++){
         $.ajax({
           type: "GET",

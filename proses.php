@@ -350,26 +350,42 @@ switch ($cmd) {
             die ("SQL ERROR : ".$sql);
         }
 
-        //JURNALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-        while($row = mysqli_fetch_object($resultPeriodeAktif)){
-            $idPeriode = $row->idPeriode;
-            if($row->idJenis==1)
-                $noAkun = "401";
-            else if($row->idJenis==2)
-                $noAkun = "402";
+        //update stok
+        $sqlCekStok = "SELECT * FROM barang WHERE kodeBarang = ".$kodeBarang;
+        $resultCekStok = mysqli_query($link, $sqlCekStok);
+        while($row = mysqli_fetch_object($resultCekStok)){
+            if($row->Jenis_idJenis==1){
+                $sqlUpdateStok = "UPDATE `barang` SET `stok`=(stok-".$jumlah.") WHERE kodeBarang = ".$kodeBarang;
+                $resultUpdateStok = mysqli_query($link, $sqlUpdateStok);
+                if($row->stok<$row->minStok){
+                    if(isset($_SESSION['notifStok'])){
+                        $_SESSION['notifStok'] = $_SESSION['notifStok'].", ".$row->namaBarang;
+                    }
+                    else{
+                        $_SESSION['notifStok'] = $row->namaBarang;
+                    }
+                }
+            }
         }
+        
+        //JURNAL
+        while($row = mysqli_fetch_object($resultPeriodeAktif))
+            $idPeriode = $row->idPeriode;
         $sql = "SELECT * FROM jenis WHERE idJenis IN (SELECT Jenis_idJenis FROM barang WHERE kodeBarang = ".$kodeBarang.")";
         $resultJenis = mysqli_query($link, $sql);
-        while($row = mysqli_fetch_object($resultJenis))
+        while($row = mysqli_fetch_object($resultJenis)){
             $keterangan = "Transaksi Penjualan ".$row->nama;
+            if($row->idJenis==1)
+                $noAkun = 401;
+            else if($row->idJenis==2)
+                $noAkun = 402;
+        }
         if($jenisBayar=="T")
             $keterangan =  $keterangan." Tunai";
         else if($jenisBayar == "TR")
             $keterangan =  $keterangan." Transfer ";
         else if($jenisBayar=="K")
             $keterangan =  $keterangan." Kredit ";
-
-        //masukin ke db jurnal
         $sqlCariJurnal = "SELECT * FROM jurnal WHERE tanggal = '".$tanggal."' AND keteranganTransaksi = '".$keterangan."'";
         $resultCariJurnal = mysqli_query($link, $sqlCariJurnal);
         if(mysqli_num_rows($resultCariJurnal)==0){
@@ -379,15 +395,26 @@ switch ($cmd) {
                 die ("SQL ERROR : ".$sqlJurnal);
             }
         }
-        //masukin ke db jurnal_has_akun
-        //Pendapatan 400
+        //DB jurnal_has_akun
+        $resultCariJurnal = mysqli_query($link, $sqlCariJurnal);
         while($row = mysqli_fetch_object($resultCariJurnal)){
             $idJurnal = $row->idJurnal;
         }
-        $sqlJurnalAkun = "INSERT INTO `jurnal_has_akun` (`Jurnal_idJurnal`, `Akun_noAkun`, `urutan`, `nominalDebet`, `nominalKredit`) VALUES (".$idJurnal.",".$noAkun.",2,0,".$hargaBarangXJumlah.")";
-        $resultJurnalAkun = mysqli_query($link, $sqlJurnalAkun);
-        if(!$resiltJurnalAkun)
-            die("SQL ERROR :".$sqlJurnalAkun);
+        ////Pendapatan 400
+        $sqlJurnalPendapatan = "INSERT INTO `jurnal_has_akun` (`Jurnal_idJurnal`, `Akun_noAkun`, `urutan`, `nominalDebet`, `nominalKredit`) VALUES (".$idJurnal.",".$noAkun.",2,0,".$hargaBarangXJumlah.")";
+        $resultJurnalPendapatan = mysqli_query($link, $sqlJurnalPendapatan);
+        if(!$resultJurnalPendapatan)
+            die("SQL ERROR :".$sqlJurnalPendapatan);
+        ////Kas & Bank
+        if($jenisBayar=="T"){
+            $noAkun = 101;
+        }
+        else if($jenisBayar == "TR")
+            $noAkun = 102;
+        $sqlJurnalKnB = "INSERT INTO `jurnal_has_akun` (`Jurnal_idJurnal`, `Akun_noAkun`, `urutan`, `nominalDebet`, `nominalKredit`) VALUES (".$idJurnal.",".$noAkun.",1,".$hargaBarangXJumlah.",0)";
+        $resultJurnalKnB = mysqli_query($link, $sqlJurnalKnB);
+        if(!$resultJurnalKnB)
+            die("SQL ERROR :".$sqlJurnalKnB);
         break;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
