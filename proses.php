@@ -342,6 +342,7 @@ switch ($cmd) {
         $kodeBarang = $_GET['kodeBarang'];
         $jumlah = $_GET['jumlah'];
         $harga = str_replace(",", "", $_GET['harga']);
+        $hargaBarangXJumlah = (int)$harga;
         $harga = (int)$harga/$jumlah; 
         $sql = "INSERT INTO `notajual_has_barang` (`NotaJual_noNota`, `Barang_kodeBarang`, `harga`, `jumlah`) VALUES ('".$noNota."', '".$kodeBarang."', '".$harga."', '".$jumlah."');";
         $result = mysqli_query($link,$sql);
@@ -350,9 +351,14 @@ switch ($cmd) {
         }
 
         //JURNALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-        while($row = mysqli_fetch_object($resultPeriodeAktif))
+        while($row = mysqli_fetch_object($resultPeriodeAktif)){
             $idPeriode = $row->idPeriode;
-        $sql = "SELECT nama FROM jenis WHERE idJenis IN (SELECT Jenis_idJenis FROM barang WHERE kodeBarang = ".$kodeBarang.")";
+            if($row->idJenis==1)
+                $noAkun = "401";
+            else if($row->idJenis==2)
+                $noAkun = "402";
+        }
+        $sql = "SELECT * FROM jenis WHERE idJenis IN (SELECT Jenis_idJenis FROM barang WHERE kodeBarang = ".$kodeBarang.")";
         $resultJenis = mysqli_query($link, $sql);
         while($row = mysqli_fetch_object($resultJenis))
             $keterangan = "Transaksi Penjualan ".$row->nama;
@@ -374,9 +380,14 @@ switch ($cmd) {
             }
         }
         //masukin ke db jurnal_has_akun
-        while($row = mysqli_fetch_object($resultTopJurnal))
-            $idJurnal = $row->topJurnal;
-        $sqlJurnalAkun = "INSERT INTO `jurnal_has_akun` (`Jurnal_idJurnal`, `Akun_noAkun`, `urutan`, `nominalDebet`, `nominalKredit`) VALUES (".$topJurnal.",``,,,)"
+        //Pendapatan 400
+        while($row = mysqli_fetch_object($resultCariJurnal)){
+            $idJurnal = $row->idJurnal;
+        }
+        $sqlJurnalAkun = "INSERT INTO `jurnal_has_akun` (`Jurnal_idJurnal`, `Akun_noAkun`, `urutan`, `nominalDebet`, `nominalKredit`) VALUES (".$idJurnal.",".$noAkun.",2,0,".$hargaBarangXJumlah.")";
+        $resultJurnalAkun = mysqli_query($link, $sqlJurnalAkun);
+        if(!$resiltJurnalAkun)
+            die("SQL ERROR :".$sqlJurnalAkun);
         break;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
