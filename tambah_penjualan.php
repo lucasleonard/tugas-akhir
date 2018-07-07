@@ -102,10 +102,7 @@ if(!isset($_COOKIE['loginU'])) {
     </div>
     <div class="contentpanel">
       <?php
-          if(!isset($_SESSION['notifStok'])) {
-              echo "asdsadasd";
-          }
-          else { ?>
+          if(isset($_SESSION['notifStok'])) { ?>
             <div id="error-alert" class="alert alert-warning alert-solid" role="alert">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -332,27 +329,26 @@ if(!isset($_COOKIE['loginU'])) {
       totalHarga:totalHarga
     },                  
     success: function(result){
-      //alert(result);
       for( i = 0 ;i < nama.length ; i++){
         $.ajax({
-          type: "GET",
-          url: "proses.php",
-          data: { cmd:'insertNotaJualBarang',
-          noNota:noNota,
-        tanggal:tanggal,
-          jenisBayar:jenisBayar,
-          kodeBarang:nama[i],
-          jumlah:jumlah[i],
-          harga:harga[i]
-        },
-        success: function(result) {
-          location.reload();
-        },
-        error: function(result) {
-          alert("Error Ajax 102");
-        }
-      });
+            type: "GET",
+            url: "proses.php",
+            data: { cmd:'insertNotaJualBarang',
+            noNota:noNota,
+            tanggal:tanggal,
+            jenisBayar:jenisBayar,
+            kodeBarang:nama[i],
+            jumlah:jumlah[i],
+            harga:harga[i]
+          },
+          success: function(result) {
+          },
+          error: function(result) {
+            alert("Error Ajax 102");
+          }
+        });
       }
+      location.reload();
     },
     error: function(result) {
       alert("Error Ajax 101");
