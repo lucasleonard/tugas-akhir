@@ -344,7 +344,7 @@ if(!isset($_COOKIE['loginU'])) {
           success: function(result) {
           },
           error: function(result) {
-            alert("Error Ajax 102");
+            alert(result);
           }
         });
       }

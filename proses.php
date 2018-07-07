@@ -357,7 +357,7 @@ switch ($cmd) {
             if($row->Jenis_idJenis==1){
                 $sqlUpdateStok = "UPDATE `barang` SET `stok`=(stok-".$jumlah.") WHERE kodeBarang = ".$kodeBarang;
                 $resultUpdateStok = mysqli_query($link, $sqlUpdateStok);
-                if($row->stok<$row->minStok){
+                if(($row->stok-$jumlah)<$row->minStok){
                     if(isset($_SESSION['notifStok'])){
                         $_SESSION['notifStok'] = $_SESSION['notifStok'].", ".$row->namaBarang;
                     }
