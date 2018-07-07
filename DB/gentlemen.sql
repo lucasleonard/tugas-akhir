@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 07, 2018 at 12:24 PM
+-- Generation Time: Jul 07, 2018 at 01:16 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -98,7 +98,9 @@ CREATE TABLE `barang` (
 
 INSERT INTO `barang` (`kodeBarang`, `namaBarang`, `hargaJual`, `hargaBeliRata2`, `stok`, `minStok`, `aktif`, `Jenis_idJenis`) VALUES
 (10001, 'Barang 1', 5000, NULL, 10, 5, 1, 1),
-(20001, 'Jasa 1', 60000, NULL, NULL, NULL, 1, 2);
+(10002, 'Barang 2', 3000, NULL, 5, 5, 1, 1),
+(20001, 'Jasa 1', 60000, NULL, NULL, NULL, 1, 2),
+(20002, 'Jasa 2', 80000, NULL, NULL, NULL, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -347,16 +349,17 @@ CREATE TABLE `notaterima` (
 CREATE TABLE `periode` (
   `idPeriode` char(6) NOT NULL,
   `tanggalAwal` date DEFAULT NULL,
-  `tanggalAkhir` date DEFAULT NULL
+  `tanggalAkhir` date DEFAULT NULL,
+  `aktif` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `periode`
 --
 
-INSERT INTO `periode` (`idPeriode`, `tanggalAwal`, `tanggalAkhir`) VALUES
-('201806', '2018-06-01', '2018-06-30'),
-('201807', '2018-07-01', '2018-07-31');
+INSERT INTO `periode` (`idPeriode`, `tanggalAwal`, `tanggalAkhir`, `aktif`) VALUES
+('201806', '2018-06-01', '2018-06-30', 1),
+('201807', '2018-07-01', '2018-07-31', 0);
 
 -- --------------------------------------------------------
 
@@ -620,7 +623,7 @@ ALTER TABLE `bank`
 -- AUTO_INCREMENT for table `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `kodeBarang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20002;
+  MODIFY `kodeBarang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20003;
 --
 -- AUTO_INCREMENT for table `customer`
 --
