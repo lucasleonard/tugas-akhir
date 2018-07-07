@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 29, 2018 at 08:16 AM
+-- Generation Time: Jul 07, 2018 at 12:24 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -32,6 +32,16 @@ CREATE TABLE `akun` (
   `saldoNormal` smallint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `akun`
+--
+
+INSERT INTO `akun` (`noAkun`, `nama`, `saldoNormal`) VALUES
+('101', 'Kas', 1),
+('102', 'Bank BCA', 1),
+('401', 'Pendapatan Barang', 2),
+('402', 'Pendapatan Jasa', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -40,39 +50,10 @@ CREATE TABLE `akun` (
 
 CREATE TABLE `aset` (
   `idAset` int(11) NOT NULL,
-  `nama` varchar(45) NOT NULL,
-  `tglBeli` date NOT NULL,
   `perkiraanUmur` double NOT NULL,
-  `hargaBeli` int(11) NOT NULL,
-  `hargaJual` int(11) DEFAULT NULL,
   `lokasi` varchar(45) DEFAULT NULL,
-  `aktif` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `aset_has_notabeli`
---
-
-CREATE TABLE `aset_has_notabeli` (
-  `Aset_idAset` int(11) NOT NULL,
-  `NotaBeli_noNota` char(11) NOT NULL,
-  `hargaBeli` int(11) DEFAULT NULL,
-  `jumlah` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `aset_has_notajual`
---
-
-CREATE TABLE `aset_has_notajual` (
-  `Aset_idAset` int(11) NOT NULL,
-  `NotaJual_noNota` char(11) NOT NULL,
-  `harga` int(11) DEFAULT NULL,
-  `jumlah` int(11) DEFAULT NULL
+  `aktif` tinyint(1) DEFAULT NULL,
+  `Barang_kodeBarang` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -91,8 +72,8 @@ CREATE TABLE `bank` (
 --
 
 INSERT INTO `bank` (`idBank`, `nama`) VALUES
-(1, 'BCA'),
-(2, 'Bank Mandiri');
+(1, 'default'),
+(2, 'BCA');
 
 -- --------------------------------------------------------
 
@@ -116,11 +97,8 @@ CREATE TABLE `barang` (
 --
 
 INSERT INTO `barang` (`kodeBarang`, `namaBarang`, `hargaJual`, `hargaBeliRata2`, `stok`, `minStok`, `aktif`, `Jenis_idJenis`) VALUES
-(1, 'Barang 1', 50000, NULL, 0, 10, NULL, 1),
-(2, 'Barang 2', 60000, NULL, 0, 20, NULL, 1),
-(3, 'Barang 3', 75000, NULL, 0, 20, NULL, 1),
-(4, 'Jasa 1', 60000, NULL, 0, 1, NULL, 2),
-(5, 'Jasa 2', 12345, NULL, 0, 1, NULL, 2);
+(10001, 'Barang 1', 5000, NULL, 10, 5, 1, 1),
+(20001, 'Jasa 1', 60000, NULL, NULL, NULL, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -134,15 +112,6 @@ CREATE TABLE `barang_has_karyawan` (
   `bonus` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `barang_has_karyawan`
---
-
-INSERT INTO `barang_has_karyawan` (`Barang_kodeBarang`, `Karyawan_idKaryawan`, `bonus`) VALUES
-(4, 1, 8000),
-(4, 3, 10000),
-(5, 1, 1234);
-
 -- --------------------------------------------------------
 
 --
@@ -151,7 +120,6 @@ INSERT INTO `barang_has_karyawan` (`Barang_kodeBarang`, `Karyawan_idKaryawan`, `
 
 CREATE TABLE `customer` (
   `idCustomer` int(11) NOT NULL,
-  `nama` varchar(45) DEFAULT NULL,
   `noTelp` varchar(13) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -159,9 +127,9 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`idCustomer`, `nama`, `noTelp`) VALUES
-(1, 'Geo', '031237123'),
-(2, 'Vanni', '0897665233');
+INSERT INTO `customer` (`idCustomer`, `noTelp`) VALUES
+(1, '081939856000'),
+(2, '0897665233');
 
 -- --------------------------------------------------------
 
@@ -181,9 +149,8 @@ CREATE TABLE `hadiah` (
 --
 
 INSERT INTO `hadiah` (`idHadiah`, `nama`, `jumlah`, `aktif`) VALUES
-(1, 'Default', '0', 1),
-(2, 'Hadiah 1', '5', 1),
-(3, 'Hadiah 2', '10', 1);
+(1, 'default', '100', 1),
+(2, 'Hadiah 1', '5', 1);
 
 -- --------------------------------------------------------
 
@@ -241,7 +208,7 @@ CREATE TABLE `jurnal_has_akun` (
 
 CREATE TABLE `karyawan` (
   `idKaryawan` int(11) NOT NULL,
-  `username` varchar(45) NOT NULL,
+  `username` varchar(45) DEFAULT NULL,
   `password` varchar(45) NOT NULL,
   `nama` varchar(45) NOT NULL,
   `tanggalMasuk` date DEFAULT NULL,
@@ -256,9 +223,8 @@ CREATE TABLE `karyawan` (
 --
 
 INSERT INTO `karyawan` (`idKaryawan`, `username`, `password`, `nama`, `tanggalMasuk`, `noTelp`, `gajiPokok`, `jabatan`, `aktif`) VALUES
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Lucas', '2018-05-15', '081939856000', 1000000, 'P', 1),
-(3, 'Leo', '', 'Leonard', '2018-05-15', '081939856001', 1050000, 'K', 1),
-(4, 'Lenovo', '', 'Lenovo', '2018-05-08', '081939856002', 1500000, 'O', 1);
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Admin', '2018-07-01', NULL, 1000000, 'P', 1),
+(2, 'kapster', '21232f297a57a5a743894a0e4a801fc3', 'Kapster 1', '2018-07-01', NULL, 500000, 'K', 1);
 
 -- --------------------------------------------------------
 
@@ -298,7 +264,7 @@ CREATE TABLE `notabeli` (
   `noRekening` varchar(45) DEFAULT NULL,
   `namaPemilikRekening` varchar(45) DEFAULT NULL,
   `dibayarOleh` enum('gentlemen','penjual') DEFAULT NULL,
-  `tanggalJatuhTempo` date NOT NULL,
+  `tanggalJatuhTempo` date DEFAULT NULL,
   `Bank_idBank` int(11) NOT NULL,
   `Supplier_idSupplier` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -324,11 +290,9 @@ CREATE TABLE `notabeli_has_barang` (
 
 CREATE TABLE `notajual` (
   `noNota` char(11) NOT NULL,
-  `tanggal` date DEFAULT NULL,
-  `nominalSeharusnya` int(11) DEFAULT NULL,
-  `diskon` double DEFAULT NULL,
-  `nominalBayar` int(11) DEFAULT NULL,
-  `caraBayar` enum('T','TR') DEFAULT NULL,
+  `tanggal` date NOT NULL,
+  `nominalBayar` int(11) NOT NULL,
+  `caraBayar` enum('T','TR') NOT NULL,
   `noRekening` varchar(45) DEFAULT NULL,
   `namaPemilikRekening` varchar(45) DEFAULT NULL,
   `Customer_idCustomer` int(11) NOT NULL,
@@ -337,16 +301,6 @@ CREATE TABLE `notajual` (
   `Karyawan_idKaryawan1` int(11) NOT NULL,
   `Hadiah_idHadiah` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `notajual`
---
-
-INSERT INTO `notajual` (`noNota`, `tanggal`, `nominalSeharusnya`, `diskon`, `nominalBayar`, `caraBayar`, `noRekening`, `namaPemilikRekening`, `Customer_idCustomer`, `Bank_idBank`, `Karyawan_idKaryawan`, `Karyawan_idKaryawan1`, `Hadiah_idHadiah`) VALUES
-('12345678901', '2018-05-01', NULL, NULL, 100000, 'T', NULL, NULL, 1, 1, 4, 1, 1),
-('12345678902', '2018-04-30', NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, 4, 3, 1),
-('12345678903', '2018-05-02', NULL, NULL, 100000, 'T', NULL, NULL, 1, 1, 4, 1, 1),
-('12345678904', '2018-04-03', NULL, NULL, NULL, NULL, NULL, NULL, 1, 2, 4, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -360,16 +314,6 @@ CREATE TABLE `notajual_has_barang` (
   `Barang_kodeBarang` int(11) NOT NULL,
   `NotaJual_noNota` char(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `notajual_has_barang`
---
-
-INSERT INTO `notajual_has_barang` (`harga`, `jumlah`, `Barang_kodeBarang`, `NotaJual_noNota`) VALUES
-(60000, 2, 4, '12345678901'),
-(60000, 1, 4, '12345678902'),
-(60000, 1, 4, '12345678903'),
-(60000, 1, 4, '12345678904');
 
 -- --------------------------------------------------------
 
@@ -406,6 +350,14 @@ CREATE TABLE `periode` (
   `tanggalAkhir` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `periode`
+--
+
+INSERT INTO `periode` (`idPeriode`, `tanggalAwal`, `tanggalAkhir`) VALUES
+('201806', '2018-06-01', '2018-06-30'),
+('201807', '2018-07-01', '2018-07-31');
+
 -- --------------------------------------------------------
 
 --
@@ -432,14 +384,6 @@ CREATE TABLE `poin` (
   `Hadiah_idHadiah` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `poin`
---
-
-INSERT INTO `poin` (`idPoin`, `sudahTerpakai`, `Customer_idCustomer`, `Hadiah_idHadiah`) VALUES
-(1, 1, 1, 1),
-(2, 1, 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -459,8 +403,8 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`idSupplier`, `nama`, `noTelp`, `alamat`, `aktif`) VALUES
-(1, 'Supplier 1', '081939856000', 'Tenggilis Mejoyo', 1),
-(2, 'Supplier 2', '081939856002', 'Alamatrtyu', 1);
+(1, 'Supplier 1', '081939856000', NULL, 1),
+(2, 'Supplier 2', '081939856002', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -478,9 +422,8 @@ CREATE TABLE `supplier_has_barang` (
 --
 
 INSERT INTO `supplier_has_barang` (`Supplier_idSupplier`, `Barang_kodeBarang`) VALUES
-(1, 1),
-(1, 2),
-(2, 3);
+(1, 10001),
+(2, 10001);
 
 --
 -- Indexes for dumped tables
@@ -496,23 +439,8 @@ ALTER TABLE `akun`
 -- Indexes for table `aset`
 --
 ALTER TABLE `aset`
-  ADD PRIMARY KEY (`idAset`);
-
---
--- Indexes for table `aset_has_notabeli`
---
-ALTER TABLE `aset_has_notabeli`
-  ADD PRIMARY KEY (`Aset_idAset`,`NotaBeli_noNota`),
-  ADD KEY `fk_Aset_has_NotaBeli_NotaBeli1_idx` (`NotaBeli_noNota`),
-  ADD KEY `fk_Aset_has_NotaBeli_Aset1_idx` (`Aset_idAset`);
-
---
--- Indexes for table `aset_has_notajual`
---
-ALTER TABLE `aset_has_notajual`
-  ADD PRIMARY KEY (`Aset_idAset`,`NotaJual_noNota`),
-  ADD KEY `fk_Aset_has_NotaJual_NotaJual1_idx` (`NotaJual_noNota`),
-  ADD KEY `fk_Aset_has_NotaJual_Aset1_idx` (`Aset_idAset`);
+  ADD PRIMARY KEY (`idAset`,`Barang_kodeBarang`),
+  ADD KEY `fk_Aset_Barang1_idx` (`Barang_kodeBarang`);
 
 --
 -- Indexes for table `bank`
@@ -564,7 +492,6 @@ ALTER TABLE `jurnal`
 -- Indexes for table `jurnal_has_akun`
 --
 ALTER TABLE `jurnal_has_akun`
-  ADD PRIMARY KEY (`Jurnal_idJurnal`,`Akun_noAkun`,`urutan`),
   ADD KEY `fk_Jurnal_has_Akun_Akun1_idx` (`Akun_noAkun`),
   ADD KEY `fk_Jurnal_has_Akun_Jurnal1_idx` (`Jurnal_idJurnal`);
 
@@ -693,7 +620,7 @@ ALTER TABLE `bank`
 -- AUTO_INCREMENT for table `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `kodeBarang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `kodeBarang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20002;
 --
 -- AUTO_INCREMENT for table `customer`
 --
@@ -703,17 +630,22 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `hadiah`
 --
 ALTER TABLE `hadiah`
-  MODIFY `idHadiah` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idHadiah` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `jurnal`
+--
+ALTER TABLE `jurnal`
+  MODIFY `idJurnal` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `idKaryawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idKaryawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `poin`
 --
 ALTER TABLE `poin`
-  MODIFY `idPoin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idPoin` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `supplier`
 --
@@ -724,18 +656,10 @@ ALTER TABLE `supplier`
 --
 
 --
--- Constraints for table `aset_has_notabeli`
+-- Constraints for table `aset`
 --
-ALTER TABLE `aset_has_notabeli`
-  ADD CONSTRAINT `fk_Aset_has_NotaBeli_Aset1` FOREIGN KEY (`Aset_idAset`) REFERENCES `aset` (`idAset`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Aset_has_NotaBeli_NotaBeli1` FOREIGN KEY (`NotaBeli_noNota`) REFERENCES `notabeli` (`noNota`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `aset_has_notajual`
---
-ALTER TABLE `aset_has_notajual`
-  ADD CONSTRAINT `fk_Aset_has_NotaJual_Aset1` FOREIGN KEY (`Aset_idAset`) REFERENCES `aset` (`idAset`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Aset_has_NotaJual_NotaJual1` FOREIGN KEY (`NotaJual_noNota`) REFERENCES `notajual` (`noNota`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `aset`
+  ADD CONSTRAINT `fk_Aset_Barang1` FOREIGN KEY (`Barang_kodeBarang`) REFERENCES `barang` (`kodeBarang`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `barang`
