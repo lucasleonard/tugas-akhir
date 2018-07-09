@@ -196,7 +196,6 @@ if(!isset($_COOKIE['loginU'])) {
                       <select id="jenisBayar" name="jenisBayar" class="form-control" onchange="copy();" required>
                         <option value="T">Tunai</option>
                         <option value="TR">Transfer</option>
-                        <option value="K">Kredit</option>
                       </select>
                     </div>
                   </div>
@@ -395,15 +394,6 @@ if(!isset($_COOKIE['loginU'])) {
       '<option value="1" style="display:none">Pilih Bank</option>'+
       '<?php while($row = mysqli_fetch_object($bank)){ echo "<option value=".$row->idBank.">".$row->nama."</option>";} ?>'+
       '</select>'+
-      '</div>'+
-      '</div>'
-    }
-    else if(document.getElementById('jenisBayar').value=='K'){
-      document.getElementById("caraBayar").innerHTML=
-      '<div class="form-group" style="margin-bottom:15px;">'+
-      '<label class="col-sm-3 control-label">Tanggal Jatuh Tempo <span class="asterisk">*</span></label>'+
-      '<div class="col-sm-9">'+
-      '<input type="date" name="tanggalJatuhTempo" class="form-control" value="<?php echo date("Y-m-d") ?>" required/>'+
       '</div>'+
       '</div>'
     }

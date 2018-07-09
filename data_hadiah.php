@@ -173,8 +173,7 @@
                                   echo "<td>" . $row->nama. "</td>";
                                   echo "<td>" . $row->jumlah . "</td>";
                                   echo "<td>
-                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idHadiah . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
-                                    <a href='#'><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idHadiah . " data-target='#exampleModal'><center><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
                                     <a href='proses.php?cmd=hapusSupplier&i=".$row->idHadiah."'><i class='fa fa-ban'></i>
                                   </td></tr>";
                                 } ?>

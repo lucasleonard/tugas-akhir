@@ -384,8 +384,6 @@ switch ($cmd) {
             $keterangan =  $keterangan." Tunai";
         else if($jenisBayar == "TR")
             $keterangan =  $keterangan." Transfer ";
-        else if($jenisBayar=="K")
-            $keterangan =  $keterangan." Kredit ";
         $sqlCariJurnal = "SELECT * FROM jurnal WHERE tanggal = '".$tanggal."' AND keteranganTransaksi = '".$keterangan."'";
         $resultCariJurnal = mysqli_query($link, $sqlCariJurnal);
         if(mysqli_num_rows($resultCariJurnal)==0){
@@ -405,10 +403,9 @@ switch ($cmd) {
         $resultJurnalPendapatan = mysqli_query($link, $sqlJurnalPendapatan);
         if(!$resultJurnalPendapatan)
             die("SQL ERROR :".$sqlJurnalPendapatan);
-        ////Kas & Bank
-        if($jenisBayar=="T"){
+        ////Kas & Bank 100
+        if($jenisBayar=="T")
             $noAkun = 101;
-        }
         else if($jenisBayar == "TR")
             $noAkun = 102;
         $sqlJurnalKnB = "INSERT INTO `jurnal_has_akun` (`Jurnal_idJurnal`, `Akun_noAkun`, `urutan`, `nominalDebet`, `nominalKredit`) VALUES (".$idJurnal.",".$noAkun.",1,".$hargaBarangXJumlah.",0)";

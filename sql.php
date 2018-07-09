@@ -39,7 +39,7 @@
   }
 
   // Mencari Karyawan aktif
-  $sql = "SELECT * FROM karyawan WHERE aktif=1";
+  $sql = "SELECT * FROM karyawan WHERE aktif=1 AND idKaryawan !=1";
   $resultKaryawan = mysqli_query($link, $sql);
   if(!$resultKaryawan){
     echo "SQL ERROR: ". $sql;
@@ -60,14 +60,14 @@
   }
 
   //Mencari hadiah aktif
-  $sql = "SELECT * FROM hadiah WHERE aktif = 1";
+  $sql = "SELECT * FROM hadiah WHERE aktif = 1 AND idHadiah!=1";
   $resultHadiah = mysqli_query($link, $sql);
   if(!$resultHadiah){
     echo "SQL ERROR: ".$sql;
   }
 
   //Mencari Customer
-  $sql = "SELECT * FROM customer";
+  $sql = "SELECT * FROM customer WHERE idCustomer!=1";
   $resultCustomer = mysqli_query($link, $sql);
   if(!$resultCustomer){
     echo "SQL ERROR: ".$sql;

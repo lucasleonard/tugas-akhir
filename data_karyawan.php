@@ -185,8 +185,7 @@
                                   echo "<td>" . $row->noTelp . "</td>";
                                   echo "<td>" . $row->gajiPokok . "</td>";
                                   echo "<td>
-                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idKaryawan . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
-                                    <a href='#'><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
+                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idKaryawan . " data-target='#exampleModal'><center><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
                                     <a href='proses.php?cmd=hapusSupplier&i=".$row->idKaryawan."'><i class='fa fa-ban'></i>
                                   </td></tr>";
                                 } ?>

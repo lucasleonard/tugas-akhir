@@ -160,7 +160,7 @@
                             <table id="datatable-buttons" class="table table-striped table-bordered">
                               <thead>
                                 <tr>
-                                  <th>Nama Customer</th>
+                                  <th>No. Telp Customer</th>
                                   <th>Jumlah Poin</th>
                                   <th>Actions</th>
                                 </tr>
@@ -170,16 +170,14 @@
                                 $hitung = 1;
                                 $index = 0;
                                 while ($row = mysqli_fetch_object($resultCustomer)) {
-                                  echo "<td>" . $row->nama. "</td>";
+                                  echo "<td>" . $row->noTelp. "</td>";
                                   $sql = "SELECT COUNT(*) as total FROM `poin` WHERE sudahTerpakai = 1 AND Customer_idCustomer =".$row->idCustomer;
                                   $resultTotal = mysqli_query($link, $sql);
                                   while($rowTotal = mysqli_fetch_object($resultTotal)){
                                     echo "<td>" . $rowTotal->total. "</td>";
                                   }
                                   echo "<td>
-                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idCustomer . " data-target='#exampleModal'><center><i class='fa fa-eye'></i></a>&nbsp&nbsp&nbsp&nbsp&nbsp
-                                    <a href='#'><i class='fa fa-edit'></i> </a>&nbsp&nbsp&nbsp&nbsp&nbsp
-                                    <a href='proses.php?cmd=hapusSupplier&i=".$row->idCustomer."'><i class='fa fa-ban'></i>
+                                    <a href='#' class='edit' data-toggle='modal' id='tekan' ide=" . $row->idCustomer . " data-target='#exampleModal'><center><i class='fa fa-edit'></i> </a>
                                   </td></tr>";
                                 } ?>
                               </tbody>
