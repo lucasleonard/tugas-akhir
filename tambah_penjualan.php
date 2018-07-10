@@ -413,6 +413,7 @@ if(!isset($_COOKIE['loginU'])) {
     function ubahHargaBarang(value, value2)
     {
       var indexBarang = $('.nama-barang').index(value2);
+      alert(indexBarang);
       var jumlahBarang = document.getElementsByClassName('jumlah-barang')[indexBarang].value;
       var jumlahArray = $('input[name="harga-barang[]"]').length;
       $.ajax({

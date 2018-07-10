@@ -51,7 +51,7 @@ include 'sql.php';
             </ul>
           </li>
           <li class="nav-parent nav-active active"><a href=""><i class="fa fa-edit"></i> <span>Nota</span></a>
-            <ul class="children"  style="display:block;">
+            <ul class="children" style="display:block;">
               <li class="active"><a href="tambah_pembelian.php"><i class="fa fa-caret-right"></i> <span>Tambah Nota Pembelian</span></a></li>
               <li><a href="tambah_penjualan.php"><i class="fa fa-caret-right"></i> <span>Tambah Nota Penjualan</span></a></li>
               <li><a href="nota_pembelian.php"><i class="fa fa-caret-right"></i> <span>Nota Pelunasan Pembelian</span></a></li>
@@ -187,13 +187,13 @@ include 'sql.php';
                     <div class="form-group" id="divJumlah">
                       <label class="col-sm-3 control-label">Jumlah Barang <span class="asterisk">*</span></label>
                       <div class="col-sm-9">
-                        <input type="number" min="0" name="jumlah-barang[]" class="form-control" placeholder="Jumlah Barang" required/>
+                        <input type="number" min="0" id="jumlah-barang[]" name="jumlah-barang[]" class="form-control jumlah-barang" onchange="ubahHargaJumlah(this.value, this)" placeholder="Jumlah Barang" required/>
                       </div>
                     </div>
                     <div class="form-group" id="divHarga">
-                      <label class="col-sm-3 control-label">Harga Barang <span class="asterisk">*</span></label>
+                      <label class="col-sm-3 control-label">Harga Barang (satuan)<span class="asterisk">*</span></label>
                       <div class="col-sm-9">
-                        <input type="number" min="0" name="harga-barang[]" class="form-control" placeholder="Harga Barang" required/>
+                        <input type="number" min="0" id="harga-barang[]" name="harga-barang[]" class="form-control harga-barang" placeholder="Harga per Barang" onchange="ubahHargaHarga(this.value, this)" required/>
                       </div>
                     </div>
                   </div>
@@ -274,9 +274,6 @@ include 'sql.php';
       tanggal:tanggal,
       jenisBayar:jenisBayar,
       statusKirim:statusKirim,
-      /*tanggalJatuhTempo:tanggalJatuhTempo,
-      nomorRekening:nomorRekening,
-      namaPemilikRekening:namaPemilikRekening,*/
       Bank_idBank:Bank_idBank
     },
     success: function(result){
@@ -326,8 +323,7 @@ include 'sql.php';
       '<div class="col-sm-4">'+
       '<select name="getBankId" class="form-control" data-placeholder="Nama Bank" required>'+
       '<option value="" style="display:none">Pilih Bank</option>'+
-      '<option value="1">Bank Baca Baca</option>'+
-      '<option value="2">Bank Suka Sendiri</option>'+
+      '<option value="1">BCA</option>'+
       '</select>'+
       '</div>'+
       '</div>'
@@ -347,91 +343,36 @@ include 'sql.php';
       '</div>'+
       '</div>'
     }
-    else if(document.getElementById('jenisBayar').value=='C'){
-      document.getElementById("caraBayar").innerHTML=
-      '<div class="form-group" style="margin-bottom:15px;">'+
-      '<label class="col-sm-3 control-label">Nomor Cek <span class="asterisk">*</span></label>'+
-      '<div class="col-sm-9">'+
-      '<input type="number" min="0" name="nomorCek" class="form-control" placeholder="Nomor Cek" required/>'+
-      '</div>'+
-      '</div>'
-    }
   }
 
-  function copystatusKirim(){
-    if(document.getElementById('statusKirim').value=='DT'){
-      document.getElementById("barangDikirim").innerHTML=''
+</script>
+<script type="text/javascript">
+    function ubahHargaHarga(value, value2)
+    {
+      var indexBarang = $('.harga-barang').index(value2);
+      var jumlahArray = $('input[name="harga-barang[]"]').length;
+      var tot=0;
+      for(var i=0;i<jumlahArray;i++){
+        var jumlahBarang = document.getElementsByClassName('jumlah-barang')[i].value;
+        var hargaBarang = document.getElementsByClassName('harga-barang')[i].value;
+        var total = jumlahBarang * hargaBarang;
+        tot += total;
+      }
+      document.getElementById('total-harga').value = tot.toLocaleString();
     }
-    else if(document.getElementById('statusKirim').value=='DK'){
-      document.getElementById("barangDikirim").innerHTML=
-      '<div class="form-group">'+
-      '<label class="col-sm-12 control-label"><center>Detail Pengiriman <span class="asterisk">*</span></center></label>'+
-      '</div>'+
-      '<div class="form-group">'+
-        '<div class="col-sm-6">'+
-          '<div class="input-group">'+
-            '<span class="input-group-addon">Rp.</span>'+
-            '<input type="number" min="0" name="biayaKirim" class="form-control" placeholder="Biaya Kirim" required/>'+
-          '</div>'+
-        '</div>'+
-        '<div class="col-sm-6">'+
-          '<select name="dibayarOleh" id="dibayarOleh" class="form-control" onchange="funcDibayarOleh();" required>'+
-            '<option value="" disabled selected style="display: none;">Dibayar Oleh</option>'+
-            '<option value="pelanggan">Gentlemen</option>'+
-            '<option value="penjual">Penjual / Supplier</option>'+
-          '</select>'+
-        '</div>'+
-      '</div>'+
-      '<div id="jenisBayarOngkir"></div>'
+    function ubahHargaJumlah(value, value2)
+    {
+      var indexBarang = $('.jumlah-barang').index(value2);
+      var jumlahArray = $('input[name="jumlah-barang[]"]').length;
+      var tot=0;
+      for(var i=0;i<jumlahArray;i++){
+        var jumlahBarang = document.getElementsByClassName('jumlah-barang')[i].value;
+        var hargaBarang = document.getElementsByClassName('harga-barang')[i].value;
+        var total = jumlahBarang * hargaBarang;
+        tot += total;
+      }
+      document.getElementById('total-harga').value = tot.toLocaleString();
     }
-  }
-
-/*  function funcDibayarOleh(){
-    if(document.getElementById('dibayarOleh').value=='penjual'){
-      document.getElementById("jenisBayarOngkir").innerHTML=''
-    }
-    else if(document.getElementById('dibayarOleh').value=='pelanggan'){
-      document.getElementById("jenisBayarOngkir").innerHTML=
-      '<div class="form-group">'+
-        '<div class="col-sm-12">'+
-          '<select id="jenisBayarOngkir" name="jenisBayarOngkir" class="form-control" onchange="copyjenisBayarOngkir();" required>'+
-            '<option value="" disabled selected style="display: none;">Cara Bayar Pengiriman</option>'+
-            '<option value="T">Tunai</option>'+
-            '<option value="TR">Transfer</option>'+
-          '</select>'+
-        '</div>'+
-      '</div>'+
-      '<div id="caraBayarOngkir"></div>'
-    }
-  }
-
-  function copyjenisBayarOngkir() {
-    if(document.getElementById('jenisBayarOngkir').value=='T'){
-      document.getElementById("caraBayarOngkir").innerHTML=''
-    }
-    else if(document.getElementById('jenisBayarOngkir').value=='TR'){
-      document.getElementById("caraBayarOngkir").innerHTML=
-      '<div class="form-group">'+
-        '<label class="col-sm-3 control-label" style="margin-top:15px;">Nama Pemilik Rekening <span class="asterisk">*</span></label>'+
-        '<div class="col-sm-9" style="margin-top:15px;">'+
-          '<input type="text" name="namaPemilikRekening" class="form-control" placeholder="Nama Pemilik Rekening" required/>'+
-        '</div>'+
-      '</div>'+
-      '<div class="form-group">'+
-        '<label class="col-sm-3 control-label ">Data Rekening <span class="asterisk">*</span></label>'+
-        '<div class="col-sm-5">'+
-          '<input type="number" min="0" name="nomorRekening" class="form-control" placeholder="Nomor Rekening" required/>'+
-        '</div>'+
-        '<div class="col-sm-4">'+
-          '<select name="getBankId" class="form-control" data-placeholder="Nama Bank" required>'+
-          '<option value="" style="display:none">Pilih Bank</option>'+
-          '<option value="1">Bank Baca Baca</option>'+
-          '<option value="2">Bank Suka Sendiri</option>'+
-          '</select>'+
-        '</div>'
-    }
-  }*/
-
 </script>
 
 </html>

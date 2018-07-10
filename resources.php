@@ -17,8 +17,8 @@
 <link rel="stylesheet" href="css/ionicons.css" />
 <link rel="stylesheet" href="css/perfect-scrollbar.css" />
 <link rel="stylesheet" href="css/jquery.switchButton.css" />
-<link rel="stylesheet" href="/css/font-awesome.css">
-<link rel="stylesheet" href="/css/bracket.css">
+<link rel="stylesheet" href="css/font-awesome.css">
+<!--<link rel="stylesheet" href="/css/bracket.css">-->
 
 
 <!-- DataTables -->
