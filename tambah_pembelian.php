@@ -203,6 +203,13 @@ include 'sql.php';
                       <button style="float: right;" id="next" class="btn btn-primary">Tambah Barang</button>
                     </div>
                   </div>
+                  
+                  <div class="form-group" id="divHargaTotal">
+                    <label class="col-sm-3 control-label">Total Harga</label>
+                      <div class="col-sm-9">
+                        <input type="text" disabled="true" name="total-harga" id="total-harga" class="form-control total-harga" style="background-color: transparent; border: transparent; font-size: 150%; font-weight:bold" value=0 />
+                      </div>
+                  </div>
                 </div>
 
               </div>
@@ -245,18 +252,18 @@ include 'sql.php';
     var jenisBayar;
     var statusKirim;
     var biayaKirim;
-    var dibayarOleh;
+    var bank;
+    var totalHarga;
 
     $('input[name="nomorNota"]').each( function(){ noNota = $(this).val(); });
     $('input[name="tanggalNota"]').each( function(){ tanggal = $(this).val(); });
     $('select[name="supplier"]').each( function(){ idSupplier = $(this).val(); });
     $('select[name="jenisBayar"]').each( function(){ jenisBayar = $(this).val(); });
-    $('input[name="statusKirim"]').each( function(){ statusKirim = $(this).val(); });
-    $('input[name="biayaKirim"]').each( function(){ biayaKirim = $(this).val(); });
-    $('select[name="dibayarOleh"]').each( function(){ dibayarOleh = $(this).val(); });
     $('select[name="nama-barang[]"]').each( function(){ nama.push($(this).val()); });
+    $('select[name="statusKirim[]"]').each( function(){ nama.push($(this).val()); });
     $('input[name="jumlah-barang[]"]').each( function(){ jumlah.push($(this).val()); });
     $('input[name="harga-barang[]"]').each( function(){ harga.push($(this).val()); });
+    $('input[name="total-harga"]').each( function(){ totalHarga = $(this).val(); });
 
     $.ajax({ 
       type: "GET",
@@ -267,12 +274,10 @@ include 'sql.php';
       tanggal:tanggal,
       jenisBayar:jenisBayar,
       statusKirim:statusKirim,
-      biayaKirim:biayaKirim,
       /*tanggalJatuhTempo:tanggalJatuhTempo,
       nomorRekening:nomorRekening,
-      namaPemilikRekening:namaPemilikRekening,
-      Bank_idBank:Bank_idBank,*/
-      dibayarOleh:dibayarOleh
+      namaPemilikRekening:namaPemilikRekening,*/
+      Bank_idBank:Bank_idBank
     },
     success: function(result){
       for( i = 0 ;i < nama.length ; i++){
@@ -333,6 +338,12 @@ include 'sql.php';
       '<label class="col-sm-3 control-label">Tanggal Jatuh Tempo <span class="asterisk">*</span></label>'+
       '<div class="col-sm-9">'+
       '<input type="date" name="tanggalJatuhTempo" class="form-control" value="<?php echo date("Y-m-d") ?>" required/>'+
+      '</div>'+
+      '</div>'+
+      '<div class="form-group" style="margin-bottom:15px;">'+
+      '<label class="col-sm-3 control-label">Uang Muka</label>'+
+      '<div class="col-sm-9">'+
+      '<input type="number" name="uangMuka" class="form-control" placeholder="Uang Muka"/>'+
       '</div>'+
       '</div>'
     }
