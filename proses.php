@@ -240,36 +240,43 @@ switch ($cmd) {
     case "insertNotaBeli": //tambah_pembelian.php
         $noNota = $_GET['noNota'];
         $tanggal = $_GET['tanggal'];
+        $idSupplier = $_GET['idSupplier'];
         $caraBayar = $_GET['jenisBayar'];
         $statusKirim = $_GET['statusKirim'];
-        $idSupplier = $_GET['idSupplier'];
-        $tanggalJatuhTempo = NULL;
-        $namaPemilikRekening = NULL;
-        $nomorRekening = NULL;
-        $idBank = NULL;
-        $dibayarOleh = NULL;
-        $biayaKirim = 0;
-        if(isset($_GET['dibayarOleh'])){
-            $dibayarOleh = $_GET['dibayarOleh'];
-        }
-        if(isset($_GET['biayaKirim'])){
+        $nominalBayar = str_replace(",", "", $_GET['totalHarga']);
+        $nominalBayar = (int)$nominalBayar;
+        if(isset($_GET['biayaKirim']))
             $biayaKirim = $_GET['biayaKirim'];
-        }
-        if(isset($_GET['tanggalJatuhTempo'])){
+        else
+            $biayaKirim = 0;
+        if(isset($_GET['bank']))
+            $bank = $_GET['bank'];
+        else
+            $bank = 1;
+        if(isset($_GET['uangMuka']))
+            $uangMuka = $_GET['uangMuka'];
+        else
+            $uangMuka = 0;
+        if(isset($_GET['tanggalJatuhTempo']))
             $tanggalJatuhTempo = $_GET['tanggalJatuhTempo'];
-        }
-        if(isset($_GET['namaPemilikRekening'])){
+        else
+            $tanggalJatuhTempo = NULL;
+        if(isset($_GET['namaPemilikRekening']))
             $namaPemilikRekening = $_GET['namaPemilikRekening'];
-        }
-        if(isset($_GET['nomorRekening'])){
+        else
+            $namaPemilikRekening = NULL;
+        if(isset($_GET['nomorRekening']))
             $nomorRekening = $_GET['nomorRekening'];
-        }
-        if(isset($_GET['idBank'])){
-            $idBank = $_GET['idBank'];
-        }
-        $sql = "INSERT INTO `notabeli`(`tanggalJatuhTempo`, `noNota`, `tanggal`, `caraBayar`, `StatusKirim`, `biayaKirim`, `dibayarOleh`, `Supplier_idSupplier`, `caraBayarPengiriman`, `noRekening`, `namaPemilikRekening`, `Bank_idBank`)
-
-            VALUES ('".$tanggalJatuhTempo."', '".$noNota."', '".$tanggal."', '".$caraBayar."', '".$statusKirim."', '".$biayaKirim."', '".$dibayarOleh."','".$idSupplier."', '".$caraBayar."', '".$nomorRekening."', '".$namaPemilikRekening."',".$idBank.");";
+        else
+            $nomorRekening = NULL;
+        if($caraBayar=="T") 
+            $sql = "INSERT INTO `notabeli`(`noNota`, `tanggal`, `nominalBayar`, `caraBayar`, `StatusKirim`, `biayaKirim`, `noRekening`, `namaPemilikRekening`, `tanggalJatuhTempo`, `Bank_idBank`, `Supplier_idSupplier`) VALUES  ('".$noNota."', '".$tanggal."', ".$nominalBayar.", '".$caraBayar."', ".$statusKirim.", ".$biayaKirim.", NULL, NULL, NULL, 1, ".$idSupplier.");";
+        else if($caraBayar=="TR")
+            $sql = "INSERT INTO `notabeli`(`noNota`, `tanggal`, `nominalBayar`, `caraBayar`, `StatusKirim`, `biayaKirim`, `noRekening`, `namaPemilikRekening`, `tanggalJatuhTempo`, `Bank_idBank`, `Supplier_idSupplier`) VALUES  ('".$noNota."', '".$tanggal."', ".$nominalBayar.", '".$caraBayar."', ".$statusKirim.", ".$biayaKirim.", '".$nomorRekening."', '".$namaPemilikRekening."', NULL, ".$bank.", ".$idSupplier.");";
+        else if($caraBayar=="K")
+            $sql = "INSERT INTO `notabeli`(`noNota`, `tanggal`, `nominalBayar`, `caraBayar`, `StatusKirim`, `biayaKirim`, `noRekening`, `namaPemilikRekening`, `tanggalJatuhTempo`, `Bank_idBank`, `Supplier_idSupplier`) VALUES  ('".$noNota."', '".$tanggal."', ".$nominalBayar.", '".$caraBayar."', ".$statusKirim.", ".$biayaKirim.", NULL, NULL, '".$tanggalJatuhTempo."', 1, ".$idSupplier.");";
+        else
+            $sql = "INSERT INTO `notabeli`(`noNota`, `tanggal`, `nominalBayar`, `caraBayar`, `StatusKirim`, `biayaKirim`, `noRekening`, `namaPemilikRekening`, `tanggalJatuhTempo`, `Bank_idBank`, `Supplier_idSupplier`) VALUES  ('".$noNota."', '".$tanggal."', ".$nominalBayar.", '".$caraBayar."', ".$statusKirim.", ".$biayaKirim.", '".$nomorRekening."', ".$namaPemilikRekening.", '".$tanggalJatuhTempo."', ".$bank.", ".$idSupplier.");";
         $result = mysqli_query($link,$sql);
         if(!$result){
             die ("SQL ERROR : ".$sql);
@@ -281,6 +288,8 @@ switch ($cmd) {
         $kodeBarang = $_GET['kodeBarang'];
         $jumlah = $_GET['jumlah'];
         $harga = $_GET['harga'];
+        $tanggal = $_GET['tanggal'];
+        $caraBayar = $_GET['jenisBayar'];
         $sql = "INSERT INTO `notabeli_has_barang` (`NotaBeli_noNota`, `Barang_kodeBarang`, `harga`, `jumlah`) VALUES ('".$noNota."', '".$kodeBarang."', '".$harga."', '".$jumlah."');";
         $result = mysqli_query($link,$sql);
         if(!$result){
@@ -334,7 +343,6 @@ switch ($cmd) {
         }
         break;  
 
-
     case "insertNotaJualBarang": //tambah_penjualan.php
         $noNota = $_GET['noNota'];
         $tanggal = $_GET['tanggal'];
@@ -349,7 +357,6 @@ switch ($cmd) {
         if(!$result){
             die ("SQL ERROR : ".$sql);
         }
-
         //update stok
         $sqlCekStok = "SELECT * FROM barang WHERE kodeBarang = ".$kodeBarang;
         $resultCekStok = mysqli_query($link, $sqlCekStok);
@@ -366,8 +373,7 @@ switch ($cmd) {
                     }
                 }
             }
-        }
-        
+        }       
         //JURNAL
         while($row = mysqli_fetch_object($resultPeriodeAktif))
             $idPeriode = $row->idPeriode;

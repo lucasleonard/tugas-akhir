@@ -18,6 +18,7 @@
   <?php
   include 'resources.php'; 
   ?>
+  <title> Gentlemen | Data Produk </title>
 </head>
 <body>
   <!-- Preloader --> 

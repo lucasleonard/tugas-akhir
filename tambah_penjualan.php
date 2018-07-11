@@ -343,7 +343,7 @@ if(!isset($_COOKIE['loginU'])) {
           success: function(result) {
           },
           error: function(result) {
-            alert(result);
+            alert("Error Ajax 2");
           }
         });
       }

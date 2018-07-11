@@ -159,7 +159,7 @@ include 'sql.php';
                     <div class="form-group">
                       <label class="col-sm-3 control-label">Status Kirim<span class="asterisk">*</span></label>
                       <div class="col-sm-9">
-                        <select id="statusKirim" name="statusKirim" class="form-control" onchange="copystatusKirim();" required>
+                        <select id="statusKirim" name="statusKirim" class="form-control" required>
                           <option value=1>Diterima Langsung</option>
                           <option value=0>Dikirim</option>
                         </select>
@@ -253,16 +253,25 @@ include 'sql.php';
     var statusKirim;
     var biayaKirim;
     var bank;
+    var nomorRekening;
+    var namaPemilikRekening;
+    var uangMuka;
+    var tanggalJatuhTempo;
     var totalHarga;
 
     $('input[name="nomorNota"]').each( function(){ noNota = $(this).val(); });
     $('input[name="tanggalNota"]').each( function(){ tanggal = $(this).val(); });
     $('select[name="supplier"]').each( function(){ idSupplier = $(this).val(); });
+    $('select[name="statusKirim"]').each( function(){ statusKirim = $(this).val(); });
     $('select[name="jenisBayar"]').each( function(){ jenisBayar = $(this).val(); });
     $('select[name="nama-barang[]"]').each( function(){ nama.push($(this).val()); });
-    $('select[name="statusKirim[]"]').each( function(){ nama.push($(this).val()); });
     $('input[name="jumlah-barang[]"]').each( function(){ jumlah.push($(this).val()); });
     $('input[name="harga-barang[]"]').each( function(){ harga.push($(this).val()); });
+    $('input[name="uangMuka"]').each( function(){ uangMuka = $(this).val(); });
+    $('input[name="nomorRekening"]').each( function(){ nomorRekening = $(this).val(); });
+    $('input[name="namaPemilikRekening"]').each( function(){ namaPemilikRekening = $(this).val(); });
+    $('input[name="getBankId"]').each( function(){ bank = $(this).val(); });
+    $('input[name="tanggalJatuhTempo"]').each( function(){ tanggalJatuhTempo = $(this).val(); });
     $('input[name="total-harga"]').each( function(){ totalHarga = $(this).val(); });
 
     $.ajax({ 
@@ -270,37 +279,44 @@ include 'sql.php';
       url: "proses.php",
       data: { cmd:'insertNotaBeli',
       noNota:noNota,
-      idSupplier:idSupplier,
       tanggal:tanggal,
+      idSupplier:idSupplier,
       jenisBayar:jenisBayar,
       statusKirim:statusKirim,
-      Bank_idBank:Bank_idBank
-    },
+      biayaKirim:biayaKirim,
+      bank:bank,
+      nomorRekening:nomorRekening,
+      namaPemilikRekening:namaPemilikRekening,
+      uangMuka:uangMuka,
+      tanggalJatuhTempo:tanggalJatuhTempo,
+      totalHarga:totalHarga
+    },                  
     success: function(result){
       for( i = 0 ;i < nama.length ; i++){
         $.ajax({
-          type: "GET",
-          url: "proses.php",
-          data: { cmd:'insertNotaBeliBarang',
-          noNota:noNota,
-          kodeBarang:nama[i],
-          jumlah:jumlah[i],
-          harga:harga[i] 
-        },
-        success: function(result) {
-          alert(result);
-          location.reload();
-        },
-        error: function(result) {
-          alert("Ajax Error 001");
-        }
-      });
+            type: "GET",
+            url: "proses.php",
+            data: { cmd:'insertNotaBeliBarang',
+            noNota:noNota,
+            tanggal:tanggal,
+            jenisBayar:jenisBayar,
+            kodeBarang:nama[i],
+            jumlah:jumlah[i],
+            harga:harga[i]
+          },
+          success: function(result) {
+            alert(result);
+          },
+          error: function(result) {
+            alert("Error Ajax 2");
+          }
+        });
       }
+      location.reload();
     },
     error: function(result) {
-      alert("Ajax Error 002");
-    }
-  });
+      alert("Error Ajax 1");
+    }});
   });
 
   function copyjenisBayar() {
@@ -318,7 +334,7 @@ include 'sql.php';
       '<div class="form-group">'+
       '<label class="col-sm-3 control-label ">Data Rekening <span class="asterisk">*</span></label>'+
       '<div class="col-sm-5">'+
-      '<input type="number" min="0" name="nomorRekening" class="form-control" placeholder="Nomor Rekening" required/>'+
+      '<input type="text" name="nomorRekening" class="form-control" placeholder="Nomor Rekening" required/>'+
       '</div>'+
       '<div class="col-sm-4">'+
       '<select name="getBankId" class="form-control" data-placeholder="Nama Bank" required>'+
@@ -331,7 +347,7 @@ include 'sql.php';
     else if(document.getElementById('jenisBayar').value=='K'){
       document.getElementById("caraBayar").innerHTML=
       '<div class="form-group" style="margin-bottom:15px;">'+
-      '<label class="col-sm-3 control-label">Tanggal Jatuh Tempo <span class="asterisk">*</span></label>'+
+      '<label class="col-sm-3 control-label">Jatuh Tempo <span class="asterisk">*</span></label>'+
       '<div class="col-sm-9">'+
       '<input type="date" name="tanggalJatuhTempo" class="form-control" value="<?php echo date("Y-m-d") ?>" required/>'+
       '</div>'+
