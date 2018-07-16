@@ -323,7 +323,7 @@ switch ($cmd) {
                     die ("SQL ERROR : ".$sqlUpdateHargaBeli2);   
             }
         }
-        //JURNAL BELUMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+        //JURNAL
         while($row = mysqli_fetch_object($resultPeriodeAktif))
             $idPeriode = $row->idPeriode;
         $sql = "SELECT * FROM jenis WHERE idJenis IN (SELECT Jenis_idJenis FROM barang WHERE kodeBarang = ".$kodeBarang.")";
@@ -331,14 +331,20 @@ switch ($cmd) {
         while($row = mysqli_fetch_object($resultJenis)){
             $keterangan = "Transaksi Pembelian ".$row->nama;
             if($row->idJenis==1)
-                $noAkun = 401;
+                $noAkun = 501;
             else if($row->idJenis==2)
-                $noAkun = 402;
+                $noAkun = 502;
+            else if($row->idJenis==3)
+                $noAkun = 503;
+            else if($row->idJenis==4)
+                $noAkun = 504;
         }
-        if($jenisBayar=="T")
+        if($caraBayar=="T")
             $keterangan =  $keterangan." Tunai";
-        else if($jenisBayar == "TR")
-            $keterangan =  $keterangan." Transfer ";
+        else if($caraBayar == "TR")
+            $keterangan =  $keterangan." Transfer";
+        else if($caraBayar == "K")
+            $keterangan =  $keterangan." Kredit";
         $sqlCariJurnal = "SELECT * FROM jurnal WHERE tanggal = '".$tanggal."' AND keteranganTransaksi = '".$keterangan."'";
         $resultCariJurnal = mysqli_query($link, $sqlCariJurnal);
         if(mysqli_num_rows($resultCariJurnal)==0){
@@ -348,6 +354,27 @@ switch ($cmd) {
                 die ("SQL ERROR : ".$sqlJurnal);
             }
         }
+        //DB jurnal_has_akun
+        $resultCariJurnal = mysqli_query($link, $sqlCariJurnal);
+        while($row = mysqli_fetch_object($resultCariJurnal)){
+            $idJurnal = $row->idJurnal;
+        }
+        ////Pengeluaran 500
+        $sqlJurnalPendapatan = "INSERT INTO `jurnal_has_akun` (`Jurnal_idJurnal`, `Akun_noAkun`, `urutan`, `nominalDebet`, `nominalKredit`) VALUES (".$idJurnal.",".$noAkun.",1,".$harga.", 0)";
+        $resultJurnalPendapatan = mysqli_query($link, $sqlJurnalPendapatan);
+        if(!$resultJurnalPendapatan)
+            die("SQL ERROR :".$sqlJurnalPendapatan);
+        ////Kas & Bank 100
+        if($jenisBayar=="T")
+            $noAkun = 101;
+        else if($jenisBayar == "TR")
+            $noAkun = 102;
+        else if($jenisBayar == "K")
+            $noAkun = 103;
+        $sqlJurnalKnB = "INSERT INTO `jurnal_has_akun` (`Jurnal_idJurnal`, `Akun_noAkun`, `urutan`, `nominalDebet`, `nominalKredit`) VALUES (".$idJurnal.",".$noAkun.",1,".$hargaBarangXJumlah.",0)";
+        $resultJurnalKnB = mysqli_query($link, $sqlJurnalKnB);
+        if(!$resultJurnalKnB)
+            die("SQL ERROR :".$sqlJurnalKnB);
         break;
 
     case "insertNotaJual": //tambah_penjualan.php

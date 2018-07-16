@@ -305,7 +305,7 @@ include 'sql.php';
             harga:harga[i]
           },
           success: function(result) {
-            alert(result);
+            //alert(result);
           },
           error: function(result) {
             alert("Error Ajax 2");
