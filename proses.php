@@ -292,8 +292,61 @@ switch ($cmd) {
         $caraBayar = $_GET['jenisBayar'];
         $sql = "INSERT INTO `notabeli_has_barang` (`NotaBeli_noNota`, `Barang_kodeBarang`, `harga`, `jumlah`) VALUES ('".$noNota."', '".$kodeBarang."', '".$harga."', '".$jumlah."');";
         $result = mysqli_query($link,$sql);
-        if(!$result){
+        if(!$result)
             die ("SQL ERROR : ".$sql);
+        //update stok
+        $sqlCekStok = "SELECT * FROM barang WHERE kodeBarang = ".$kodeBarang;
+        $resultCekStok = mysqli_query($link, $sqlCekStok);
+        while($row = mysqli_fetch_object($resultCekStok)){
+            $jumlahstokLama = $row->stok;
+            $jumlahStokBaru = $row->stok+$jumlah;
+            if($row->Jenis_idJenis==1){
+                $sqlUpdateStok = "UPDATE `barang` SET `stok`=".$jumlahStokBaru." WHERE kodeBarang = ".$kodeBarang;
+                $resultUpdateStok = mysqli_query($link, $sqlUpdateStok);
+                if(!$resultUpdateStok)
+                    die ("SQL ERROR : ".$sqlUpdateStok);
+            }
+            //update harga beli (AVG)
+            if($row->hargaBeliRata2==NULL){
+                $sqlUpdateHargaBeli = "UPDATE `barang` SET `hargaBeliRata2`=".$harga." WHERE kodeBarang = ".$kodeBarang;
+                $resultUpdateHargaBeli = mysqli_query($link, $sqlUpdateHargaBeli);
+                if(!$resultUpdateHargaBeli)
+                    die ("SQL ERROR : ".$sqlUpdateHargaBeli);                
+            }
+            else if($row->hargaBeliRata2!=NULL){
+                $totalHargaSkrg = $row->hargaBeliRata2 * $jumlahstokLama;
+                $totalHargaBaru = $harga * $jumlah;
+                $hargaBaru = ($totalHargaSkrg+$totalHargaBaru)/$jumlahStokBaru;
+                $sqlUpdateHargaBeli2 = "UPDATE `barang` SET `hargaBeliRata2`=".$hargaBaru." WHERE kodeBarang = ".$kodeBarang;
+                $resultUpdateHargaBeli2 = mysqli_query($link, $sqlUpdateHargaBeli2);
+                if(!$resultUpdateHargaBeli2)
+                    die ("SQL ERROR : ".$sqlUpdateHargaBeli2);   
+            }
+        }
+        //JURNAL BELUMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+        while($row = mysqli_fetch_object($resultPeriodeAktif))
+            $idPeriode = $row->idPeriode;
+        $sql = "SELECT * FROM jenis WHERE idJenis IN (SELECT Jenis_idJenis FROM barang WHERE kodeBarang = ".$kodeBarang.")";
+        $resultJenis = mysqli_query($link, $sql);
+        while($row = mysqli_fetch_object($resultJenis)){
+            $keterangan = "Transaksi Pembelian ".$row->nama;
+            if($row->idJenis==1)
+                $noAkun = 401;
+            else if($row->idJenis==2)
+                $noAkun = 402;
+        }
+        if($jenisBayar=="T")
+            $keterangan =  $keterangan." Tunai";
+        else if($jenisBayar == "TR")
+            $keterangan =  $keterangan." Transfer ";
+        $sqlCariJurnal = "SELECT * FROM jurnal WHERE tanggal = '".$tanggal."' AND keteranganTransaksi = '".$keterangan."'";
+        $resultCariJurnal = mysqli_query($link, $sqlCariJurnal);
+        if(mysqli_num_rows($resultCariJurnal)==0){
+            $sqlJurnal = "INSERT INTO `jurnal` (`tanggal`, `keteranganTransaksi`, `Periode_idPeriode`) VALUES ('".$tanggal."', '".$keterangan."', '".$idPeriode."')";
+            $resultJurnal = mysqli_query($link,$sqlJurnal);
+            if(!$resultJurnal){
+                die ("SQL ERROR : ".$sqlJurnal);
+            }
         }
         break;
 
@@ -365,12 +418,10 @@ switch ($cmd) {
                 $sqlUpdateStok = "UPDATE `barang` SET `stok`=(stok-".$jumlah.") WHERE kodeBarang = ".$kodeBarang;
                 $resultUpdateStok = mysqli_query($link, $sqlUpdateStok);
                 if(($row->stok-$jumlah)<$row->minStok){
-                    if(isset($_SESSION['notifStok'])){
+                    if(isset($_SESSION['notifStok']))
                         $_SESSION['notifStok'] = $_SESSION['notifStok'].", ".$row->namaBarang;
-                    }
-                    else{
+                    else
                         $_SESSION['notifStok'] = $row->namaBarang;
-                    }
                 }
             }
         }       

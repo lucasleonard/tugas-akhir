@@ -135,7 +135,7 @@ include 'sql.php';
                       <label class="col-sm-3 control-label">Supplier <span class="asterisk">*</span></label>
                       <div class="col-sm-9">
                         <select name="supplier" class="form-control">
-                          <option value="" disabled selected style="display: none;">[Pilih Supplier]</option>
+                          <option value="" disabled selected style="display: none;"> [Pilih Supplier]</option>
                           <?php 
                           while($row = mysqli_fetch_object($resultSupplier)){
                             echo "<option value=".$row->idSupplier.">".$row->nama."</option>";
@@ -148,8 +148,8 @@ include 'sql.php';
                       <label class="col-sm-3 control-label">Jenis Pembayaran<span class="asterisk">*</span></label>
                       <div class="col-sm-9">
                         <select id="jenisBayar" name="jenisBayar" class="form-control" onchange="copyjenisBayar();" required>
-                          <option value="" disabled selected style="display: none;">Pilih Pembayaran</option>
-                          <option value="T">Tunai</option>
+                          <!--<option value="" disabled selected style="display: none;"> [Pilih Pembayaran]</option>-->
+                          <option selected value="T">Tunai</option>
                           <option value="TR">Transfer</option>
                           <option value="K">Kredit</option>
                         </select>
