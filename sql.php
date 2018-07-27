@@ -31,6 +31,14 @@
   if(!$resultJasaSaja){
     echo "SQL ERROR: ". $sql;
   }
+
+  // Mencari Produk -> Aset
+  $sql = "SELECT * FROM barang WHERE Jenis_idJenis = 5";
+  $resultJasaSaja = mysqli_query($link, $sql);
+  if(!$resultJasaSaja){
+    echo "SQL ERROR: ". $sql;
+  }
+
     // Mencari Supplier
   $sql = "SELECT * FROM supplier";
   $resultSupplier = mysqli_query($link, $sql);
